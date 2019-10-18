@@ -19,8 +19,14 @@ def preprocess(features):
     def remove_zero_cols(df):
         return df.loc[:, (df != 0).any(axis=0)] # remove any col that is all 0s
 
+    # fill in values for some vars from NaN -> Unknown
+    feat = features.copy()
+    feat.AbdTenderDegree_1 = feat.AbdTenderDegree_1.fillna(4)
+    feat.AbdTrauma_1 = feat.AbdTrauma_1.fillna(4)
+    
+    
     # print(df.shape)
-    df_filt = features.dropna(axis=1, thresh=NUM_PATIENTS - 602) # thresh is how many non-nan values - 602 is 5%
+    df_filt = feat.dropna(axis=1, thresh=NUM_PATIENTS - 602) # thresh is how many non-nan values - 602 is 5%
     # print(df_filt.shape)
     # print(list(df_filt.keys()))
     # originally used features: age < 2, severe mechanism of injury (includes many things), vomiting, hypotension, GCS
@@ -37,6 +43,7 @@ def preprocess(features):
     df_filt = df_filt.drop(labels=keys_to_remove, axis=1)
     # print('keys removed', keys_to_remove, 'new shape', df_filt.shape)
 
+    
     # pandas impute missing values with median
     df_filt = df_filt.fillna(df_filt.median())
     df_filt = remove_zero_cols(df_filt)
@@ -63,9 +70,15 @@ def rename_values(df):
         7: 'Other'
     }
     df.RACE = [race[v] for v in df.RACE.values]
+    df['Costal_1'] = (df.LtCostalTender_1 == 1) | (df.RtCostalTender_1 == 1) | (df.DecrBreathSound_1)
+    df['AbdTrauma_or_SeatBeltSign_1'] = (df.AbdTrauma_1 == 1) | (df.SeatBeltSign_1 == 1)
     
     ks_categorical = ['SEX', 'RACE', 'HISPANIC_ETHNICITY', 
-                      'VomitWretch_1', 'RecodedMOI_1', 'ThoracicTender_1']
+                      'VomitWretch_1', 'RecodedMOI_1', 'ThoracicTender_1', 'ThoracicTrauma_1',
+                      'Costal_1', 'DecrBreathSound_1', 'AbdDistention_1', 'AbdTenderDegree_1',
+                      'AbdTrauma_1', 'SeatBeltSign_1', 'AbdTrauma_or_SeatBeltSign_1', 'DistractingPain_1',
+                      'AbdomenPain_1']
+    
     for k in ks_categorical:
         df[k] = df[k].astype(str)
     
@@ -98,8 +111,11 @@ def get_features(ddir = 'iaip_data/Datasets', rdir = 'results', pdir = 'processe
 
     fnames_small = [fname for fname in fnames
                     if 'form1' in fname
-                    or 'form5' in fname
-                    or 'form4' in fname]
+                    or 'form2' in fname
+                    or 'form4' in fname
+                    or 'form5' in fname                    
+                    or 'form7' in fname
+                   ]
     for i, fname in tqdm(enumerate(fnames_small)): # this should include more than 3!
         df2 = r[fname].copy()
         df2 = df2.drop_duplicates(subset=['id'], keep='last') # if subj has multiple entries, only keep first
