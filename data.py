@@ -43,7 +43,7 @@ def get_features(ddir = 'iaip_data/Datasets', rdir = 'results', pdir = 'processe
                     or 'form4' in fname]
     for i, fname in tqdm(enumerate(fnames_small)): # this should include more than 3!
         df2 = r[fname].copy()
-        df2 = df2.drop_duplicates(subset=['id'], keep='first') # if subj has multiple entries, only keep first
+        df2 = df2.drop_duplicates(subset=['id'], keep='last') # if subj has multiple entries, only keep first
         rename_dict = {
             key: key + '_' + fname[:-4].replace('form', '')
             for key in df2.keys()
