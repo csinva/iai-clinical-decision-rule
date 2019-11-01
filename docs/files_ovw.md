@@ -1,0 +1,10 @@
+- format.csv - describes the variables
+- outcomes: form 6
+	- 6b - Intra-abdominal injury diagnosed in the ED/during hospitalization by any diagnostic method
+	- 6c - surgical outcomes
+- usable features
+  - demographics.csv - demographics of all subjects
+  - form 1
+    - glascow score
+  - form 5 - labs (e.g. hematocrit)
+  - form 4 - scans (e.g. CT, ultrasound)
