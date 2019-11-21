@@ -13,14 +13,24 @@ import data
 
 NUM_PATIENTS = 12044
 
-def preprocess(features):
+
+
+def get_data():
+    features = data.get_features() # uses several forms
+    outcomes = data.get_outcomes() # 2 outcomes: iai, and iai_intervention
+    df = pd.merge(features, outcomes, on='id', how='left')
+    
+    # process the feats (should save into df)
+    df = data.preprocess(features)
+    
+
+
+def preprocess(df_feats: pd.DataFrame):
     '''Get preprocessed features from df
     '''
-    def remove_zero_cols(df):
-        return df.loc[:, (df != 0).any(axis=0)] # remove any col that is all 0s
 
     # fill in values for some vars from NaN -> Unknown
-    feat = features.copy()
+    feat = df_feats.copy()
     feat.AbdTenderDegree_1 = feat.AbdTenderDegree_1.fillna(4)
     feat.AbdTrauma_1 = feat.AbdTrauma_1.fillna(4)
     
@@ -46,16 +56,10 @@ def preprocess(features):
     
     # pandas impute missing values with median
     df_filt = df_filt.fillna(df_filt.median())
-    df_filt = remove_zero_cols(df_filt)
-
 
     # keys = ['SEX', 'RACE', 'ageinyrs']
-    keys = list(df_filt.keys())
     # print(df_filt.dtypes)
-    X_feats = pd.get_dummies(df_filt[keys], dummy_na=True) # treat na as a separate category
-    X_feats = remove_zero_cols(X_feats)
-    
-    return X_feats
+    return df_filt
 
 def rename_values(df):
     '''Map values to meanings
@@ -192,3 +196,6 @@ def get_outcomes(NUM_PATIENTS=12044):
         'iai_intervention': iai_intervention
     })
     return df_iai
+
+def remove_zero_cols(df):
+    return df.loc[:, (df != 0).any(axis=0)] # remove any col that is all 0s
