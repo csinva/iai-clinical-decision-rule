@@ -78,9 +78,16 @@ def train(df, feat_names, model_type='rf', outcome_def='y_thresh',
         m = GradientBoostingClassifier()
     
 
+    def specificity_score(y_true, y_pred):
+        tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
+        return tn / (tn + tp)
+    
     # scores = ['balanced_accuracy'] # ['accuracy', 'precision', 'recall', 'f1', 'balanced_accuracy', 'roc_auc']
     scorers = {'balanced_accuracy': metrics.balanced_accuracy_score, 'accuracy': metrics.accuracy_score,
-               'precision': metrics.precision_score, 'recall': metrics.recall_score, 'f1': metrics.f1_score, 'roc_auc': metrics.roc_auc_score,
+               'precision': metrics.precision_score, 
+               'sensitivity': metrics.recall_score, 
+               'specificity': specificity_score,
+               'f1': metrics.f1_score, 'roc_auc': metrics.roc_auc_score,
                'precision_recall_curve': metrics.precision_recall_curve, 'roc_curve': metrics.roc_curve}
     scores_cv = {s: [] for s in scorers.keys()}
     scores_test = {s: [] for s in scorers.keys()}
