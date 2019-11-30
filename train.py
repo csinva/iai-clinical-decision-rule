@@ -25,8 +25,13 @@ from sklearn.model_selection import KFold
 import pandas as pd
 import data 
 from collections import Counter
+from typing import List
+
 
 def get_feature_importance(model, model_type, X_val, Y_val):
+    '''Get feature importance based on model
+    '''
+    
     if model_type in ['rf', 'dt']:
         imps = model.feature_importances_
     elif model_type == 'logistic':
@@ -36,9 +41,10 @@ def get_feature_importance(model, model_type, X_val, Y_val):
         imps = perm.feature_importances_
     return imps.squeeze()
 
-def balance(X, y, balancing='ros'):
-    '''
-    Balance classes in y using strategy specified by balancing
+def balance(X, y, balancing='ros', balancing_ratio=1):
+    '''Balance classes in y using strategy specified by balancing
+    
+    Note: balancing ratio not currently supported!
     '''
     if balancing == 'none':
         return X, y
@@ -47,13 +53,16 @@ def balance(X, y, balancing='ros'):
         sampler = RandomOverSampler(random_state=42)
     elif balancing == 'smote':
         sampler = SMOTE(random_state=42)
+        
     X_r, Y_r = sampler.fit_resample(X, y)   
     return X_r, Y_r
 
 
 
-def train(df, feat_names, model_type='rf', outcome_def='y_thresh',
-          balancing='ros', out_name='results/classify/test.pkl'):
+def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_intervention',
+          balancing='ros', balancing_ratio=1, out_name='results/classify/test.pkl'):
+    '''Balance classes in y using strategy specified by balancing
+    '''
     np.random.seed(42)
     # make logistic data
     X = df[feat_names]
@@ -104,7 +113,7 @@ def train(df, feat_names, model_type='rf', outcome_def='y_thresh',
 
 
         # resample training data
-        X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing)
+        X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
 
         # fit
         m.fit(X_train_r_cv, Y_train_r_cv)

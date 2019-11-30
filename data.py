@@ -9,23 +9,26 @@ from tqdm import tqdm
 from copy import deepcopy
 import pickle as pkl
 import pandas as pd
-import data
 
 NUM_PATIENTS = 12044
 
 
 
 def get_data():
-    features = data.get_features() # uses several forms
-    outcomes = data.get_outcomes() # 2 outcomes: iai, and iai_intervention
+    '''Run all the preprocessing and return df
+    '''
+    features = get_features() # read all features into df
+    outcomes = get_outcomes() # 2 outcomes: iai, and iai_intervention
     df = pd.merge(features, outcomes, on='id', how='left')
-    df = rename_values(df)
-    # process the feats (should save into df)
-    df = data.preprocess(features)
+    df = rename_values(df) # rename the features by their meaning
+    df = preprocess(features) # impute and fill
+    df = classification_setup(df) # add cv fold + dummies
+    return df
     
 
 def get_features(ddir = 'iaip_data/Datasets', rdir = 'results', pdir = 'processed'):
-    '''
+    '''Read all features into df
+    
     Returns
     -------
     features: pd.DataFrame
@@ -72,73 +75,9 @@ def get_features(ddir = 'iaip_data/Datasets', rdir = 'results', pdir = 'processe
     # df.to_pickle(oj(pdir, 'features.pkl'))
     return df
 
-def rename_values(df):
-    '''Map values to meanings
-    '''
-    race = {
-        1: 'American Indian or Alaska Native',
-        2: 'Asian',
-        3: 'Black or African American',
-        4: 'Native Hawaaian or Other Pacific Islander',
-        5: 'White',
-        6: 'Stated as Unknown',
-        7: 'Other'
-    }
-    df.RACE = [race[v] for v in df.RACE.values]
-    df['Costal_1'] = (df.LtCostalTender_1 == 1) | (df.RtCostalTender_1 == 1) | (df.DecrBreathSound_1)
-    df['AbdTrauma_or_SeatBeltSign_1'] = (df.AbdTrauma_1 == 1) | (df.SeatBeltSign_1 == 1)
-    
-    ks_categorical = ['SEX', 'RACE', 'HISPANIC_ETHNICITY', 
-                      'VomitWretch_1', 'RecodedMOI_1', 'ThoracicTender_1', 'ThoracicTrauma_1',
-                      'Costal_1', 'DecrBreathSound_1', 'AbdDistention_1', 'AbdTenderDegree_1',
-                      'AbdTrauma_1', 'SeatBeltSign_1', 'AbdTrauma_or_SeatBeltSign_1', 'DistractingPain_1',
-                      'AbdomenPain_1']
-    
-    for k in ks_categorical:
-        df[k] = df[k].astype(str)
-    
-    return df
-    
-def preprocess(df_feats: pd.DataFrame):
-    '''Get preprocessed features from df
-    '''
-
-    # fill in values for some vars from NaN -> Unknown
-    feat = df_feats.copy()
-    feat.AbdTenderDegree_1 = feat.AbdTenderDegree_1.fillna(4)
-    feat.AbdTrauma_1 = feat.AbdTrauma_1.fillna(4)
-    
-    
-    # print(df.shape)
-    df_filt = feat.dropna(axis=1, thresh=NUM_PATIENTS - 602) # thresh is how many non-nan values - 602 is 5%
-    # print(df_filt.shape)
-    # print(list(df_filt.keys()))
-    # originally used features: age < 2, severe mechanism of injury (includes many things), vomiting, hypotension, GCS
-    # thoracic tenderness, evidence of thoracic wall trauma
-    # costal marign tenderness, decreased breath sounds, abdominal distention
-    # complaints of abdominal pain, abdominal tenderness (3 levels)
-    # evidence of abdominal wall trauma or seat belt sign
-    # distracting patinful injury
-    # femur fracture
-
-    # delete some columns
-    keys = list(df_filt.keys())
-    keys_to_remove = [k for k in keys if 'Repeat_instance' in k]
-    df_filt = df_filt.drop(labels=keys_to_remove, axis=1)
-    # print('keys removed', keys_to_remove, 'new shape', df_filt.shape)
-
-    
-    # pandas impute missing values with median
-    df_filt = df_filt.fillna(df_filt.median())
-
-    # keys = ['SEX', 'RACE', 'ageinyrs']
-    # print(df_filt.dtypes)
-    return df_filt
-
-
-
 def get_outcomes(NUM_PATIENTS=12044):
-    '''
+    '''Read in the outcomes
+    
     Returns
     -------
     outcomes: pd.DataFrame
@@ -197,5 +136,84 @@ def get_outcomes(NUM_PATIENTS=12044):
     })
     return df_iai
 
-def remove_zero_cols(df):
-    return df.loc[:, (df != 0).any(axis=0)] # remove any col that is all 0s
+def rename_values(df):
+    '''Map values to meanings
+    '''
+    race = {
+        1: 'American Indian or Alaska Native',
+        2: 'Asian',
+        3: 'Black or African American',
+        4: 'Native Hawaaian or Other Pacific Islander',
+        5: 'White',
+        6: 'Stated as Unknown',
+        7: 'Other'
+    }
+    df.RACE = [race[v] for v in df.RACE.values]
+    df['Costal_1'] = (df.LtCostalTender_1 == 1) | (df.RtCostalTender_1 == 1) | (df.DecrBreathSound_1)
+    df['AbdTrauma_or_SeatBeltSign_1'] = (df.AbdTrauma_1 == 1) | (df.SeatBeltSign_1 == 1)
+    
+    ks_categorical = ['SEX', 'RACE', 'HISPANIC_ETHNICITY', 
+                      'VomitWretch_1', 'RecodedMOI_1', 'ThoracicTender_1', 'ThoracicTrauma_1',
+                      'Costal_1', 'DecrBreathSound_1', 'AbdDistention_1', 'AbdTenderDegree_1',
+                      'AbdTrauma_1', 'SeatBeltSign_1', 'AbdTrauma_or_SeatBeltSign_1', 'DistractingPain_1',
+                      'AbdomenPain_1']
+    
+    for k in ks_categorical:
+        df[k] = df[k].astype(str)
+    
+    return df
+    
+def preprocess(df_feats: pd.DataFrame):
+    '''Get preprocessed features from df
+    
+    Originally used features: age < 2, severe mechanism of injury (includes many things), 
+    vomiting, hypotension, GCS
+    thoracic tenderness, evidence of thoracic wall trauma
+    costal marign tenderness, decreased breath sounds, abdominal distention
+    complaints of abdominal pain, abdominal tenderness (3 levels)
+    evidence of abdominal wall trauma or seat belt sign
+    distracting patinful injury
+    femur fracture
+    '''
+
+    # fill in values for some vars from NaN -> Unknown
+    feat = df_feats.copy()
+    feat.AbdTenderDegree_1 = feat.AbdTenderDegree_1.fillna(4)
+    feat.AbdTrauma_1 = feat.AbdTrauma_1.fillna(4)
+    
+    
+    # print(df.shape)
+    df_filt = feat.dropna(axis=1, thresh=NUM_PATIENTS - 602) # thresh is how many non-nan values - 602 is 5%
+    # print(df_filt.shape)
+    # print(list(df_filt.keys()))
+
+
+    # delete some columns
+    keys = list(df_filt.keys())
+    keys_to_remove = [k for k in keys if 'Repeat_instance' in k]
+    df_filt = df_filt.drop(labels=keys_to_remove, axis=1)
+    # print('keys removed', keys_to_remove, 'new shape', df_filt.shape)
+
+    
+    # pandas impute missing values with median
+    df_filt = df_filt.fillna(df_filt.median())
+
+    # keys = ['SEX', 'RACE', 'ageinyrs']
+    # print(df_filt.dtypes)
+    return df_filt
+
+def classification_setup(df: pd.DataFrame):
+    '''Prepare the data for classification
+    '''
+
+    # convert feats to dummy
+    df = pd.get_dummies(df, dummy_na=True) # treat na as a separate category
+
+    df = df.loc[:, (df != 0).any(axis=0)] # remove any col that is all 0s
+
+
+    # set up train / test
+    np.random.seed(42)
+    df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0]) # 6 is the test set
+
+    return df
