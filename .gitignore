@@ -13,7 +13,6 @@ env
 *.pth
 **Icon*
 <<<<<<< HEAD
-**.html
 
 # Setuptools distribution folder.
 /dist/
