@@ -14,16 +14,29 @@ NUM_PATIENTS = 12044
 
 
 
-def get_data():
-    '''Run all the preprocessing and return df
+def get_data(use_processed=True, save_processed=True, processed_file='processed/df.pkl'):
+    '''Run all the preprocessing
+    
+    Params
+    ------
+    use_processed: bool, optional
+        determines whether to load df from cached pkl
+    save_processed: bool, optional
+        if not using processed, determines whether to save the df
     '''
-    features = get_features() # read all features into df
-    outcomes = get_outcomes() # 2 outcomes: iai, and iai_intervention
-    df = pd.merge(features, outcomes, on='id', how='left')
-    df = rename_values(df) # rename the features by their meaning
-    df = preprocess(features) # impute and fill
-    df = classification_setup(df) # add cv fold + dummies
-    return df
+    if use_processed and os.path.exists(processed_file):
+        return pd.read_pickle(processed_file)
+    else:
+        print('computing preprocessing...')
+        df_features = get_features() # read all features into df
+        df_outcomes = get_outcomes() # 2 outcomes: iai, and iai_intervention
+        df = pd.merge(df_features, df_outcomes, on='id', how='left')
+        df = rename_values(df) # rename the features by their meaning
+        df = preprocess(df) # impute and fill
+        df = classification_setup(df) # add cv fold + dummies
+        if save_processed:
+            df.to_pickle(processed_file)
+        return df
     
 
 def get_features(ddir = 'iaip_data/Datasets', rdir = 'results', pdir = 'processed'):
@@ -163,7 +176,7 @@ def rename_values(df):
     
     return df
     
-def preprocess(df_feats: pd.DataFrame):
+def preprocess(df: pd.DataFrame):
     '''Get preprocessed features from df
     
     Originally used features: age < 2, severe mechanism of injury (includes many things), 
@@ -177,13 +190,13 @@ def preprocess(df_feats: pd.DataFrame):
     '''
 
     # fill in values for some vars from NaN -> Unknown
-    feat = df_feats.copy()
-    feat.AbdTenderDegree_1 = feat.AbdTenderDegree_1.fillna(4)
-    feat.AbdTrauma_1 = feat.AbdTrauma_1.fillna(4)
+    df_filt = df.copy()
+    df_filt.AbdTenderDegree_1 = df_filt.AbdTenderDegree_1.fillna(4)
+    df_filt.AbdTrauma_1 = df_filt.AbdTrauma_1.fillna(4)
     
     
     # print(df.shape)
-    df_filt = feat.dropna(axis=1, thresh=NUM_PATIENTS - 602) # thresh is how many non-nan values - 602 is 5%
+    df_filt = df_filt.dropna(axis=1, thresh=NUM_PATIENTS - 602) # thresh is how many non-nan values - 602 is 5%
     # print(df_filt.shape)
     # print(list(df_filt.keys()))
 
@@ -209,8 +222,8 @@ def classification_setup(df: pd.DataFrame):
     # convert feats to dummy
     df = pd.get_dummies(df, dummy_na=True) # treat na as a separate category
 
-    df = df.loc[:, (df != 0).any(axis=0)] # remove any col that is all 0s
-
+    # remove any col that is all 0s
+    df = df.loc[:, (df != 0).any(axis=0)] 
 
     # set up train / test
     np.random.seed(42)

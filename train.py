@@ -41,18 +41,26 @@ def get_feature_importance(model, model_type, X_val, Y_val):
         imps = perm.feature_importances_
     return imps.squeeze()
 
-def balance(X, y, balancing='ros', balancing_ratio=1):
+def balance(X, y, balancing='ros', balancing_ratio: float=1):
     '''Balance classes in y using strategy specified by balancing
     
-    Note: balancing ratio not currently supported!
+    Params
+    ------
+    balancing_ratio: float
+        num positive / num negative desired, negative class is left the same
     '''
     if balancing == 'none':
         return X, y
     
+    class0 = np.sum(y==0)
+    class0_new = class0
+    class1_new = int(class0 * balancing_ratio)
+    desired_ratio = {0: class0_new, 1: class1_new}
+    
     if balancing == 'ros':
-        sampler = RandomOverSampler(random_state=42)
+        sampler = RandomOverSampler(desired_ratio, random_state=42)
     elif balancing == 'smote':
-        sampler = SMOTE(random_state=42)
+        sampler = SMOTE(desired_ratio, random_state=42)
         
     X_r, Y_r = sampler.fit_resample(X, y)   
     return X_r, Y_r
@@ -149,5 +157,6 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
                'feat_names': feat_names,
                'model_type': model_type,
                'balancing': balancing,
+               'balacing_ratio': balancing_ratio,
               }
     pkl.dump(results, open(out_name, 'wb'))

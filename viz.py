@@ -30,6 +30,56 @@ from colorama import Fore
 import pickle as pkl
 from style import *
 
+def visualize_individual_results(results, X_test, Y_test):
+    '''Print and visualize results from a single train.
+    '''
+    scores_cv = results['cv']
+    scores_test = results['test']
+    imps = results['imps']
+    m = imps['model'][0]
+    print(Fore.CYAN + f'{"metric":<25}\tvalidation') #\ttest')
+    for s in results['metrics']:
+        if not 'curve' in s:
+            print(Fore.WHITE + f'{s:<25}\t{np.mean(scores_cv[s]):.3f} ~ {np.std(scores_cv[s]):.3f}')
+    #         print(Fore.WHITE + f'{s:<25}\t{np.mean(scores_cv[s]):.3f} ~ {np.std(scores_cv[s]):.3f}\t{np.mean(scores_test[s]):.3f} ~ {np.std(scores_test[s]):.3f}')
+
+    print(Fore.CYAN + '\nfeature importances')
+    imp_mat = np.array(imps['imps'])
+    imp_mu = imp_mat.mean(axis=0)
+    imp_sd = imp_mat.std(axis=0)
+    for i, feat_name in enumerate(results['feat_names']):
+        print(Fore.WHITE + f'{feat_name:<25}\t{imp_mu[i]:.3f} ~ {imp_sd[i]:.3f}')
+
+    # print(m.coef_)
+    plt.figure(figsize=(10, 3), dpi=140)
+    R, C = 1, 3
+    plt.subplot(R, C, 1)
+    # print(X_test.shape, results['feat_names'])
+    preds = m.predict(X_test[results['feat_names']])
+    preds_proba = m.predict_proba(X_test[results['feat_names']])[:, 1]    
+    plot_confusion_matrix(Y_test, preds, classes=np.array(['Failure', 'Success']))
+
+    plt.subplot(R, C, 2)
+    prec, rec, thresh = scores_test['precision_recall_curve'][0]
+    plt.plot(rec, prec)
+    plt.xlim((-0.1, 1.1))
+    plt.ylim((-0.1, 1.1))
+    plt.ylabel('Precision')
+    plt.xlabel('Recall')
+    
+    
+    plt.subplot(R, C, 3)
+    plt.hist(preds_proba[Y_test==0], alpha=0.5, label='Failure')
+    plt.hist(preds_proba[Y_test==1], alpha=0.5, label='Success')
+    plt.xlabel('Predicted probability')
+    plt.ylabel('Count')
+    plt.legend()
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return preds, preds_proba
+
 def plot_confusion_matrix(y_true, y_pred, classes,
                           normalize=False,
                           title=None,
