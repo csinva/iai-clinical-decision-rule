@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>iai-interpretability.data API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>iai-interpretability.data</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], &#39;..&#39;))  # insert parent path
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+
+NUM_PATIENTS = 12044
+
+
+
+def get_data():
+    &#39;&#39;&#39;Run all the preprocessing and return df
+    &#39;&#39;&#39;
+    features = get_features() # read all features into df
+    outcomes = get_outcomes() # 2 outcomes: iai, and iai_intervention
+    df = pd.merge(features, outcomes, on=&#39;id&#39;, how=&#39;left&#39;)
+    df = rename_values(df) # rename the features by their meaning
+    df = preprocess(features) # impute and fill
+    df = classification_setup(df) # add cv fold + dummies
+    return df
+    
+
+def get_features(ddir = &#39;iaip_data/Datasets&#39;, rdir = &#39;results&#39;, pdir = &#39;processed&#39;):
+    &#39;&#39;&#39;Read all features into df
+    
+    Returns
+    -------
+    features: pd.DataFrame
+    &#39;&#39;&#39;
+    fnames = sorted([fname for fname in os.listdir(ddir) 
+                     if &#39;csv&#39; in fname
+                     and not &#39;formats&#39; in fname
+                     and not &#39;form6&#39; in fname]) # remove outcome
+    feature_names = [fname[:-4].replace(&#39;form&#39;, &#39;&#39;).replace(&#39;-&#39;, &#39;_&#39;) for fname in fnames]
+    # demographics = pd.read_csv(&#39;iaip_data/Datasets/demographics.csv&#39;)
+    # print(fnames)
+
+    r = {}
+    for fname in tqdm(fnames):
+        df = pd.read_csv(oj(ddir, fname), engine=&#39;python&#39;)
+        df.rename(columns={&#39;SubjectID&#39;: &#39;id&#39;}, inplace=True)
+        df.rename(columns={&#39;subjectid&#39;: &#39;id&#39;}, inplace=True)
+        assert(&#39;id&#39; in df.keys())
+        r[fname] = df
+
+    df = r[fnames[0]]
+    how = &#39;left&#39;
+
+    fnames_small = [fname for fname in fnames
+                    if &#39;form1&#39; in fname
+                    or &#39;form2&#39; in fname
+                    or &#39;form4&#39; in fname
+                    or &#39;form5&#39; in fname                    
+                    or &#39;form7&#39; in fname
+                   ]
+    for i, fname in tqdm(enumerate(fnames_small)): # this should include more than 3!
+        df2 = r[fname].copy()
+        df2 = df2.drop_duplicates(subset=[&#39;id&#39;], keep=&#39;last&#39;) # if subj has multiple entries, only keep first
+        rename_dict = {
+            key: key + &#39;_&#39; + fname[:-4].replace(&#39;form&#39;, &#39;&#39;)
+            for key in df2.keys()
+            if not key == &#39;id&#39;
+        }
+
+        df2.rename(columns=rename_dict, inplace=True)
+        df = pd.merge(df, df2, on=&#39;id&#39;, how=how)
+    print(&#39;final shape&#39;, df.shape)
+    
+    # df.to_pickle(oj(pdir, &#39;features.pkl&#39;))
+    return df
+
+def get_outcomes(NUM_PATIENTS=12044):
+    &#39;&#39;&#39;Read in the outcomes
+    
+    Returns
+    -------
+    outcomes: pd.DataFrame
+        iai (has 761 positives)
+        iai_intervention (has 203 positives)
+    &#39;&#39;&#39;
+    form4abdangio = pd.read_csv(&#39;iaip_data/Datasets/form4bother_abdangio.csv&#39;).rename(columns={&#39;subjectid&#39;: &#39;id&#39;})
+    form6a = pd.read_csv(&#39;iaip_data/Datasets/form6a.csv&#39;).rename(columns={&#39;subjectid&#39;: &#39;id&#39;})
+    form6b = pd.read_csv(&#39;iaip_data/Datasets/form6b.csv&#39;).rename(columns={&#39;SubjectID&#39;: &#39;id&#39;}) 
+    form6c = pd.read_csv(&#39;iaip_data/Datasets/form6c.csv&#39;).rename(columns={&#39;subjectid&#39;: &#39;id&#39;})
+
+    # (6b) Intra-abdominal injury diagnosed in the ED/during hospitalization by any diagnostic method
+    # 1 is yes, 761 have intra-abdominal injury
+    # 2 is no -&gt; remap to 0, 841 without intra-abdominal injury
+    idxs_iai = form6b.id[form6b[&#39;IAIinED1&#39;] == 1]
+    iai = np.zeros(NUM_PATIENTS).astype(np.int)
+    iai[idxs_iai] = 1
+
+    
+    def get_ids(form, keys):
+        ids_all = set()
+        for key in keys:
+            ids = form.id.values[form[key] == 1]
+            for i in ids:
+                ids_all.add(i)     
+#             print(key, np.sum(form[key] == 1), np.unique(ids).size)            
+        return ids_all
+
+    
+
+    # print(form4abdangio.keys())
+    ids_allangio = get_ids(form4abdangio, [&#39;AbdAngioVessel&#39;])
+    # print(&#39;num in 4angio&#39;, len(ids_allangio))
+    # print(form6a.keys())
+    # ids_alla = get_ids(form6a, [&#39;DeathCause&#39;])
+    # print(&#39;num in a&#39;, len(ids_alla))
+    # print(form6b.keys())
+    ids_allb = get_ids(form6b, [&#39;IVFluids&#39;, &#39;BldTransfusion&#39;])
+    # print(&#39;num in b&#39;, len(ids_allb))
+    # print(form6c.keys())
+    ids_allc = get_ids(form6c, [&#39;IntervenDurLap&#39;])
+    # print(&#39;num in c&#39;, len(ids_allc))
+
+    ids = ids_allb.union(ids_allangio).union(ids_allc)
+    ids_np = np.array(list(ids)) - 1
+    iai_intervention = np.zeros(NUM_PATIENTS).astype(np.int)
+    iai_intervention[ids_np] = 1
+#     print(&#39;num total&#39;, len(ids))
+    # print(len(ids_allb.union(ids_allc)))
+    
+    
+    df_iai = pd.DataFrame.from_dict({
+        &#39;id&#39;: np.arange(1, NUM_PATIENTS + 1),
+        &#39;iai&#39;: iai,
+        &#39;iai_intervention&#39;: iai_intervention
+    })
+    return df_iai
+
+def rename_values(df):
+    &#39;&#39;&#39;Map values to meanings
+    &#39;&#39;&#39;
+    race = {
+        1: &#39;American Indian or Alaska Native&#39;,
+        2: &#39;Asian&#39;,
+        3: &#39;Black or African American&#39;,
+        4: &#39;Native Hawaaian or Other Pacific Islander&#39;,
+        5: &#39;White&#39;,
+        6: &#39;Stated as Unknown&#39;,
+        7: &#39;Other&#39;
+    }
+    df.RACE = [race[v] for v in df.RACE.values]
+    df[&#39;Costal_1&#39;] = (df.LtCostalTender_1 == 1) | (df.RtCostalTender_1 == 1) | (df.DecrBreathSound_1)
+    df[&#39;AbdTrauma_or_SeatBeltSign_1&#39;] = (df.AbdTrauma_1 == 1) | (df.SeatBeltSign_1 == 1)
+    
+    ks_categorical = [&#39;SEX&#39;, &#39;RACE&#39;, &#39;HISPANIC_ETHNICITY&#39;, 
+                      &#39;VomitWretch_1&#39;, &#39;RecodedMOI_1&#39;, &#39;ThoracicTender_1&#39;, &#39;ThoracicTrauma_1&#39;,
+                      &#39;Costal_1&#39;, &#39;DecrBreathSound_1&#39;, &#39;AbdDistention_1&#39;, &#39;AbdTenderDegree_1&#39;,
+                      &#39;AbdTrauma_1&#39;, &#39;SeatBeltSign_1&#39;, &#39;AbdTrauma_or_SeatBeltSign_1&#39;, &#39;DistractingPain_1&#39;,
+                      &#39;AbdomenPain_1&#39;]
+    
+    for k in ks_categorical:
+        df[k] = df[k].astype(str)
+    
+    return df
+    
+def preprocess(df_feats: pd.DataFrame):
+    &#39;&#39;&#39;Get preprocessed features from df
+    
+    Originally used features: age &lt; 2, severe mechanism of injury (includes many things), 
+    vomiting, hypotension, GCS
+    thoracic tenderness, evidence of thoracic wall trauma
+    costal marign tenderness, decreased breath sounds, abdominal distention
+    complaints of abdominal pain, abdominal tenderness (3 levels)
+    evidence of abdominal wall trauma or seat belt sign
+    distracting patinful injury
+    femur fracture
+    &#39;&#39;&#39;
+
+    # fill in values for some vars from NaN -&gt; Unknown
+    feat = df_feats.copy()
+    feat.AbdTenderDegree_1 = feat.AbdTenderDegree_1.fillna(4)
+    feat.AbdTrauma_1 = feat.AbdTrauma_1.fillna(4)
+    
+    
+    # print(df.shape)
+    df_filt = feat.dropna(axis=1, thresh=NUM_PATIENTS - 602) # thresh is how many non-nan values - 602 is 5%
+    # print(df_filt.shape)
+    # print(list(df_filt.keys()))
+
+
+    # delete some columns
+    keys = list(df_filt.keys())
+    keys_to_remove = [k for k in keys if &#39;Repeat_instance&#39; in k]
+    df_filt = df_filt.drop(labels=keys_to_remove, axis=1)
+    # print(&#39;keys removed&#39;, keys_to_remove, &#39;new shape&#39;, df_filt.shape)
+
+    
+    # pandas impute missing values with median
+    df_filt = df_filt.fillna(df_filt.median())
+
+    # keys = [&#39;SEX&#39;, &#39;RACE&#39;, &#39;ageinyrs&#39;]
+    # print(df_filt.dtypes)
+    return df_filt
+
+def classification_setup(df: pd.DataFrame):
+    &#39;&#39;&#39;Prepare the data for classification
+    &#39;&#39;&#39;
+
+    # convert feats to dummy
+    df = pd.get_dummies(df, dummy_na=True) # treat na as a separate category
+
+    df = df.loc[:, (df != 0).any(axis=0)] # remove any col that is all 0s
+
+
+    # set up train / test
+    np.random.seed(42)
+    df[&#39;cv_fold&#39;] = np.random.randint(1, 7, size=df.shape[0]) # 6 is the test set
+
+    return df</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="iai-interpretability.data.classification_setup"><code class="name flex">
+<span>def <span class="ident">classification_setup</span></span>(<span>df)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Prepare the data for classification</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def classification_setup(df: pd.DataFrame):
+    &#39;&#39;&#39;Prepare the data for classification
+    &#39;&#39;&#39;
+
+    # convert feats to dummy
+    df = pd.get_dummies(df, dummy_na=True) # treat na as a separate category
+
+    df = df.loc[:, (df != 0).any(axis=0)] # remove any col that is all 0s
+
+
+    # set up train / test
+    np.random.seed(42)
+    df[&#39;cv_fold&#39;] = np.random.randint(1, 7, size=df.shape[0]) # 6 is the test set
+
+    return df</code></pre>
+</details>
+</dd>
+<dt id="iai-interpretability.data.get_data"><code class="name flex">
+<span>def <span class="ident">get_data</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Run all the preprocessing and return df</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data():
+    &#39;&#39;&#39;Run all the preprocessing and return df
+    &#39;&#39;&#39;
+    features = get_features() # read all features into df
+    outcomes = get_outcomes() # 2 outcomes: iai, and iai_intervention
+    df = pd.merge(features, outcomes, on=&#39;id&#39;, how=&#39;left&#39;)
+    df = rename_values(df) # rename the features by their meaning
+    df = preprocess(features) # impute and fill
+    df = classification_setup(df) # add cv fold + dummies
+    return df</code></pre>
+</details>
+</dd>
+<dt id="iai-interpretability.data.get_features"><code class="name flex">
+<span>def <span class="ident">get_features</span></span>(<span>ddir='iaip_data/Datasets', rdir='results', pdir='processed')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Read all features into df</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>features</code></strong> :&ensp;<code>pd.DataFrame</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_features(ddir = &#39;iaip_data/Datasets&#39;, rdir = &#39;results&#39;, pdir = &#39;processed&#39;):
+    &#39;&#39;&#39;Read all features into df
+    
+    Returns
+    -------
+    features: pd.DataFrame
+    &#39;&#39;&#39;
+    fnames = sorted([fname for fname in os.listdir(ddir) 
+                     if &#39;csv&#39; in fname
+                     and not &#39;formats&#39; in fname
+                     and not &#39;form6&#39; in fname]) # remove outcome
+    feature_names = [fname[:-4].replace(&#39;form&#39;, &#39;&#39;).replace(&#39;-&#39;, &#39;_&#39;) for fname in fnames]
+    # demographics = pd.read_csv(&#39;iaip_data/Datasets/demographics.csv&#39;)
+    # print(fnames)
+
+    r = {}
+    for fname in tqdm(fnames):
+        df = pd.read_csv(oj(ddir, fname), engine=&#39;python&#39;)
+        df.rename(columns={&#39;SubjectID&#39;: &#39;id&#39;}, inplace=True)
+        df.rename(columns={&#39;subjectid&#39;: &#39;id&#39;}, inplace=True)
+        assert(&#39;id&#39; in df.keys())
+        r[fname] = df
+
+    df = r[fnames[0]]
+    how = &#39;left&#39;
+
+    fnames_small = [fname for fname in fnames
+                    if &#39;form1&#39; in fname
+                    or &#39;form2&#39; in fname
+                    or &#39;form4&#39; in fname
+                    or &#39;form5&#39; in fname                    
+                    or &#39;form7&#39; in fname
+                   ]
+    for i, fname in tqdm(enumerate(fnames_small)): # this should include more than 3!
+        df2 = r[fname].copy()
+        df2 = df2.drop_duplicates(subset=[&#39;id&#39;], keep=&#39;last&#39;) # if subj has multiple entries, only keep first
+        rename_dict = {
+            key: key + &#39;_&#39; + fname[:-4].replace(&#39;form&#39;, &#39;&#39;)
+            for key in df2.keys()
+            if not key == &#39;id&#39;
+        }
+
+        df2.rename(columns=rename_dict, inplace=True)
+        df = pd.merge(df, df2, on=&#39;id&#39;, how=how)
+    print(&#39;final shape&#39;, df.shape)
+    
+    # df.to_pickle(oj(pdir, &#39;features.pkl&#39;))
+    return df</code></pre>
+</details>
+</dd>
+<dt id="iai-interpretability.data.get_outcomes"><code class="name flex">
+<span>def <span class="ident">get_outcomes</span></span>(<span>NUM_PATIENTS=12044)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Read in the outcomes</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>outcomes</code></strong> :&ensp;<code>pd.DataFrame</code></dt>
+<dd>iai (has 761 positives)
+iai_intervention (has 203 positives)</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_outcomes(NUM_PATIENTS=12044):
+    &#39;&#39;&#39;Read in the outcomes
+    
+    Returns
+    -------
+    outcomes: pd.DataFrame
+        iai (has 761 positives)
+        iai_intervention (has 203 positives)
+    &#39;&#39;&#39;
+    form4abdangio = pd.read_csv(&#39;iaip_data/Datasets/form4bother_abdangio.csv&#39;).rename(columns={&#39;subjectid&#39;: &#39;id&#39;})
+    form6a = pd.read_csv(&#39;iaip_data/Datasets/form6a.csv&#39;).rename(columns={&#39;subjectid&#39;: &#39;id&#39;})
+    form6b = pd.read_csv(&#39;iaip_data/Datasets/form6b.csv&#39;).rename(columns={&#39;SubjectID&#39;: &#39;id&#39;}) 
+    form6c = pd.read_csv(&#39;iaip_data/Datasets/form6c.csv&#39;).rename(columns={&#39;subjectid&#39;: &#39;id&#39;})
+
+    # (6b) Intra-abdominal injury diagnosed in the ED/during hospitalization by any diagnostic method
+    # 1 is yes, 761 have intra-abdominal injury
+    # 2 is no -&gt; remap to 0, 841 without intra-abdominal injury
+    idxs_iai = form6b.id[form6b[&#39;IAIinED1&#39;] == 1]
+    iai = np.zeros(NUM_PATIENTS).astype(np.int)
+    iai[idxs_iai] = 1
+
+    
+    def get_ids(form, keys):
+        ids_all = set()
+        for key in keys:
+            ids = form.id.values[form[key] == 1]
+            for i in ids:
+                ids_all.add(i)     
+#             print(key, np.sum(form[key] == 1), np.unique(ids).size)            
+        return ids_all
+
+    
+
+    # print(form4abdangio.keys())
+    ids_allangio = get_ids(form4abdangio, [&#39;AbdAngioVessel&#39;])
+    # print(&#39;num in 4angio&#39;, len(ids_allangio))
+    # print(form6a.keys())
+    # ids_alla = get_ids(form6a, [&#39;DeathCause&#39;])
+    # print(&#39;num in a&#39;, len(ids_alla))
+    # print(form6b.keys())
+    ids_allb = get_ids(form6b, [&#39;IVFluids&#39;, &#39;BldTransfusion&#39;])
+    # print(&#39;num in b&#39;, len(ids_allb))
+    # print(form6c.keys())
+    ids_allc = get_ids(form6c, [&#39;IntervenDurLap&#39;])
+    # print(&#39;num in c&#39;, len(ids_allc))
+
+    ids = ids_allb.union(ids_allangio).union(ids_allc)
+    ids_np = np.array(list(ids)) - 1
+    iai_intervention = np.zeros(NUM_PATIENTS).astype(np.int)
+    iai_intervention[ids_np] = 1
+#     print(&#39;num total&#39;, len(ids))
+    # print(len(ids_allb.union(ids_allc)))
+    
+    
+    df_iai = pd.DataFrame.from_dict({
+        &#39;id&#39;: np.arange(1, NUM_PATIENTS + 1),
+        &#39;iai&#39;: iai,
+        &#39;iai_intervention&#39;: iai_intervention
+    })
+    return df_iai</code></pre>
+</details>
+</dd>
+<dt id="iai-interpretability.data.preprocess"><code class="name flex">
+<span>def <span class="ident">preprocess</span></span>(<span>df_feats)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get preprocessed features from df</p>
+<p>Originally used features: age &lt; 2, severe mechanism of injury (includes many things),
+vomiting, hypotension, GCS
+thoracic tenderness, evidence of thoracic wall trauma
+costal marign tenderness, decreased breath sounds, abdominal distention
+complaints of abdominal pain, abdominal tenderness (3 levels)
+evidence of abdominal wall trauma or seat belt sign
+distracting patinful injury
+femur fracture</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def preprocess(df_feats: pd.DataFrame):
+    &#39;&#39;&#39;Get preprocessed features from df
+    
+    Originally used features: age &lt; 2, severe mechanism of injury (includes many things), 
+    vomiting, hypotension, GCS
+    thoracic tenderness, evidence of thoracic wall trauma
+    costal marign tenderness, decreased breath sounds, abdominal distention
+    complaints of abdominal pain, abdominal tenderness (3 levels)
+    evidence of abdominal wall trauma or seat belt sign
+    distracting patinful injury
+    femur fracture
+    &#39;&#39;&#39;
+
+    # fill in values for some vars from NaN -&gt; Unknown
+    feat = df_feats.copy()
+    feat.AbdTenderDegree_1 = feat.AbdTenderDegree_1.fillna(4)
+    feat.AbdTrauma_1 = feat.AbdTrauma_1.fillna(4)
+    
+    
+    # print(df.shape)
+    df_filt = feat.dropna(axis=1, thresh=NUM_PATIENTS - 602) # thresh is how many non-nan values - 602 is 5%
+    # print(df_filt.shape)
+    # print(list(df_filt.keys()))
+
+
+    # delete some columns
+    keys = list(df_filt.keys())
+    keys_to_remove = [k for k in keys if &#39;Repeat_instance&#39; in k]
+    df_filt = df_filt.drop(labels=keys_to_remove, axis=1)
+    # print(&#39;keys removed&#39;, keys_to_remove, &#39;new shape&#39;, df_filt.shape)
+
+    
+    # pandas impute missing values with median
+    df_filt = df_filt.fillna(df_filt.median())
+
+    # keys = [&#39;SEX&#39;, &#39;RACE&#39;, &#39;ageinyrs&#39;]
+    # print(df_filt.dtypes)
+    return df_filt</code></pre>
+</details>
+</dd>
+<dt id="iai-interpretability.data.rename_values"><code class="name flex">
+<span>def <span class="ident">rename_values</span></span>(<span>df)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Map values to meanings</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rename_values(df):
+    &#39;&#39;&#39;Map values to meanings
+    &#39;&#39;&#39;
+    race = {
+        1: &#39;American Indian or Alaska Native&#39;,
+        2: &#39;Asian&#39;,
+        3: &#39;Black or African American&#39;,
+        4: &#39;Native Hawaaian or Other Pacific Islander&#39;,
+        5: &#39;White&#39;,
+        6: &#39;Stated as Unknown&#39;,
+        7: &#39;Other&#39;
+    }
+    df.RACE = [race[v] for v in df.RACE.values]
+    df[&#39;Costal_1&#39;] = (df.LtCostalTender_1 == 1) | (df.RtCostalTender_1 == 1) | (df.DecrBreathSound_1)
+    df[&#39;AbdTrauma_or_SeatBeltSign_1&#39;] = (df.AbdTrauma_1 == 1) | (df.SeatBeltSign_1 == 1)
+    
+    ks_categorical = [&#39;SEX&#39;, &#39;RACE&#39;, &#39;HISPANIC_ETHNICITY&#39;, 
+                      &#39;VomitWretch_1&#39;, &#39;RecodedMOI_1&#39;, &#39;ThoracicTender_1&#39;, &#39;ThoracicTrauma_1&#39;,
+                      &#39;Costal_1&#39;, &#39;DecrBreathSound_1&#39;, &#39;AbdDistention_1&#39;, &#39;AbdTenderDegree_1&#39;,
+                      &#39;AbdTrauma_1&#39;, &#39;SeatBeltSign_1&#39;, &#39;AbdTrauma_or_SeatBeltSign_1&#39;, &#39;DistractingPain_1&#39;,
+                      &#39;AbdomenPain_1&#39;]
+    
+    for k in ks_categorical:
+        df[k] = df[k].astype(str)
+    
+    return df</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="iai-interpretability" href="index.html">iai-interpretability</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="iai-interpretability.data.classification_setup" href="#iai-interpretability.data.classification_setup">classification_setup</a></code></li>
+<li><code><a title="iai-interpretability.data.get_data" href="#iai-interpretability.data.get_data">get_data</a></code></li>
+<li><code><a title="iai-interpretability.data.get_features" href="#iai-interpretability.data.get_features">get_features</a></code></li>
+<li><code><a title="iai-interpretability.data.get_outcomes" href="#iai-interpretability.data.get_outcomes">get_outcomes</a></code></li>
+<li><code><a title="iai-interpretability.data.preprocess" href="#iai-interpretability.data.preprocess">preprocess</a></code></li>
+<li><code><a title="iai-interpretability.data.rename_values" href="#iai-interpretability.data.rename_values">rename_values</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
