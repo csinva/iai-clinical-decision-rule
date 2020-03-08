@@ -39,7 +39,7 @@ def get_data(use_processed=True, save_processed=True, processed_file='processed/
         return df
     
 
-def get_features(ddir = 'iaip_data/Datasets', rdir = 'results', pdir = 'processed'):
+def get_features(ddir='data_pecarn/Datasets', rdir='results', pdir='processed'):
     '''Read all features into df
     
     Returns
