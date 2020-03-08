@@ -30,28 +30,30 @@ from colorama import Fore
 import pickle as pkl
 from style import *
 
-def visualize_individual_results(results, X_test, Y_test):
+def visualize_individual_results(results, X_test, Y_test, print_results=True):
     '''Print and visualize results from a single train.
     '''
     scores_cv = results['cv']
     scores_test = results['test']
     imps = results['imps']
     m = imps['model'][0]
-    print(Fore.CYAN + f'{"metric":<25}\tvalidation') #\ttest')
-    for s in results['metrics']:
-        if not 'curve' in s:
-            print(Fore.WHITE + f'{s:<25}\t{np.mean(scores_cv[s]):.3f} ~ {np.std(scores_cv[s]):.3f}')
-    #         print(Fore.WHITE + f'{s:<25}\t{np.mean(scores_cv[s]):.3f} ~ {np.std(scores_cv[s]):.3f}\t{np.mean(scores_test[s]):.3f} ~ {np.std(scores_test[s]):.3f}')
+    
+    if print_results:
+        print(Fore.CYAN + f'{"metric":<25}\tvalidation') #\ttest')
+        for s in results['metrics']:
+            if not 'curve' in s:
+                print(Fore.WHITE + f'{s:<25}\t{np.mean(scores_cv[s]):.3f} ~ {np.std(scores_cv[s]):.3f}')
+        #         print(Fore.WHITE + f'{s:<25}\t{np.mean(scores_cv[s]):.3f} ~ {np.std(scores_cv[s]):.3f}\t{np.mean(scores_test[s]):.3f} ~ {np.std(scores_test[s]):.3f}')
 
-    print(Fore.CYAN + '\nfeature importances')
-    imp_mat = np.array(imps['imps'])
-    imp_mu = imp_mat.mean(axis=0)
-    imp_sd = imp_mat.std(axis=0)
-    for i, feat_name in enumerate(results['feat_names']):
-        print(Fore.WHITE + f'{feat_name:<25}\t{imp_mu[i]:.3f} ~ {imp_sd[i]:.3f}')
+        print(Fore.CYAN + '\nfeature importances')
+        imp_mat = np.array(imps['imps'])
+        imp_mu = imp_mat.mean(axis=0)
+        imp_sd = imp_mat.std(axis=0)
+        for i, feat_name in enumerate(results['feat_names']):
+            print(Fore.WHITE + f'{feat_name:<25}\t{imp_mu[i]:.3f} ~ {imp_sd[i]:.3f}')
 
     # print(m.coef_)
-    plt.figure(figsize=(10, 3), dpi=140)
+    plt.figure(figsize=(10, 3), dpi=200)
     R, C = 1, 3
     plt.subplot(R, C, 1)
     # print(X_test.shape, results['feat_names'])

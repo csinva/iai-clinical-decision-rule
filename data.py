@@ -88,7 +88,7 @@ def get_features(ddir = 'iaip_data/Datasets', rdir = 'results', pdir = 'processe
     # df.to_pickle(oj(pdir, 'features.pkl'))
     return df
 
-def get_outcomes(NUM_PATIENTS=12044):
+def get_outcomes():
     '''Read in the outcomes
     
     Returns
@@ -230,3 +230,29 @@ def classification_setup(df: pd.DataFrame):
     df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0]) # 6 is the test set
 
     return df
+
+def get_feat_names(df):
+    '''Get feature names
+    
+    Returns
+    -------
+    feat_names: List[Str]
+        All valid feature names
+    pecarn_feats: List[Str]
+        All valid feature names corresponding to original pecarn iai study
+    '''
+    feat_names = [k for k in df.keys() # features to use
+              if not k in ['id', 'cv_fold'] 
+              and not 'iai' in k.lower()]
+    
+    PECARN_FEAT_NAMES = ['VomitWretch_1', 'RecodedMOI_1', 'GCSScore_1', 'ThoracicTender_1', 'ThoracicTrauma_1', 
+              'Cosatsl_1', 'DecrBreathSound_1', 'AbdDistention_1', 'AbdomenPain_1', 'AbdTenderDegree_1',
+              'AbdTrauma_1', 'SeatBeltSign_1', 'DistractingPain_1']
+    # InjuryMechanism_1, hypotension?, femure fracture
+    ks = set() # pecarn feats after encoding
+    for pecarn_feat in PECARN_FEAT_NAMES:
+        for feat_name in feat_names:
+            if pecarn_feat in feat_name:
+                ks.add(feat_name)
+    ks = list(ks)
+    return feat_names, ks
