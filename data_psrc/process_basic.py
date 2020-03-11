@@ -2,7 +2,7 @@
 csv_file = 'psrc_data.csv'
 with open(csv_file, 'r') as f:
     lines = f.read()
-with open('prsc_data_processed.csv', 'w') as f:
+with open('psrc_data_processed.csv', 'w') as f:
     lines = lines.replace('Unchecked', '0')
     lines = lines.replace('Checked', '1')
     lines = lines.replace('Yes', '1')

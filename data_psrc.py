@@ -1,20 +1,15 @@
 import os
 from os.path import join as oj
-import sys, time
+import sys
 sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
-import seaborn as sns
 import numpy as np
-import matplotlib.pyplot as plt
 from tqdm import tqdm
-from copy import deepcopy
-import pickle as pkl
 import pandas as pd
-
 NUM_PATIENTS = 12044
 
 
 
-def get_data(use_processed=True, save_processed=True, processed_file='processed/df.pkl'):
+def get_data(use_processed=True, save_processed=True, processed_file='processed/df_pecarn.pkl'):
     '''Run all the preprocessing
     
     Params
@@ -28,16 +23,27 @@ def get_data(use_processed=True, save_processed=True, processed_file='processed/
         return pd.read_pickle(processed_file)
     else:
         print('computing preprocessing...')
+        '''
         df_features = get_features() # read all features into df
         df_outcomes = get_outcomes() # 2 outcomes: iai, and iai_intervention
         df = pd.merge(df_features, df_outcomes, on='id', how='left')
         df = rename_values(df) # rename the features by their meaning
         df = preprocess(df) # impute and fill
         df = classification_setup(df) # add cv fold + dummies
+        '''
         if save_processed:
             df.to_pickle(processed_file)
         return df
     
+
+
+
+
+
+
+######################################### REF #################################
+
+
 
 def get_features(ddir='data_pecarn/Datasets', rdir='results', pdir='processed'):
     '''Read all features into df
@@ -98,28 +104,27 @@ def get_outcomes():
         iai_intervention (has 203 positives)
     '''
     form4abdangio = pd.read_csv('iaip_data/Datasets/form4bother_abdangio.csv').rename(columns={'subjectid': 'id'})
-    form6a = pd.read_csv('iaip_data/Datasets/form6a.csv').rename(columns={'subjectid': 'id'})
+    # form6a = pd.read_csv('iaip_data/Datasets/form6a.csv').rename(columns={'subjectid': 'id'})
     form6b = pd.read_csv('iaip_data/Datasets/form6b.csv').rename(columns={'SubjectID': 'id'}) 
     form6c = pd.read_csv('iaip_data/Datasets/form6c.csv').rename(columns={'subjectid': 'id'})
 
-    # (6b) Intra-abdominal injury diagnosed in the ED/during hospitalization by any diagnostic method
-    # 1 is yes, 761 have intra-abdominal injury
-    # 2 is no -> remap to 0, 841 without intra-abdominal injury
-    idxs_iai = form6b.id[form6b['IAIinED1'] == 1]
-    iai = np.zeros(NUM_PATIENTS).astype(np.int)
-    iai[idxs_iai] = 1
-
-    
     def get_ids(form, keys):
+        '''Return ids for which any of the keys is 1
+        '''
         ids_all = set()
         for key in keys:
             ids = form.id.values[form[key] == 1]
             for i in ids:
-                ids_all.add(i)     
-#             print(key, np.sum(form[key] == 1), np.unique(ids).size)            
+                ids_all.add(i)
+                #             print(key, np.sum(form[key] == 1), np.unique(ids).size)
         return ids_all
 
-    
+    # (6b) Intra-abdominal injury diagnosed in the ED/during hospitalization by any diagnostic method
+    # 1 is yes, 761 have intra-abdominal injury
+    # 2 is no -> remap to 0, 841 without intra-abdominal injury
+    idxs_iai = get_ids(form6b, ['IAIinED1'])# form6b.id[form6b['IAIinED1'] == 1]
+    iai = np.zeros(NUM_PATIENTS).astype(np.int)
+    iai[idxs_iai] = 1
 
     # print(form4abdangio.keys())
     ids_allangio = get_ids(form4abdangio, ['AbdAngioVessel'])

@@ -1,0 +1,2 @@
+- start by converting .xls file to .csv
+- the run process_basic.py on the csv file to shrink it into a more manageable format
