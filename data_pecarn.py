@@ -11,7 +11,7 @@ NUM_PATIENTS = 12044
 DATA_DIR = 'data_pecarn/Datasets'
 
 
-def get_data(use_processed=True, save_processed=True, processed_file='processed/df.pkl'):
+def get_data(use_processed=True, save_processed=True, processed_file='processed/df_pecarn.pkl'):
     '''Run all the preprocessing
     
     Params
@@ -241,9 +241,23 @@ def get_feat_names(df):
                   if not k in ['id', 'cv_fold']
                   and not 'iai' in k.lower()]
 
-    PECARN_FEAT_NAMES = ['VomitWretch', 'RecodedMOI', 'GCSScore', 'ThoracicTender', 'ThoracicTrauma',
-                         'Costal', 'DecrBreathSound', 'AbdDistention', 'AbdomenPain', 'AbdTenderDegree',
-                         'AbdTrauma', 'SeatBeltSign', 'DistractingPain']
+    PECARN_FEAT_NAMES = ['AbdDistention',
+                         'AbdTenderDegree',
+                         'AbdTrauma',
+                         'AbdTrauma_or_SeatBeltSign',
+                         'AbdomenPain',
+                         'Costal',
+                         'DecrBreathSound',
+                         'DistractingPain',
+                         'GCSScore',
+                         'LtCostalTender',
+                         'RecodedMOI',
+                         'RtCostalTender',
+                         'SeatBeltSign',
+                         'ThoracicTender',
+                         'ThoracicTrauma',
+                         'VomitWretch',
+                         'ageinyrs']
     # InjuryMechanism_1, hypotension?, femure fracture
     ks = set()  # pecarn feats after encoding
     for pecarn_feat in PECARN_FEAT_NAMES:
