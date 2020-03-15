@@ -1,0 +1,62 @@
+import os
+from os.path import join as oj
+import sys
+import numpy as np
+from tqdm import tqdm
+import pandas as pd
+from copy import deepcopy
+def classification_setup(df: pd.DataFrame):
+    """Prepare the data for classification
+    """
+
+    # convert feats to dummy
+    df = pd.get_dummies(df, dummy_na=True)  # treat na as a separate category
+
+    # remove any col that is all 0s
+    df = df.loc[:, (df != 0).any(axis=0)]
+
+    # set up train / test
+    np.random.seed(42)
+    df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0])  # 6 is the test set
+
+    return df
+
+def get_feat_names(df):
+    '''Get feature names for pecarn
+    
+    Returns
+    -------
+    feat_names: List[Str]
+        All valid feature names
+    pecarn_feats: List[Str]
+        All valid feature names corresponding to original pecarn iai study
+    '''
+    feat_names = [k for k in df.keys()  # features to use
+                  if not k in ['id', 'cv_fold']
+                  and not 'iai' in k.lower()]
+
+    PECARN_FEAT_NAMES = ['AbdDistention',
+                         'AbdTenderDegree',
+                         'AbdTrauma',
+                         'AbdTrauma_or_SeatBeltSign',
+                         'AbdomenPain',
+                         'Costal',
+                         'DecrBreathSound',
+                         'DistractingPain',
+                         'GCSScore',
+                         'LtCostalTender',
+                         'RecodedMOI',
+                         'RtCostalTender',
+                         'SeatBeltSign',
+                         'ThoracicTender',
+                         'ThoracicTrauma',
+                         'VomitWretch',
+                         'ageinyrs']
+    # InjuryMechanism_1, hypotension?, femure fracture
+    ks = set()  # pecarn feats after encoding
+    for pecarn_feat in PECARN_FEAT_NAMES:
+        for feat_name in feat_names:
+            if pecarn_feat in feat_name:
+                ks.add(feat_name)
+    ks = sorted(list(ks))
+    return feat_names, ks

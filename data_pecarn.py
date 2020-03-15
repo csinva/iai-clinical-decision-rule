@@ -1,11 +1,11 @@
 import os
 from os.path import join as oj
 import sys
-
-sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
 import numpy as np
 from tqdm import tqdm
 import pandas as pd
+from copy import deepcopy
+from data import classification_setup
 
 NUM_PATIENTS = 12044
 DATA_DIR = 'data_pecarn/Datasets'
@@ -146,29 +146,85 @@ def get_outcomes():
 
 def rename_values(df):
     '''Map values to meanings
+    Rename some features
+    Compute a couple new features
+    set types of 
     '''
     race = {
         1: 'American Indian or Alaska Native',
         2: 'Asian',
         3: 'Black or African American',
-        4: 'Native Hawaaian or Other Pacific Islander',
+        4: 'Native Hawaiian or Other Pacific Islander',
         5: 'White',
-        6: 'Stated as Unknown',
+        6: 'Stated as unknown',
         7: 'Other'
     }
+    moi = {
+        1: 'Motor vehicle collision',
+        2: 'Fall from an elevation',
+        3: 'Fall down stairs',
+        4: 'Pedestrian/bicyclist struck by moving vehicle',
+        5: 'Bike collision/fall',
+        6: 'Motorcycle/ATV/Scooter collision',
+        7: 'Object struck abdomen',
+        8: 'unknown', # unknown mechanism,
+        9: 'unknown', # other mechanism
+        10: 'unknown' # physician did not answer
+    }
+    abdTenderDegree = {
+        1: 'Mild',
+        2: 'Moderate',
+        3: 'Severe',
+        4: 'unknown'
+    }
     df.RACE = [race[v] for v in df.RACE.values]
-    print('keys', list(df.keys()))
-    df['Costal'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) | (df.DecrBreathSound)
+    df.RecodedMOI = [moi[v] for v in df.RecodedMOI.values]
+    df.AbdTenderDegree = df.AbdTenderDegree.fillna(4)
+    df.AbdTenderDegree = [abdTenderDegree[v] for v in df.AbdTenderDegree.values]
+    df = df.rename(columns={'RACE': 'Race', 
+                            'SEX': 'Sex', 
+                            'HISPANIC_ETHNICITY': 'Hispanic',
+                            'ageinyrs': 'Age'
+                           })
+    # print('keys', list(df.keys()))
+    df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) | (df.DecrBreathSound)
     df['AbdTrauma_or_SeatBeltSign'] = (df.AbdTrauma == 1) | (df.SeatBeltSign == 1)
 
-    ks_categorical = ['SEX', 'RACE', 'HISPANIC_ETHNICITY',
+    
+    # set types of these variables to categorical
+    ks_categorical = ['Sex', 'Race', 'Hispanic',
                       'VomitWretch', 'RecodedMOI', 'ThoracicTender', 'ThoracicTrauma',
-                      'Costal', 'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
+                      'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
                       'AbdTrauma', 'SeatBeltSign', 'AbdTrauma_or_SeatBeltSign', 'DistractingPain',
                       'AbdomenPain']
-
     for k in ks_categorical:
-        df[k] = df[k].astype(str)
+        df[k] = df[k].astype(str)    
+    
+    
+    # rename vars to values
+    ks_remap = ['Hispanic', 'VomitWretch', 'RecodedMOI', 
+                'ThoracicTender', 'ThoracicTrauma', 
+                'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
+                'AbdTrauma', 'SeatBeltSign', 
+                'DistractingPain', 'AbdomenPain']
+    for k in ks_remap:
+
+        vals = df[k].values
+        v2 = deepcopy(df[k].values.astype(str))
+        is_na = df[k].isna()
+        print(k, vals.dtype)        
+        uniques = np.unique(vals).astype(np.str)
+        print('uniques', uniques, uniques.size, type(uniques), uniques.astype(str).dtype)
+        contains_nan = np.sum(is_na) > 0
+        if contains_nan and uniques.size in [4, 5] or ~contains_nan and uniques.size in [3, 4]:
+            if '1.0' in uniques and '2.0' in uniques and '3.0' in uniques:
+                v2[v2=='1.0'] = 'yes'
+                v2[v2=='2.0'] = 'no'
+                v2[v2=='3.0'] = 'unknown' # Unknown
+                v2[v2=='4.0'] = 'unknown' # Physician didn't answer
+                v2[is_na] = 'unknown' # data not colltected
+                df[k] = v2
+                print('reset!')
 
     return df
 
@@ -188,8 +244,8 @@ def preprocess(df: pd.DataFrame):
 
     # fill in values for some vars from NaN -> Unknown
     df_filt = df.copy()
-    df_filt.AbdTenderDegree = df_filt.AbdTenderDegree.fillna(4)
-    df_filt.AbdTrauma = df_filt.AbdTrauma.fillna(4)
+#     df_filt.AbdTenderDegree = df_filt.AbdTenderDegree.fillna('unknown')
+    df_filt.AbdTrauma = df_filt.AbdTrauma.fillna('unknown')
 
     # print(df.shape)
     df_filt = df_filt.dropna(axis=1, thresh=NUM_PATIENTS - 602)  # thresh is how many non-nan values - 602 is 5%
@@ -203,66 +259,8 @@ def preprocess(df: pd.DataFrame):
     # print('keys removed', keys_to_remove, 'new shape', df_filt.shape)
 
     # pandas impute missing values with median
-    df_filt = df_filt.fillna(df_filt.median())
+    # df_filt = df_filt.fillna(df_filt.median())
 
     # keys = ['SEX', 'RACE', 'ageinyrs']
     # print(df_filt.dtypes)
     return df_filt
-
-
-def classification_setup(df: pd.DataFrame):
-    """Prepare the data for classification
-    """
-
-    # convert feats to dummy
-    df = pd.get_dummies(df, dummy_na=True)  # treat na as a separate category
-
-    # remove any col that is all 0s
-    df = df.loc[:, (df != 0).any(axis=0)]
-
-    # set up train / test
-    np.random.seed(42)
-    df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0])  # 6 is the test set
-
-    return df
-
-
-def get_feat_names(df):
-    '''Get feature names for pecarn
-    
-    Returns
-    -------
-    feat_names: List[Str]
-        All valid feature names
-    pecarn_feats: List[Str]
-        All valid feature names corresponding to original pecarn iai study
-    '''
-    feat_names = [k for k in df.keys()  # features to use
-                  if not k in ['id', 'cv_fold']
-                  and not 'iai' in k.lower()]
-
-    PECARN_FEAT_NAMES = ['AbdDistention',
-                         'AbdTenderDegree',
-                         'AbdTrauma',
-                         'AbdTrauma_or_SeatBeltSign',
-                         'AbdomenPain',
-                         'Costal',
-                         'DecrBreathSound',
-                         'DistractingPain',
-                         'GCSScore',
-                         'LtCostalTender',
-                         'RecodedMOI',
-                         'RtCostalTender',
-                         'SeatBeltSign',
-                         'ThoracicTender',
-                         'ThoracicTrauma',
-                         'VomitWretch',
-                         'ageinyrs']
-    # InjuryMechanism_1, hypotension?, femure fracture
-    ks = set()  # pecarn feats after encoding
-    for pecarn_feat in PECARN_FEAT_NAMES:
-        for feat_name in feat_names:
-            if pecarn_feat in feat_name:
-                ks.add(feat_name)
-    ks = sorted(list(ks))
-    return feat_names, ks
