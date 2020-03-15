@@ -24,7 +24,7 @@ def get_data(use_processed=True, save_processed=True, processed_file='processed/
     if use_processed and os.path.exists(processed_file):
         return pd.read_pickle(processed_file)
     else:
-        print('computing preprocessing...')
+        print('computing pecarn preprocessing...')
         df_features = get_features()  # read all features into df
         df_outcomes = get_outcomes()  # 2 outcomes: iai, and iai_intervention
         df = pd.merge(df_features, df_outcomes, on='id', how='left')
@@ -179,6 +179,7 @@ def rename_values(df):
     }
     df.RACE = [race[v] for v in df.RACE.values]
     df.RecodedMOI = [moi[v] for v in df.RecodedMOI.values]
+    df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
     df.AbdTenderDegree = df.AbdTenderDegree.fillna(4)
     df.AbdTenderDegree = [abdTenderDegree[v] for v in df.AbdTenderDegree.values]
     df = df.rename(columns={'RACE': 'Race', 
@@ -212,9 +213,7 @@ def rename_values(df):
         vals = df[k].values
         v2 = deepcopy(df[k].values.astype(str))
         is_na = df[k].isna()
-        print(k, vals.dtype)        
         uniques = np.unique(vals).astype(np.str)
-        print('uniques', uniques, uniques.size, type(uniques), uniques.astype(str).dtype)
         contains_nan = np.sum(is_na) > 0
         if contains_nan and uniques.size in [4, 5] or ~contains_nan and uniques.size in [3, 4]:
             if '1.0' in uniques and '2.0' in uniques and '3.0' in uniques:
@@ -224,7 +223,6 @@ def rename_values(df):
                 v2[v2=='4.0'] = 'unknown' # Physician didn't answer
                 v2[is_na] = 'unknown' # data not colltected
                 df[k] = v2
-                print('reset!')
 
     return df
 

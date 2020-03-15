@@ -5,7 +5,13 @@ import numpy as np
 from tqdm import tqdm
 import pandas as pd
 from copy import deepcopy
-def classification_setup(df: pd.DataFrame):
+
+pecarn_train_idxs = [1, 2, 3, 4, 5]
+pecarn_test_idxs = [6]
+psrc_train_idxs = [8, 9, 10, 11, 12]
+psrc_test_idxs = [13]
+
+def classification_setup(df: pd.DataFrame, dset='pecarn'):
     """Prepare the data for classification
     """
 
@@ -17,7 +23,11 @@ def classification_setup(df: pd.DataFrame):
 
     # set up train / test
     np.random.seed(42)
-    df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0])  # 6 is the test set
+    if dset == 'pecarn':
+        offset = 0
+    elif dset == 'psrc':
+        offset = 7
+    df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0]) + offset  # 6 is the test set
 
     return df
 
@@ -51,7 +61,7 @@ def get_feat_names(df):
                          'ThoracicTender',
                          'ThoracicTrauma',
                          'VomitWretch',
-                         'ageinyrs']
+                         'Age']
     # InjuryMechanism_1, hypotension?, femure fracture
     ks = set()  # pecarn feats after encoding
     for pecarn_feat in PECARN_FEAT_NAMES:

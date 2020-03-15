@@ -68,7 +68,8 @@ def balance(X, y, balancing='ros', balancing_ratio: float=1):
 
 
 def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_intervention',
-          balancing='ros', balancing_ratio=1, out_name='results/classify/test.pkl'):
+          balancing='ros', balancing_ratio=1, out_name='results/classify/test.pkl', 
+          train_idxs=[1, 2, 3, 4, 5], test_idxs=[6]):
     '''Balance classes in y using strategy specified by balancing
     '''
     np.random.seed(42)
@@ -78,7 +79,7 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     y = df[outcome_def].values
 
     # split testing data based on cell num
-    idxs_test = df.cv_fold.isin([6])
+    idxs_test = df.cv_fold.isin(test_idxs)
     X_test, Y_test = X[idxs_test], y[idxs_test]
 
     if model_type == 'rf':
@@ -100,18 +101,21 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
         return tn / (tn + tp)
     
     # scores = ['balanced_accuracy'] # ['accuracy', 'precision', 'recall', 'f1', 'balanced_accuracy', 'roc_auc']
-    scorers = {'balanced_accuracy': metrics.balanced_accuracy_score, 'accuracy': metrics.accuracy_score,
+    scorers = {'balanced_accuracy': metrics.balanced_accuracy_score, 
+               'accuracy': metrics.accuracy_score,
                'precision': metrics.precision_score, 
                'sensitivity': metrics.recall_score, 
                'specificity': specificity_score,
-               'f1': metrics.f1_score, 'roc_auc': metrics.roc_auc_score,
-               'precision_recall_curve': metrics.precision_recall_curve, 'roc_curve': metrics.roc_curve}
+               'f1': metrics.f1_score, 
+               'roc_auc': metrics.roc_auc_score,
+               'precision_recall_curve': metrics.precision_recall_curve, 
+               'roc_curve': metrics.roc_curve}
     scores_cv = {s: [] for s in scorers.keys()}
     scores_test = {s: [] for s in scorers.keys()}
     imps = {'model': [], 'imps': []}
 
     kf = KFold(n_splits=5)
-    cv_folds_train = [1, 2, 3, 4, 5]
+    cv_folds_train = train_idxs
     for cv_idx, cv_val_idx in kf.split(cv_folds_train):
         # get sample indices
         idxs_cv = df.cv_fold.isin(cv_idx + 1)
@@ -152,8 +156,10 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
 
     # save results
     # os.makedirs(out_dir, exist_ok=True)
-    results = {'metrics': list(scorers.keys()), 'cv': scores_cv, 
-               'test': scores_test, 'imps': imps,
+    results = {'metrics': list(scorers.keys()), 
+               'cv': scores_cv, 
+               'test': scores_test, 
+               'imps': imps,
                'feat_names': feat_names,
                'model_type': model_type,
                'balancing': balancing,
