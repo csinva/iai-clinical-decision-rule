@@ -257,7 +257,7 @@ def preprocess(df: pd.DataFrame):
     # print('keys removed', keys_to_remove, 'new shape', df_filt.shape)
 
     # pandas impute missing values with median
-    # df_filt = df_filt.fillna(df_filt.median())
+    df_filt = df_filt.fillna(df_filt.median())
 
     # keys = ['SEX', 'RACE', 'ageinyrs']
     # print(df_filt.dtypes)
