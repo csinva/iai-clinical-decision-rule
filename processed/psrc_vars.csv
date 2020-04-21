@@ -1,0 +1,379 @@
+,count,unique,top,freq
+Age,2188.0,27.0,14.0,176.0
+Hispanic ethnicity,2031.0,2.0,0.0,1770.0
+Mechanism of injury (choice=Assault/struck),2188,2,0,2130
+Mechanism of injury (choice=ATV injury),2188,2,0,2010
+Mechanism of injury (choice=Bike crash),2188,2,0,2107
+Mechanism of injury (choice=Bike struck by auto),2188,2,0,2098
+Mechanism of injury (choice=Fall > 10 ft. height),2188,2,0,2031
+Mechanism of injury (choice=Golf cart injury),2188,2,0,2168
+Mechanism of injury (choice=Motorcycle/dirt bike crash),2188,2,0,2140
+Mechanism of injury (choice=MVC),2188,2,0,1172
+Mechanism of injury (choice=Pedestrian struck by auto),2188,2,0,1839
+Mechanism of injury (choice=Other blunt mechanism),2188,2,0,1985
+"If bike crash, landed on handle bar",81.0,2.0,0.0,57.0
+MVC details (choice=>40 MPH),2188,2,0,1671
+MVC details (choice=Ejection),2188,2,0,2067
+MVC details (choice=Rollover),2188,2,0,1924
+MVC details (choice=Prolonged extrication),2188,2,0,2137
+MVC details (choice=Unrestrained),2188,2,0,1970
+MVC details (choice=Death in vehicle),2188,2,0,2104
+MVC details (choice=0t reported),2188,2,0,2082
+Emesis post injury,2176.0,2.0,0.0,1974.0
+Intubated prior to arrival,2176.0,2.0,0.0,2030.0
+Intubated during trauma resuscitation,2178.0,2.0,0.0,2069.0
+Initial ED HR,2183.0,159.0,100.0,69.0
+Initial ED systolic BP,2177.0,128.0,122.0,77.0
+GCSScore,2188,13,15,1733
+Evidence of abdominal wall trauma (choice=None),2188,2,1,1709
+Evidence of abdominal wall trauma (choice=Abrasion),2188,2,0,1855
+Contusion,2188,2,0,2066
+Evidence of thoracic trauma  (choice=None),2188,2,1,1870
+Evidence of thoracic trauma  (choice=Abrasion),2188,2,0,1926
+Evidence of thoracic trauma  (choice=Contusion),2188,2,0,2105
+Evidence of thoracic trauma  (choice=Decreased breath sounds),2188,2,0,2163
+Evidence of thoracic trauma  (choice=SQ air),2188,2,0,2179
+Lower chest wall/costal margin tenderness to palpation  (choice=None),2188,2,1,1901
+LtCostalTender,2188,2,0,2121
+RtCostalTender,2188,2,0,2128
+Lower chest wall/costal margin tenderness to palpation  (choice=Limited exam secondary to intubation/sedation),2188,2,0,2006
+Pelvic bone tenderness or instability on palpation,2188,2,0,2082
+Femur fracture,2177.0,2.0,0.0,2034.0
+Chest X-ray (choice=0rmal),2188,2,1,1525
+Chest X-ray (choice=Hemothorax),2188,2,0,2179
+Chest X-ray (choice=Pneumothorax),2188,2,0,2114
+Chest X-ray (choice=Subcutaneous emphysema (without evident hemo/pneumo thorax)),2188,2,0,2180
+Chest X-ray (choice=Pulmonary contusion),2188,2,0,2058
+Chest X-ray (choice=Clavicle fracture),2188,2,0,2128
+Chest X-ray (choice=Rib fracture),2188,2,0,2141
+Chest X-ray (choice=Thoracic spine fracture),2188,2,0,2183
+Chest X-ray (choice=Mediastinal widening),2188,2,0,2180
+Chest X-ray (choice=0t ordered),2188,2,0,1786
+FAST (choice=Negative),2188,2,0,1423
+FAST (choice=+ cardiac),2188,2,0,2185
+FAST (choice=+ right),2188,2,0,2168
+FAST (choice=+ left),2188,2,0,2170
+FAST (choice=+ pelvis),2188,2,0,2164
+FAST (choice=0t performed),2188,2,1,1359
+CT abdomen/pelvis ordered from trauma bay,2187.0,2.0,0.0,1248.0
+Abdominal CT scan performed,2186.0,2.0,0.0,1219.0
+Intra-abdominal injury,966.0,2.0,0.0,705.0
+Spleen injury,259.0,2.0,0.0,190.0
+Spleen injury grade,65.0,5.0,3.0,19.0
+Blush/extravasation of IV contrast in spleen,67.0,2.0,0.0,57.0
+Liver injury,258.0,2.0,0.0,135.0
+Liver injury grade,118.0,5.0,2.0,37.0
+Blush/extravasation of IV contrast in liver,121.0,2.0,0.0,112.0
+Kidney injury,258.0,2.0,0.0,219.0
+Kidney injury grade,36.0,5.0,3.0,12.0
+Blush/extravasation of IV contrast in kidney,38.0,2.0,0.0,26.0
+Mesentery injury,256.0,2.0,0.0,233.0
+Duodenum injury,257.0,2.0,0.0,241.0
+Duodenum hematoma,16.0,2.0,1.0,8.0
+Duodenum perforation,18.0,2.0,0.0,15.0
+Jejunum/ileum injury,258.0,2.0,0.0,241.0
+Jejunum/ileum hematoma,17.0,2.0,0.0,10.0
+Jejunum/ileum perforation,16.0,2.0,0.0,11.0
+Colon injury,257.0,2.0,0.0,244.0
+Colon hematoma,13.0,2.0,0.0,9.0
+Colon perforation,12.0,2.0,1.0,7.0
+Adrenal injury,259.0,2.0,0.0,227.0
+Pancreas injury,259.0,2.0,0.0,247.0
+Major intra-abdominal vascular injury,257.0,2.0,0.0,250.0
+Bladder injury,258.0,2.0,0.0,249.0
+Ureter injury,255.0,2.0,0.0,254.0
+Gallbladder injury,256.0,1.0,0.0,256.0
+Gallbladder hematoma,0.0,0.0,,
+Gallbladder perforation,0.0,0.0,,
+Abdominal wall fascial injury,255.0,2.0,0.0,243.0
+Interventions for IAI  (choice=Angio-embolization),2188,2,0,2181
+Interventions for IAI  (choice=Laparoscopy),2188,2,0,2171
+Interventions for IAI  (choice=Laparotomy),2188,2,0,2156
+Interventions for IAI  (choice=Transfusion for IAI),2188,2,0,2162
+Interventions for IAI  (choice=None),2188,2,0,1989
+Hours past ED arrival,45.0,22.0,2.0,10.0
+Organs found injured during exploration (choice=Spleen),2188,2,0,2184
+Organs found injured during exploration (choice=Liver),2188,2,0,2180
+Organs found injured during exploration (choice=Kidney),2188,2,0,2186
+Organs found injured during exploration (choice=Duodenum),2188,2,0,2184
+Organs found injured during exploration (choice=Jejunum/ileum),2188,2,0,2171
+Organs found injured during exploration (choice=Colon),2188,2,0,2172
+Organs found injured during exploration (choice=Pancreas),2188,2,0,2187
+Organs found injured during exploration (choice=Major intra-abdominal vasculature),2188,2,0,2183
+Organs found injured during exploration (choice=Bladder),2188,2,0,2187
+Organs found injured during exploration (choice=Abdominal wall fascia),2188,2,0,2183
+TBI (with evidence of traumatic injury on head CT),2183.0,2.0,0.0,1847.0
+ICP Monitor,336.0,2.0,0.0,273.0
+Craniotomy,335.0,2.0,0.0,297.0
+Skull fracture,2173.0,2.0,0.0,1933.0
+Facial fracture (other than nasal bone),2177.0,2.0,0.0,1964.0
+Cervical spine injury,2181.0,2.0,0.0,2115.0
+Cervical fracture,66.0,2.0,1.0,39.0
+Cervical spinal cord injury,67.0,2.0,0.0,51.0
+T/L spine injury,2180.0,2.0,0.0,2075.0
+T/L spine fracture,105.0,2.0,1.0,101.0
+T/L spinal cord injury,105.0,2.0,0.0,101.0
+Thoracic injury,2179.0,2.0,0.0,1841.0
+Indicate thoracic injury (choice=Pneumothorax),2188,2,0,2054
+Indicate thoracic injury (choice=Hemothorax),2188,2,0,2169
+Indicate thoracic injury (choice=Pulmonary contusion),2188,2,0,1972
+Indicate thoracic injury (choice=Rib fracture),2188,2,0,2084
+Indicate thoracic injury (choice=Clavicle fracture),2188,2,0,2125
+Laterality of rib fracture (choice=Left),2188,2,0,2133
+Laterality of rib fracture (choice=Right),2188,2,0,2131
+Laterality of rib fracture (choice=Sternum),2188,2,0,2186
+Pelvic fracture,2183.0,2.0,0.0,2059.0
+Femur fracture,2183.0,2.0,0.0,2020.0
+Any other extremity fracture,2181.0,2.0,0.0,1863.0
+Admission,2188,2,1,1640
+ICU admission,1634.0,2.0,0.0,1173.0
+Length of inpatient stay (days),1631.0,55.0,1.0,602.0
+Delayed inpatient diagnosis of IAI (more than 24 hours after admission),1618.0,2.0,0.0,1613.0
+Mortality (within 30 days of injury),2163.0,2.0,0.0,2121.0
+Mortality related to trauma,42.0,2.0,1.0,40.0
+Mortality secondary to intra-abdominal injury,38.0,2.0,0.0,37.0
+Missed diagnosis of IAI (following discharge),2153.0,2.0,0.0,2148.0
+id,2188,2188,-1,1
+iai,2188,2,False,1927
+iai_intervention,2188,2,False,2126
+Race_American Indian or Alaska Native,2188,2,0,2187
+Race_Asian,2188,2,0,2156
+Race_Black or African American,2188,2,0,1400
+Race_Native Hawaiian or other Pacific Islander,2188,2,0,2187
+Race_White,2188,2,0,1117
+Race_nan,2188,2,0,1893
+Other mechanism of injury_0n-accidental trauma. Transferred due to SDH and posturing. Taken directly from Helipad to OR by NSR,2188,2,0,2187
+Other mechanism of injury_Bar stool fell on face and head,2188,2,0,2187
+"Other mechanism of injury_Bathtub fall, possible NAT",2188,2,0,2187
+Other mechanism of injury_Boating/Tubing Accident; Tube vs. Tree,2188,2,0,2186
+"Other mechanism of injury_Concern for abuse, story parent provided is that patient was head butted by sibling.",2188,2,0,2187
+Other mechanism of injury_Crush by trailer,2188,2,0,2187
+Other mechanism of injury_Crush injury to penis,2188,2,0,2187
+Other mechanism of injury_Dresser fell on child,2188,2,0,2187
+Other mechanism of injury_FALL < 10 FT WITH CONCERN FOR ABDOMINAL TRAUMA,2188,2,0,2187
+Other mechanism of injury_Fall 6 feet with concern for abd trauma,2188,2,0,2187
+Other mechanism of injury_Fall < 10 feet,2188,2,0,2186
+Other mechanism of injury_Fall < 10 feet with concern for abdominal injury,2188,2,0,2187
+"Other mechanism of injury_Fall < 10 feet, concern for NAT",2188,2,0,2187
+Other mechanism of injury_Fall < 3 ft. from bed face down [abdomen] directly onto corner of a hardcover book on floor in home,2188,2,0,2187
+Other mechanism of injury_Fall <10 feet with concern for abdominal injury,2188,2,0,2186
+Other mechanism of injury_Fall <10 with abdominal pain,2188,2,0,2187
+Other mechanism of injury_Fall LT 10 feet with concern for abdominal injury,2188,2,0,2186
+"Other mechanism of injury_Fall during cheerleading practice. Per report, patient was being tossed in the air and was not properly caught and hit the ground on the right side",2188,2,0,2187
+Other mechanism of injury_Fall from 4 feet,2188,2,0,2187
+Other mechanism of injury_Fall from Standing,2188,2,0,2187
+"Other mechanism of injury_Fall from arms, concern for NAT",2188,2,0,2187
+Other mechanism of injury_Fall from back of moving car,2188,2,0,2187
+Other mechanism of injury_Fall from horse,2188,2,0,2186
+Other mechanism of injury_Fall from horse < 8 ft.  Transferred from OSH,2188,2,0,2187
+Other mechanism of injury_Fall from horse; horse landed on him.,2188,2,0,2187
+Other mechanism of injury_Fall from moving van,2188,2,0,2187
+Other mechanism of injury_Fall from shopping cart and stairs (7steps) ~7 feet,2188,2,0,2187
+Other mechanism of injury_Fall of unknown height with posturing,2188,2,0,2187
+Other mechanism of injury_Fall off trampoline,2188,2,0,2187
+Other mechanism of injury_Fall out of moving car,2188,2,0,2186
+Other mechanism of injury_Fall while rollerskating,2188,2,0,2187
+Other mechanism of injury_Fall while snowboarding,2188,2,0,2187
+Other mechanism of injury_Father fell on child. CXR showed pneumoperitoneum. Patient had gastric perforation at OR.,2188,2,0,2187
+Other mechanism of injury_Fell < 10 feet,2188,2,0,2187
+Other mechanism of injury_Fell down stairs,2188,2,0,2187
+"Other mechanism of injury_Fell from tree, approximately 7 feet",2188,2,0,2187
+Other mechanism of injury_Fell off farm equipment and rolled over by trailer.,2188,2,0,2187
+Other mechanism of injury_Fell off hay ride,2188,2,0,2187
+"Other mechanism of injury_Fell off trampoline, <10 ft",2188,2,0,2187
+Other mechanism of injury_Fell out of moving car,2188,2,0,2185
+Other mechanism of injury_Fell out of moving vehicle,2188,2,0,2187
+Other mechanism of injury_Football,2188,2,0,2187
+Other mechanism of injury_Football collision,2188,2,0,2186
+Other mechanism of injury_Football injury- hit to abdomin,2188,2,0,2187
+Other mechanism of injury_Foul ball (baseball) to L chest/upper abdomen,2188,2,0,2186
+Other mechanism of injury_Found unresponsive between crib and wall,2188,2,0,2187
+Other mechanism of injury_Gate fell on patient,2188,2,0,2187
+Other mechanism of injury_Go Cart crash,2188,2,0,2187
+Other mechanism of injury_Grain in silo dropped on pt.,2188,2,0,2187
+Other mechanism of injury_Jumped in front of ATV at highway speed.,2188,2,0,2187
+Other mechanism of injury_Jumped out of moving car,2188,2,0,2187
+Other mechanism of injury_Jumped out of rolling car,2188,2,0,2187
+Other mechanism of injury_Kicked by horse,2188,2,0,2187
+Other mechanism of injury_Kicked in head and chest by horse,2188,2,0,2187
+Other mechanism of injury_Large round hay bale rolled onto child  ,2188,2,0,2187
+Other mechanism of injury_MVC vs scooter,2188,2,0,2187
+Other mechanism of injury_NAT,2188,2,0,2187
+Other mechanism of injury_NAT Evaluation,2188,2,0,2187
+Other mechanism of injury_NAT vs unknown,2188,2,0,2187
+Other mechanism of injury_Pedestrian struck by tractor,2188,2,0,2187
+"Other mechanism of injury_Playing on playground, when 6X6 lumbar pile fell on him",2188,2,0,2187
+Other mechanism of injury_Possible upper abdominal injury during paintball game,2188,2,0,2187
+"Other mechanism of injury_Presented with slurred speech, headache, nausea, emesis and LE pain after fall from lifegaurd ladder (6-8 ft) and landing on back",2188,2,0,2187
+Other mechanism of injury_Pt reportedly fell into the path of a riding lawnmower and was ran over.,2188,2,0,2187
+Other mechanism of injury_Pt was at the bottom of a cheer-leading pyramid when it collapsed. Head was reportedly hit by another cheerleader's body,2188,2,0,2187
+"Other mechanism of injury_Pt was standing in the back of a moving truck driving at ~30 mph, fell out, and struck the back of the head",2188,2,0,2187
+Other mechanism of injury_Pulled TV/Dresser onto head/chest,2188,2,0,2187
+Other mechanism of injury_Ran into pole,2188,2,0,2187
+Other mechanism of injury_Reportedly playing when crushed in between 2 gates outside of the parking lot of home,2188,2,0,2187
+Other mechanism of injury_Riding a rip stick down hill and fell hitting abdomen on curb,2188,2,0,2187
+Other mechanism of injury_SNAT,2188,2,0,2187
+Other mechanism of injury_Scooter crash,2188,2,0,2187
+Other mechanism of injury_Scooter struck by auto,2188,2,0,2187
+Other mechanism of injury_Scooter vs Car,2188,2,0,2187
+Other mechanism of injury_Skateboard crash,2188,2,0,2187
+Other mechanism of injury_Sledding crash,2188,2,0,2187
+Other mechanism of injury_Snow sledding,2188,2,0,2187
+Other mechanism of injury_Sports Related,2188,2,0,2187
+Other mechanism of injury_Stepped on by bull,2188,2,0,2187
+Other mechanism of injury_Stepped on by horse,2188,2,0,2187
+Other mechanism of injury_Suspended by zipline,2188,2,0,2187
+Other mechanism of injury_TV fell on head and body,2188,2,0,2187
+Other mechanism of injury_TV fell on mid-chest/ abdomen,2188,2,0,2187
+Other mechanism of injury_TV fell on patient,2188,2,0,2184
+Other mechanism of injury_TV fell onto patient,2188,2,0,2187
+Other mechanism of injury_TV pulled onto body,2188,2,0,2187
+Other mechanism of injury_TV tipover,2188,2,0,2187
+Other mechanism of injury_TV/bookcase fell onto patient,2188,2,0,2187
+Other mechanism of injury_Thrown from back of moving pick up truck,2188,2,0,2187
+Other mechanism of injury_Thrown from motorbike,2188,2,0,2187
+Other mechanism of injury_Trampled by a horse,2188,2,0,2187
+Other mechanism of injury_Trampled by mules,2188,2,0,2187
+Other mechanism of injury_Tree branch fell on him,2188,2,0,2187
+Other mechanism of injury_Tubing accident - fell off tube and collided with cousin,2188,2,0,2187
+Other mechanism of injury_Unknown; found down,2188,2,0,2187
+Other mechanism of injury_Was in a building that was struck by a truck,2188,2,0,2187
+Other mechanism of injury_back flip and landed on head,2188,2,0,2187
+Other mechanism of injury_backed over by car,2188,2,0,2187
+Other mechanism of injury_baseball to abdomen,2188,2,0,2187
+Other mechanism of injury_bucked off horse,2188,2,0,2187
+Other mechanism of injury_car surfing,2188,2,0,2187
+Other mechanism of injury_collision into another person during football practice,2188,2,0,2187
+"Other mechanism of injury_collision with another person during a soccer game with trauma to the head, FAST was positive for fluid in the pelvis",2188,2,0,2187
+Other mechanism of injury_collision with another player at football practice,2188,2,0,2187
+Other mechanism of injury_concern for NAT- bilateral humerus fractures,2188,2,0,2187
+Other mechanism of injury_crush,2188,2,0,2187
+Other mechanism of injury_crush by furniture,2188,2,0,2187
+Other mechanism of injury_crush under large tv,2188,2,0,2187
+Other mechanism of injury_crushed between two cars,2188,2,0,2187
+Other mechanism of injury_crushed by horse,2188,2,0,2187
+Other mechanism of injury_dog bite/attack,2188,2,0,2187
+Other mechanism of injury_dresser + TV fell on child,2188,2,0,2187
+Other mechanism of injury_dropped about 3 feet,2188,2,0,2187
+Other mechanism of injury_ejected from pickup truck bed and hit head on the trailer,2188,2,0,2187
+Other mechanism of injury_fall 6 ft,2188,2,0,2187
+Other mechanism of injury_fall < 10 ft,2188,2,0,2187
+Other mechanism of injury_fall <10 feet with abdominal injury,2188,2,0,2187
+Other mechanism of injury_fall <10 feet with concern for abdominal trauma,2188,2,0,2187
+Other mechanism of injury_fall <10 ft,2188,2,0,2187
+Other mechanism of injury_fall <10ft,2188,2,0,2187
+Other mechanism of injury_fall <10ft with concern for abdominal injury,2188,2,0,2187
+Other mechanism of injury_fall <10ft with direct abdomen strike,2188,2,0,2187
+Other mechanism of injury_fall from a tire swing and sustained a head injury after the tree branch fell and hit patient's head,2188,2,0,2187
+Other mechanism of injury_fall from counter top,2188,2,0,2187
+Other mechanism of injury_fall from horse,2188,2,0,2186
+Other mechanism of injury_fall from horse and horse trampled on chest,2188,2,0,2187
+Other mechanism of injury_fall from moving car,2188,2,0,2187
+Other mechanism of injury_fall from moving vehicle,2188,2,0,2185
+Other mechanism of injury_fall from moving vihicle,2188,2,0,2187
+Other mechanism of injury_fall from shopping cart; lower GCS,2188,2,0,2187
+"Other mechanism of injury_fall from zipline about 7 feet, with abdominal pain.",2188,2,0,2187
+Other mechanism of injury_fall into manhole,2188,2,0,2187
+Other mechanism of injury_fall of unknown height,2188,2,0,2187
+Other mechanism of injury_fall onto an object directly striking abdomen,2188,2,0,2187
+Other mechanism of injury_fall- unknown details,2188,2,0,2187
+Other mechanism of injury_fell from a horse earlier today while visiting grandparents; struck head on the ground and lost conciousness,2188,2,0,2187
+Other mechanism of injury_fell out of boat struck by propeller.,2188,2,0,2187
+"Other mechanism of injury_fell out of car at about 5-6 mph, may have been run over by rear tire.",2188,2,0,2187
+Other mechanism of injury_fell out of moving vehicle @ 25mph,2188,2,0,2187
+Other mechanism of injury_fell while riding skateboard down a playground slide (fall < 10 feet),2188,2,0,2187
+Other mechanism of injury_football collision; helmet to helmet,2188,2,0,2187
+Other mechanism of injury_football injury,2188,2,0,2187
+Other mechanism of injury_found down,2188,2,0,2187
+Other mechanism of injury_goal post fell on patient during soccer,2188,2,0,2187
+Other mechanism of injury_head caught between mattress and headboard,2188,2,0,2187
+Other mechanism of injury_hockey ,2188,2,0,2187
+Other mechanism of injury_horse fell on patient,2188,2,0,2187
+Other mechanism of injury_jumped off a dumpster,2188,2,0,2187
+Other mechanism of injury_kicked by a horse,2188,2,0,2187
+Other mechanism of injury_kicked by a horse in abdomen,2188,2,0,2187
+Other mechanism of injury_kicked by horse,2188,2,0,2187
+Other mechanism of injury_kicked in head/chest by horse,2188,2,0,2187
+Other mechanism of injury_large wagon wheel fell on him,2188,2,0,2187
+Other mechanism of injury_lawnmower vs car. patient on lawn mower,2188,2,0,2187
+Other mechanism of injury_patient and sibling were playing around a large trailer when sibling pulled the gate hitch allowing the gate to fall onto the patient,2188,2,0,2187
+Other mechanism of injury_patient was running around house with twin sibling when patient apparently tripped and fell from standing height.  Mother heard crying and came to find patient down saying left flank hurts,2188,2,0,2187
+Other mechanism of injury_pedestrian struck by ATV,2188,2,0,2187
+Other mechanism of injury_pedestrian struck by golf cart,2188,2,0,2187
+Other mechanism of injury_probable NAT,2188,2,0,2187
+Other mechanism of injury_run over by bobcat steer skid loader,2188,2,0,2187
+Other mechanism of injury_run over by wagon,2188,2,0,2187
+Other mechanism of injury_s/p fall from back of truck while truck was moving,2188,2,0,2187
+Other mechanism of injury_scooter struck by auto,2188,2,0,2187
+Other mechanism of injury_skateboard fall,2188,2,0,2187
+Other mechanism of injury_skateboarding fall,2188,2,0,2187
+Other mechanism of injury_skiing - hit tree,2188,2,0,2187
+Other mechanism of injury_sledding,2188,2,0,2186
+Other mechanism of injury_sports (hockey),2188,2,0,2187
+Other mechanism of injury_stepped on by horse,2188,2,0,2187
+Other mechanism of injury_stomped by bull,2188,2,0,2187
+Other mechanism of injury_suspected NAT,2188,2,0,2186
+Other mechanism of injury_thrown against wall in wind tunnel,2188,2,0,2187
+Other mechanism of injury_thrown from and run over by buggy wheel,2188,2,0,2187
+Other mechanism of injury_thrown from car,2188,2,0,2187
+Other mechanism of injury_thrown from horse onto gate,2188,2,0,2187
+Other mechanism of injury_tornado,2188,2,0,2186
+Other mechanism of injury_tornado victim,2188,2,0,2187
+Other mechanism of injury_trampled by cattle,2188,2,0,2187
+Other mechanism of injury_trampled by horse,2188,2,0,2187
+Other mechanism of injury_tv fell on patient,2188,2,0,2187
+"Other mechanism of injury_unknown; possible fall, found in altered mental status",2188,2,0,2187
+Other mechanism of injury_unknown; possible fall; possible NAT,2188,2,0,2187
+Other mechanism of injury_nan,2188,2,1,1987
+Alert level_Consult,2188,2,0,1859
+Alert level_I,2188,2,0,1807
+Alert level_II,2188,2,1,1470
+Alert level_nan,2188,2,0,2180
+Complainabd. pain_0,2188,2,1,1382
+Complainabd. pain_0n-verbal,2188,2,0,2045
+Complainabd. pain_1,2188,2,0,1729
+Complainabd. pain_Incoherent,2188,2,0,2139
+Complainabd. pain_Intubated,2188,2,0,2034
+Complainabd. pain_nan,2188,2,0,2187
+SeatBeltSign_no,2188,2,1,2045
+SeatBeltSign_yes,2188,2,0,2045
+AbdTenderDegree_Mild,2188,2,1,1767
+AbdTenderDegree_Moderate,2188,2,0,1990
+AbdTenderDegree_Severe,2188,2,0,2158
+AbdTenderDegree_unknown,2188,2,0,1995
+AbdDistention_no,2188,2,1,2070
+AbdDistention_unknown,2188,2,0,2187
+AbdDistention_yes,2188,2,0,2071
+Pelvis X-ray_0rmal,2188,2,0,1154
+Pelvis X-ray_0t ordered,2188,2,0,1144
+Pelvis X-ray_Pelvic fracture,2188,2,0,2083
+Pelvis X-ray_nan,2188,2,0,2183
+Disposition from trauma bay_CT,2188,2,0,1941
+Disposition from trauma bay_Death,2188,2,0,2181
+Disposition from trauma bay_ED observation,2188,2,0,1599
+Disposition from trauma bay_Floor,2188,2,0,1304
+Disposition from trauma bay_ICU,2188,2,0,1829
+Disposition from trauma bay_IR,2188,2,0,2187
+Disposition from trauma bay_OR,2188,2,0,2091
+Disposition from trauma bay_nan,2188,2,0,2184
+Intra or extra abdominal bladder injury_Extra,2188,2,0,2183
+Intra or extra abdominal bladder injury_Intra,2188,2,0,2185
+Intra or extra abdominal bladder injury_nan,2188,2,1,2180
+Positive or negative exploration_Positive,2188,2,0,2150
+Positive or negative exploration_nan,2188,2,1,2150
+Laterality of pulmonary contusion_Bilateral,2188,2,0,2095
+Laterality of pulmonary contusion_Left,2188,2,0,2144
+Laterality of pulmonary contusion_Right,2188,2,0,2109
+Laterality of pulmonary contusion_nan,2188,2,1,1972
+Laterality of clavicle fracture_Bilateral,2188,2,0,2187
+Laterality of clavicle fracture_Left,2188,2,0,2156
+Laterality of clavicle fracture_Right,2188,2,0,2158
+Laterality of clavicle fracture_nan,2188,2,1,2125
+RecodedMOI_Bike collision/fall,2188,2,0,2111
+RecodedMOI_Fall from an elevation,2188,2,0,2033
+RecodedMOI_Motor vehicle collision,2188,2,0,1174
+RecodedMOI_Motorcycle/ATV/Scooter collision,2188,2,0,1945
+RecodedMOI_Object struck abdomen,2188,2,0,1930
+RecodedMOI_Pedestrian/bicyclist struck by moving vehicle,2188,2,0,1751
+RecodedMOI_unknown,2188,2,0,2184
+cv_fold,2188,6,8,379

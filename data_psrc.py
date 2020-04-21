@@ -6,10 +6,10 @@ import numpy as np
 from tqdm import tqdm
 import pandas as pd
 NUM_PATIENTS = 12044
-from data import classification_setup
+import data
 
 
-def get_data(use_processed=True, save_processed=True, processed_file='processed/df_psrc.pkl'):
+def get_data(use_processed=False, save_processed=True, processed_file='processed/df_psrc.pkl'):
     '''Run all the preprocessing
     
     Params
@@ -29,7 +29,6 @@ def get_data(use_processed=True, save_processed=True, processed_file='processed/
 
 
         NUM_PATIENTS = df.shape[0]
-        print(NUM_PATIENTS)
 
         # fix col names
         df['id'] = -1 * np.arange(1, NUM_PATIENTS + 1)
@@ -38,13 +37,17 @@ def get_data(use_processed=True, save_processed=True, processed_file='processed/
         df['Age'] = df['Age in years'].fillna(0) + df['Age in months'].fillna(0) / 12
 
         # drop unnecessary
-        df = df.drop(columns=['Record ID',  'Arrival time in ED', 'Age in months', 'Age in years'])
+        ks_drop = [k for k in df.keys() 
+                   if k in ['Time patient trauma alert concluded/ left trauma bay (military time)',
+                            'Time CT performed',
+                           ]]
+        df = df.drop(columns=ks_drop + ['Record ID',  'Arrival time in ED', 'Age in months', 'Age in years'])
 
+        # rename values
         df = rename_values(df)
         # other vars present
         # Race
         # Thoracic injury - matches ThoracicTrauma
-        df = classification_setup(df, dset='psrc')
         
         # outcomes
         iai_keys = [k for k in df.keys() if 'Interventions for IAI' in k]
@@ -63,6 +66,16 @@ def get_data(use_processed=True, save_processed=True, processed_file='processed/
         df['iai'] = df[iai_keys].sum(axis=1) > 0
         df['iai_intervention'] = df[iai_with_intervention_keys].sum(axis=1) > 0
         
+        vals = {
+            0: 'no',
+            1: 'yes'
+        }
+        
+        df['SeatBeltSign'] = [vals[x] for x in df['SeatBeltSign'].values]
+        
+        df = df.infer_objects()
+        df = data.classification_setup(df, dset='psrc')
+        # df = df.fillna('unknown')
         
         if save_processed:
             df.to_pickle(processed_file)
@@ -83,7 +96,6 @@ def rename_values(df):
                                })
     # fill with unknown
     df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
-    df = df.fillna('unknown')
 
 
     # these need matching
@@ -95,7 +107,7 @@ def rename_values(df):
         1: 'yes',
         'unknown': 'unknown'
     }
-    df['AbdDistention'] = [binary[v] for v in df.AbdDistention.values]
+    df['AbdDistention'] = [binary[v] for v in df.AbdDistention.fillna('unknown').values]
 
     abdTenderDegree = {
         'None': 'Mild',
@@ -105,7 +117,7 @@ def rename_values(df):
         'Limited exam secondary to intubation/sedation': 'unknown',
         'unknown': 'unknown'
     }
-    df['AbdTenderDegree'] = [abdTenderDegree[v] for v in df.AbdTenderDegree.values]
+    df['AbdTenderDegree'] = [abdTenderDegree[v] for v in df.AbdTenderDegree.fillna('unknown').values]
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',

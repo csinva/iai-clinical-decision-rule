@@ -5,13 +5,13 @@ import numpy as np
 from tqdm import tqdm
 import pandas as pd
 from copy import deepcopy
-from data import classification_setup
+import data
 
 NUM_PATIENTS = 12044
 DATA_DIR = 'data_pecarn/Datasets'
 
 
-def get_data(use_processed=True, save_processed=True, processed_file='processed/df_pecarn.pkl'):
+def get_data(use_processed=False, save_processed=True, frac_missing_allowed=0.05, processed_file='processed/df_pecarn.pkl'):
     '''Run all the preprocessing
     
     Params
@@ -29,21 +29,36 @@ def get_data(use_processed=True, save_processed=True, processed_file='processed/
         df_outcomes = get_outcomes()  # 2 outcomes: iai, and iai_intervention
         df = pd.merge(df_features, df_outcomes, on='id', how='left')
         df = rename_values(df)  # rename the features by their meaning
-        df = preprocess(df)  # impute and fill
-        df = classification_setup(df)  # add cv fold + dummies
+        
+        # drop cols with vals missing this percent of the time
+        df = df.dropna(axis=1, thresh=(1 - frac_missing_allowed) * NUM_PATIENTS)
+        
+        # delete repeat columns
+        '''
+        keys = list(df.keys())
+        keys_to_remove = [k for k in keys if 'Repeat_instance' in k]
+        df = df.drop(labels=keys_to_remove, axis=1)
+        '''
+
+        df = impute(df)  # impute and fill
+        df = data.classification_setup(df)  # add cv fold + dummies
         if save_processed:
             os.makedirs(os.path.dirname(processed_file), exist_ok=True)
             df.to_pickle(processed_file)
         return df
 
 
-def get_features():
+def get_features(processed_file='processed/df_pecarn_features.pkl'):
     '''Read all features into df
     
     Returns
     -------
     features: pd.DataFrame
     '''
+    
+    if os.path.exists(processed_file):
+        return pd.read_pickle(processed_file)
+    
     fnames = sorted([fname for fname in os.listdir(DATA_DIR)
                      if 'csv' in fname
                      and not 'formats' in fname
@@ -67,7 +82,7 @@ def get_features():
                     or 'form5' in fname
                     or 'form7' in fname
                     ]
-    for i, fname in tqdm(enumerate(fnames_small)):  # this should include more than 3!
+    for i, fname in tqdm(enumerate(fnames_small)):
         df2 = r[fname].copy()
         df2 = df2.drop_duplicates(subset=['id'], keep='last')  # if subj has multiple entries, only keep first
         rename_dict = {
@@ -77,8 +92,9 @@ def get_features():
         }
         df2.rename(columns=rename_dict, inplace=True)
         df = df.set_index('id').combine_first(df2.set_index('id')).reset_index()  # don't save duplicate columns
-    print('final shape', df.shape)
 
+    os.makedirs(os.path.dirname(processed_file), exist_ok=True)
+    df.to_pickle(processed_file)
     # df.to_pickle(oj(pdir, 'features.pkl'))
     return df
 
@@ -180,8 +196,7 @@ def rename_values(df):
     df.RACE = [race[v] for v in df.RACE.values]
     df.RecodedMOI = [moi[v] for v in df.RecodedMOI.values]
     df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
-    df.AbdTenderDegree = df.AbdTenderDegree.fillna(4)
-    df.AbdTenderDegree = [abdTenderDegree[v] for v in df.AbdTenderDegree.values]
+    df['AbdTenderDegree'] = [abdTenderDegree[v] for v in df.AbdTenderDegree.fillna(4).values]
     df = df.rename(columns={'RACE': 'Race', 
                             'SEX': 'Sex', 
                             'HISPANIC_ETHNICITY': 'Hispanic',
@@ -227,38 +242,14 @@ def rename_values(df):
     return df
 
 
-def preprocess(df: pd.DataFrame):
-    """Get preprocessed features from df
-
-    Originally used features: age < 2, severe mechanism of injury (includes many things),
-    vomiting, hypotension, GCS
-    thoracic tenderness, evidence of thoracic wall trauma
-    costal marign tenderness, decreased breath sounds, abdominal distention
-    complaints of abdominal pain, abdominal tenderness (3 levels)
-    evidence of abdominal wall trauma or seat belt sign
-    distracting patinful injury
-    femur fracture
+def impute(df: pd.DataFrame):
+    """Returns df with imputed features
     """
 
     # fill in values for some vars from NaN -> Unknown
-    df_filt = df.copy()
-#     df_filt.AbdTenderDegree = df_filt.AbdTenderDegree.fillna('unknown')
-    df_filt.AbdTrauma = df_filt.AbdTrauma.fillna('unknown')
+    df['AbdTrauma'] = df['AbdTrauma'].fillna('unknown')
 
-    # print(df.shape)
-    df_filt = df_filt.dropna(axis=1, thresh=NUM_PATIENTS - 602)  # thresh is how many non-nan values - 602 is 5%
-    # print(df_filt.shape)
-    # print(list(df_filt.keys()))
-
-    # delete some columns
-    keys = list(df_filt.keys())
-    keys_to_remove = [k for k in keys if 'Repeat_instance' in k]
-    df_filt = df_filt.drop(labels=keys_to_remove, axis=1)
-    # print('keys removed', keys_to_remove, 'new shape', df_filt.shape)
 
     # pandas impute missing values with median
-    df_filt = df_filt.fillna(df_filt.median())
-
-    # keys = ['SEX', 'RACE', 'ageinyrs']
-    # print(df_filt.dtypes)
-    return df_filt
+    df = df.fillna(df.median())
+    return df

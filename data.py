@@ -17,7 +17,6 @@ def classification_setup(df: pd.DataFrame, dset='pecarn'):
 
     # convert feats to dummy
     df = pd.get_dummies(df, dummy_na=True)  # treat na as a separate category
-
     # remove any col that is all 0s
     df = df.loc[:, (df != 0).any(axis=0)]
 
@@ -33,6 +32,17 @@ def classification_setup(df: pd.DataFrame, dset='pecarn'):
 
 def get_feat_names(df):
     '''Get feature names for pecarn
+    
+    Original PECARN feats
+    ---------------------
+    Originally used features: age < 2, severe mechanism of injury (includes many things),
+    vomiting, hypotension, GCS
+    thoracic tenderness, evidence of thoracic wall trauma
+    costal marign tenderness, decreased breath sounds, abdominal distention
+    complaints of abdominal pain, abdominal tenderness (3 levels)
+    evidence of abdominal wall trauma or seat belt sign
+    distracting patinful injury
+    femur fracture
     
     Returns
     -------
@@ -63,10 +73,10 @@ def get_feat_names(df):
                          'VomitWretch',
                          'Age']
     # InjuryMechanism_1, hypotension?, femure fracture
-    ks = set()  # pecarn feats after encoding
+    pecarn_feats = set()  # pecarn feats after encoding
     for pecarn_feat in PECARN_FEAT_NAMES:
         for feat_name in feat_names:
             if pecarn_feat in feat_name:
-                ks.add(feat_name)
-    ks = sorted(list(ks))
-    return feat_names, ks
+                pecarn_feats.add(feat_name)
+    pecarn_feats = sorted(list(pecarn_feats))
+    return feat_names, pecarn_feats

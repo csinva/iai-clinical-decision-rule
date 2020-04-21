@@ -1,0 +1,162 @@
+,count,unique,top,freq
+id,12044,12044,12044,1
+AbdCTScan,12044.0,4.0,2.0,6557.0
+AbdCTScan1,12044.0,2.0,2.0,6536.0
+AbdUltrasound,12044.0,4.0,2.0,9876.0
+AbdUltrasound1,12044.0,2.0,2.0,11014.0
+AbdomenTender,12044.0,4.0,2.0,7236.0
+AbnChestAusc,12044.0,4.0,2.0,11616.0
+AlcDrgSuspicion,12044.0,3.0,2.0,11704.0
+ApproxWtKg,12044.0,864.0,40.0,1261.0
+BowelSounds,12044.0,4.0,2.0,9250.0
+CHCXRFindings,12044.0,2.0,1.0,11585.0
+Certification,12044.0,9.0,3.0,6629.0
+ChestCXR,12044.0,2.0,1.0,8030.0
+CurrIntubated,12044.0,3.0,2.0,11451.0
+EDTriageTime,12044.0,1263.0,1704.0,225.0
+FlankTender,12044.0,4.0,2.0,9659.0
+GCSEye,12044.0,4.0,1.0,11127.0
+GCSMotor,12044.0,6.0,1.0,11184.0
+GCSScore,12044.0,13.0,15.0,10417.0
+GCSVerbal,12044.0,5.0,1.0,10615.0
+HCTDay,12044.0,10.0,0.0,9513.0
+HCTTime,12044.0,1374.0,1550.0,3112.0
+HCTValue,12044.0,353.0,36.7,3173.0
+HRDocumented,12044.0,3.0,1.0,11994.0
+HematocritColl,12044.0,2.0,1.0,10203.0
+IAIAcuteInterv,12044.0,6.0,1.0,9252.0
+IAISuspicion,12044.0,6.0,1.0,6591.0
+InitHeartRate,12044.0,174.0,100.0,485.0
+InitResp,12044.0,4.0,1.0,11774.0
+InitRespRange,12044.0,78.0,20.0,2730.0
+InitSysBP,12044.0,3.0,1.0,11783.0
+InitSysBPRange,12044.0,145.0,119.0,538.0
+InjTmKnown,12044.0,2.0,1.0,8763.0
+InjuryDay,12044.0,2.0,0.0,11289.0
+InjuryMechanism,12044.0,10.0,1.0,3830.0
+InjuryTime,12044.0,482.0,1600.0,3635.0
+LabResultAware,12044.0,3.0,2.0,8976.0
+LabsObtained,12044.0,2.0,1.0,10798.0
+LtCostalTender,12044.0,4.0,2.0,9903.0
+NonAbdSurgery,12044.0,4.0,2.0,9256.0
+OthAbdImages,12044.0,2.0,2.0,11952.0
+PelvicTender,12044.0,4.0,2.0,9834.0
+PelvicXR,12044.0,2.0,2.0,6968.0
+PelvisUnstable,12044.0,4.0,2.0,11375.0
+PeritonIrrit,12044.0,4.0,2.0,10709.0
+PharmaParalyzed,12044.0,3.0,2.0,11607.0
+PharmaSedated,12044.0,3.0,2.0,11405.0
+Preverbal,12044.0,3.0,2.0,10153.0
+PtHosp,12044.0,2.0,2.0,6053.0
+RectalBlood,12044.0,4.0,3.0,6209.0
+RefuseFU,12044.0,3.0,3.0,5992.0
+Repeat_instance,12044.0,8.0,1.0,8656.0
+RtCostalTender,12044.0,4.0,2.0,9964.0
+SerALTTime,12044.0,1287.0,1645.0,5152.0
+SerALTValue,12044.0,363.0,23.0,5345.0
+SerASTDay,12044.0,9.0,0.0,10927.0
+SerASTTime,12044.0,1307.0,1645.0,4748.0
+SerASTValue,12044.0,437.0,40.0,4892.0
+SerAmylaseColl,12044.0,2.0,2.0,7124.0
+SerBUNColl,12044.0,2.0,1.0,7952.0
+SerBUNTime,12044.0,1260.0,1651.0,5346.0
+SerBUNValue,12044.0,39.0,12.0,6056.0
+SerBicarbColl,12044.0,2.0,1.0,8087.0
+SerBicarbDay,12044.0,14.0,0.0,11559.0
+SerBicarbTime,12044.0,1265.0,1715.0,5215.0
+SerBicarbValue,12044.0,184.0,24.0,6117.0
+SerBunDay,12044.0,14.0,0.0,11213.0
+SerCreatColl,12044.0,2.0,1.0,7912.0
+SerCreatDay,12044.0,17.0,0.0,11204.0
+SerCreatTime,12044.0,1259.0,1652.0,5386.0
+SerCreatValue,12044.0,20.0,0.6,6437.0
+SerLipaseColl,12044.0,2.0,2.0,7156.0
+SerumALTColl,12044.0,2.0,1.0,8156.0
+SerumASTColl,12044.0,2.0,1.0,8563.0
+ShortBreath,12044.0,4.0,2.0,10039.0
+TriageTmUnkown,12044.0,2.0,1.0,11833.0
+WBCColl,12044.0,2.0,1.0,9518.0
+WBCDay,12044.0,9.0,0.0,9310.0
+WBCTime,12044.0,1332.0,1516.0,3778.0
+WBCValue,12044.0,775.0,9.8,3872.0
+WtAssessment,12044.0,4.0,1.0,4329.0
+Age,12044,18,17,1081
+repeat_instance,12044.0,5.0,1.0,11673.0
+seraltday,12044.0,9.0,0.0,10970.0
+iai,12044,2,0,11283
+iai_intervention,12044,2,0,11841
+CostalTender,12044,1,True,12044
+AbdDistention_no,12044,2,1,11239
+AbdDistention_unk,12044,2,0,11516
+AbdDistention_yes,12044,2,0,11767
+AbdTenderDegree_Mild,12044,2,0,10409
+AbdTenderDegree_Moderate,12044,2,0,10501
+AbdTenderDegree_Severe,12044,2,0,11625
+AbdTenderDegree_unknown,12044,2,1,8447
+AbdTrauma_no,12044,2,1,10113
+AbdTrauma_unk,12044,2,0,11977
+AbdTrauma_yes,12044,2,0,10180
+AbdomenPain_no,12044,2,1,6572
+AbdomenPain_unk,12044,2,0,10192
+AbdomenPain_yes,12044,2,0,8424
+DecrBreathSound_no,12044,2,1,11555
+DecrBreathSound_unk,12044,2,0,11811
+DecrBreathSound_yes,12044,2,0,11788
+DistractingPain_no,12044,2,1,8350
+DistractingPain_unk,12044,2,0,11155
+DistractingPain_yes,12044,2,0,9239
+Hispanic_-1,12044,2,0,10753
+Hispanic_0,12044,2,1,7656
+Hispanic_1,12044,2,0,8947
+InjMechSpecs_1: 5 or less,12044,2,0,11962
+InjMechSpecs_1: < 20 mph,12044,2,0,11678
+InjMechSpecs_1: < 3 ft.,12044,2,0,11736
+InjMechSpecs_1: < 5 mph,12044,2,0,11848
+InjMechSpecs_1: Intentional,12044,2,0,11617
+InjMechSpecs_2: 20 - 40 mph,12044,2,0,11190
+InjMechSpecs_2: 3 - 10 ft.,12044,2,0,11325
+InjMechSpecs_2: 5 - 20 mph,12044,2,0,11512
+InjMechSpecs_2: 6-15,12044,2,0,11883
+InjMechSpecs_2: Accidental,12044,2,0,11724
+InjMechSpecs_3: > 10 ft.,12044,2,0,11500
+InjMechSpecs_3: > 15,12044,2,0,12021
+InjMechSpecs_3: > 20 mph,12044,2,0,11445
+InjMechSpecs_3: > 40 mph,12044,2,0,10802
+InjMechSpecs_3: Unknown intentionality,12044,2,0,12012
+InjMechSpecs_4: Physician did not answer,12044,2,0,12021
+InjMechSpecs_4: Speed Unknown,12044,2,0,9860
+InjMechSpecs_4: Unknown,12044,2,0,11973
+InjMechSpecs_5: Physician did not answer,12044,2,0,11902
+InjMechSpecs_nan,12044,2,0,8825
+Race_American Indian or Alaska Native,12044,2,0,11959
+Race_Asian,12044,2,0,11822
+Race_Black or African American,12044,2,0,8300
+Race_Native Hawaiian or Other Pacific Islander,12044,2,0,12006
+Race_Other,12044,2,0,11584
+Race_Stated as unknown,12044,2,0,11038
+Race_White,12044,2,1,6489
+RecodedMOI_Bike collision/fall,12044,2,0,11277
+RecodedMOI_Fall down stairs,12044,2,0,11763
+RecodedMOI_Fall from an elevation,12044,2,0,9883
+RecodedMOI_Motor vehicle collision,12044,2,0,8212
+RecodedMOI_Motorcycle/ATV/Scooter collision,12044,2,0,11381
+RecodedMOI_Object struck abdomen,12044,2,0,10496
+RecodedMOI_Pedestrian/bicyclist struck by moving vehicle,12044,2,0,9728
+RecodedMOI_unknown,12044,2,0,11568
+Sex_F,12044,2,0,7384
+Sex_M,12044,2,1,7384
+SeatBeltSign_no,12044,2,1,11052
+SeatBeltSign_unk,12044,2,0,11646
+SeatBeltSign_yes,12044,2,0,11450
+ThoracicTender_no,12044,2,1,8919
+ThoracicTender_unk,12044,2,0,10841
+ThoracicTender_yes,12044,2,0,10122
+ThoracicTrauma_no,12044,2,1,9926
+ThoracicTrauma_unk,12044,2,0,11968
+ThoracicTrauma_yes,12044,2,0,10002
+VomitWretch_no,12044,2,1,10419
+VomitWretch_unk,12044,2,0,11572
+VomitWretch_yes,12044,2,0,10891
+AbdTrauma_or_SeatBeltSign_False,12044,2,1,10081
+AbdTrauma_or_SeatBeltSign_True,12044,2,0,10081
+cv_fold,12044,6,1,2058
