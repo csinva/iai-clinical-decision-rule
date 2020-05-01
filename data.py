@@ -11,7 +11,7 @@ pecarn_test_idxs = [6]
 psrc_train_idxs = [8, 9, 10, 11, 12]
 psrc_test_idxs = [13]
 
-def classification_setup(df: pd.DataFrame, dset='pecarn'):
+def add_dummies_and_cv_split(df: pd.DataFrame, dset='pecarn'):
     """Prepare the data for classification
     """
 

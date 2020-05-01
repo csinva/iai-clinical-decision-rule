@@ -9,7 +9,7 @@ NUM_PATIENTS = 12044
 import data
 
 
-def get_data(use_processed=False, save_processed=True, processed_file='processed/df_psrc.pkl'):
+def get_data(use_processed=False, processed_file='processed/df_psrc.pkl'):
     '''Run all the preprocessing
     
     Params
@@ -66,19 +66,16 @@ def get_data(use_processed=False, save_processed=True, processed_file='processed
         df['iai'] = df[iai_keys].sum(axis=1) > 0
         df['iai_intervention'] = df[iai_with_intervention_keys].sum(axis=1) > 0
         
-        vals = {
-            0: 'no',
-            1: 'yes'
-        }
         
-        df['SeatBeltSign'] = [vals[x] for x in df['SeatBeltSign'].values]
+        df['SeatBeltSign'] = df['SeatBeltSign'].map({0: 'no', 1: 'yes'})
         
         df = df.infer_objects()
-        df = data.classification_setup(df, dset='psrc')
+        df = data.add_dummies_and_cv_split(df, dset='psrc')
         # df = df.fillna('unknown')
         
-        if save_processed:
-            df.to_pickle(processed_file)
+        # save
+        os.makedirs(os.path.dirname(processed_file), exist_ok=True)
+        df.to_pickle(processed_file)
         return df
     
 
@@ -89,25 +86,29 @@ def rename_values(df):
     Compute a couple new features
     set types of 
     '''
-    df = df.rename(columns={'Seatbelt sign': 'SeatBeltSign', 
-                                'Initial GCS': 'GCSScore',
-                                'Lower chest wall/costal margin tenderness to palpation  (choice=1 on left)': 'LtCostalTender',
-                                'Lower chest wall/costal margin tenderness to palpation  (choice=1 on right)': 'RtCostalTender'
-                               })
-    # fill with unknown
+    df = df.rename(columns={
+        'Seatbelt sign': 'SeatBeltSign', 
+        'Initial GCS': 'GCSScore',
+        'Lower chest wall/costal margin tenderness to palpation  (choice=1 on left)': 'LtCostalTender',
+        'Lower chest wall/costal margin tenderness to palpation  (choice=1 on right)': 'RtCostalTender'
+    })
+    # fill with median
     df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
 
 
     # these need matching
-    df = df.rename(columns={'Abdominal distension': 'AbdDistention',
-                            'Abdominal tenderness to palpation': 'AbdTenderDegree',
-                           })
+    df = df.rename(columns={
+        'Abdominal distension': 'AbdDistention',
+        'Abdominal tenderness to palpation': 'AbdTenderDegree',
+        'Emesis post injury': 'VomitWretch'
+    })
     binary = {
         0: 'no',
         1: 'yes',
         'unknown': 'unknown'
     }
-    df['AbdDistention'] = [binary[v] for v in df.AbdDistention.fillna('unknown').values]
+    df['AbdDistention'] = df.AbdDistention.fillna('unknown').map(binary)
+    df['VomitWretch'] = df.VomitWretch.fillna('unknown').map(binary)
 
     abdTenderDegree = {
         'None': 'Mild',
@@ -117,7 +118,7 @@ def rename_values(df):
         'Limited exam secondary to intubation/sedation': 'unknown',
         'unknown': 'unknown'
     }
-    df['AbdTenderDegree'] = [abdTenderDegree[v] for v in df.AbdTenderDegree.fillna('unknown').values]
+    df['AbdTenderDegree'] = df.AbdTenderDegree.fillna('unknown').map(abdTenderDegree)
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',

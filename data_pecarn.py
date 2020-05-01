@@ -11,7 +11,7 @@ NUM_PATIENTS = 12044
 DATA_DIR = 'data_pecarn/Datasets'
 
 
-def get_data(use_processed=False, save_processed=True, frac_missing_allowed=0.05, processed_file='processed/df_pecarn.pkl'):
+def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='processed/df_pecarn.pkl'):
     '''Run all the preprocessing
     
     Params
@@ -41,10 +41,11 @@ def get_data(use_processed=False, save_processed=True, frac_missing_allowed=0.05
         '''
 
         df = impute(df)  # impute and fill
-        df = data.classification_setup(df)  # add cv fold + dummies
-        if save_processed:
-            os.makedirs(os.path.dirname(processed_file), exist_ok=True)
-            df.to_pickle(processed_file)
+        df = data.add_dummies_and_cv_split(df)  # add cv fold + dummies
+        
+        # save
+        os.makedirs(os.path.dirname(processed_file), exist_ok=True)
+        df.to_pickle(processed_file)
         return df
 
 
@@ -193,10 +194,10 @@ def rename_values(df):
         3: 'Severe',
         4: 'unknown'
     }
-    df.RACE = [race[v] for v in df.RACE.values]
-    df.RecodedMOI = [moi[v] for v in df.RecodedMOI.values]
+    df.RACE = df.RACE.map(race)
+    df.RecodedMOI = df.RecodedMOI.map(moi)
     df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
-    df['AbdTenderDegree'] = [abdTenderDegree[v] for v in df.AbdTenderDegree.fillna(4).values]
+    df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(4).map(abdTenderDegree)
     df = df.rename(columns={'RACE': 'Race', 
                             'SEX': 'Sex', 
                             'HISPANIC_ETHNICITY': 'Hispanic',
