@@ -94,7 +94,7 @@ def rename_values(df):
     })
     # fill with median
     df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
-
+    
 
     # these need matching
     df = df.rename(columns={
@@ -109,6 +109,7 @@ def rename_values(df):
     }
     df['AbdDistention'] = df.AbdDistention.fillna('unknown').map(binary)
     df['VomitWretch'] = df.VomitWretch.fillna('unknown').map(binary)
+    df['AbdTrauma'] = df['Evidence of abdominal wall trauma (choice=None)'].map(binary)
 
     abdTenderDegree = {
         'None': 'Mild',

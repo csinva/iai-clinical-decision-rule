@@ -167,6 +167,7 @@ def rename_values(df):
     Compute a couple new features
     set types of 
     '''
+
     race = {
         1: 'American Indian or Alaska Native',
         2: 'Asian',
@@ -207,7 +208,6 @@ def rename_values(df):
     df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) | (df.DecrBreathSound)
     df['AbdTrauma_or_SeatBeltSign'] = (df.AbdTrauma == 1) | (df.SeatBeltSign == 1)
 
-    
     # set types of these variables to categorical
     ks_categorical = ['Sex', 'Race', 'Hispanic',
                       'VomitWretch', 'RecodedMOI', 'ThoracicTender', 'ThoracicTrauma',
@@ -233,13 +233,15 @@ def rename_values(df):
         contains_nan = np.sum(is_na) > 0
         if contains_nan and uniques.size in [4, 5] or ~contains_nan and uniques.size in [3, 4]:
             if '1.0' in uniques and '2.0' in uniques and '3.0' in uniques:
-                v2[v2=='1.0'] = 'yes'
-                v2[v2=='2.0'] = 'no'
-                v2[v2=='3.0'] = 'unknown' # Unknown
-                v2[v2=='4.0'] = 'unknown' # Physician didn't answer
-                v2[is_na] = 'unknown' # data not colltected
-                df[k] = v2
+                df[k] = df[k].map({
+                    '1.0': 'yes',
+                    '2.0': 'no',
+                    '3.0': 'unknown',
+                    '4.0': 'unknown',
+                    np.nan: 'unknown',
+                })
 
+                
     return df
 
 

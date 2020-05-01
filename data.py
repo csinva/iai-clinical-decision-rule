@@ -79,4 +79,4 @@ def get_feat_names(df):
             if pecarn_feat in feat_name:
                 pecarn_feats.add(feat_name)
     pecarn_feats = sorted(list(pecarn_feats))
-    return feat_names, pecarn_feats
+    return feat_names, set(pecarn_feats)
