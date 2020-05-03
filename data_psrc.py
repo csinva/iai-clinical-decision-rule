@@ -34,20 +34,16 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl'):
         df['id'] = -1 * np.arange(1, NUM_PATIENTS + 1)
         df = df.rename(columns=lambda x: x.replace('choice=0ne', 'choice=None').strip())
         df = df.replace('0ne', 'None')
-        df['Age'] = df['Age in years'].fillna(0) + df['Age in months'].fillna(0) / 12
 
+        # rename values
+        df = rename_values(df)
+        
         # drop unnecessary
         ks_drop = [k for k in df.keys() 
                    if k in ['Time patient trauma alert concluded/ left trauma bay (military time)',
                             'Time CT performed',
                            ]]
         df = df.drop(columns=ks_drop + ['Record ID',  'Arrival time in ED', 'Age in months', 'Age in years'])
-
-        # rename values
-        df = rename_values(df)
-        # other vars present
-        # Race
-        # Thoracic injury - matches ThoracicTrauma
         
         # outcomes
         iai_keys = [k for k in df.keys() if 'Interventions for IAI' in k]
@@ -66,8 +62,6 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl'):
         df['iai'] = df[iai_keys].sum(axis=1) > 0
         df['iai_intervention'] = df[iai_with_intervention_keys].sum(axis=1) > 0
         
-        
-        df['SeatBeltSign'] = df['SeatBeltSign'].map({0: 'no', 1: 'yes'})
         
         df = df.infer_objects()
         df = data.add_dummies_and_cv_split(df, dset='psrc')
@@ -92,24 +86,26 @@ def rename_values(df):
         'Lower chest wall/costal margin tenderness to palpation  (choice=1 on left)': 'LtCostalTender',
         'Lower chest wall/costal margin tenderness to palpation  (choice=1 on right)': 'RtCostalTender'
     })
+    
     # fill with median
     df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
-    
-
+    df['Age'] = df['Age in years'].fillna(0) + df['Age in months'].fillna(0) / 12
+    df['InitSysBPRange'] = df['Initial ED systolic BP'].fillna(df['Initial ED systolic BP'].median()).astype(int)
     # these need matching
-    df = df.rename(columns={
-        'Abdominal distension': 'AbdDistention',
-        'Abdominal tenderness to palpation': 'AbdTenderDegree',
-        'Emesis post injury': 'VomitWretch'
-    })
+    df['InitHeartRate'] = df['Initial ED HR'].fillna(df['Initial ED HR'].median())
     binary = {
         0: 'no',
         1: 'yes',
         'unknown': 'unknown'
     }
-    df['AbdDistention'] = df.AbdDistention.fillna('unknown').map(binary)
-    df['VomitWretch'] = df.VomitWretch.fillna('unknown').map(binary)
+    df['SeatBeltSign'] = df['SeatBeltSign'].map(binary)
+    df['AbdDistention'] = df['Abdominal distension'].fillna('unknown').map(binary)
+    df['VomitWretch'] = df['Emesis post injury'].fillna('unknown').map(binary)
     df['AbdTrauma'] = df['Evidence of abdominal wall trauma (choice=None)'].map(binary)
+    df['AbdomenPain'] = (df['Complainabd. pain']!='0').astype(int).map(binary).fillna('other')
+    df['ThoracicTrauma'] = (1 - df['Evidence of thoracic trauma  (choice=None)']).map(binary)
+    df['DecrBreathSound'] = df['Evidence of thoracic trauma  (choice=Decreased breath sounds)'].map(binary)
+    # df['FemurFracture'] = df['Femur fracture'] #.map(binar)
 
     abdTenderDegree = {
         'None': 'Mild',
@@ -119,7 +115,7 @@ def rename_values(df):
         'Limited exam secondary to intubation/sedation': 'unknown',
         'unknown': 'unknown'
     }
-    df['AbdTenderDegree'] = df.AbdTenderDegree.fillna('unknown').map(abdTenderDegree)
+    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].fillna('unknown').map(abdTenderDegree)
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',
@@ -134,6 +130,7 @@ def rename_values(df):
         'Mechanism of injury (choice=Other blunt mechanism)': 'Object struck abdomen',
     }
     df['RecodedMOI'] = ['unknown'] * df.shape[0]
+    
     for k in moi:
         df.loc[df[k] == 1, 'RecodedMOI'] = moi[k]
     return df

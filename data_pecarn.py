@@ -218,6 +218,8 @@ def rename_values(df):
         df[k] = df[k].astype(str)    
     
     
+    df['AbdomenPain'] = df['AbdomenPain'].replace('3.0', 'other')
+    
     # rename vars to values
     ks_remap = ['Hispanic', 'VomitWretch', 'RecodedMOI', 
                 'ThoracicTender', 'ThoracicTrauma', 
@@ -225,19 +227,18 @@ def rename_values(df):
                 'AbdTrauma', 'SeatBeltSign', 
                 'DistractingPain', 'AbdomenPain']
     for k in ks_remap:
-
         vals = df[k].values
-        v2 = deepcopy(df[k].values.astype(str))
         is_na = df[k].isna()
         uniques = np.unique(vals).astype(np.str)
         contains_nan = np.sum(is_na) > 0
         if contains_nan and uniques.size in [4, 5] or ~contains_nan and uniques.size in [3, 4]:
-            if '1.0' in uniques and '2.0' in uniques and '3.0' in uniques:
+            if '1.0' in uniques and '2.0' in uniques and ('3.0' in uniques or 'other' in uniques):
                 df[k] = df[k].map({
                     '1.0': 'yes',
                     '2.0': 'no',
                     '3.0': 'unknown',
                     '4.0': 'unknown',
+                    'other': 'other',
                     np.nan: 'unknown',
                 })
 
