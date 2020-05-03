@@ -71,7 +71,8 @@ def get_feat_names(df):
                          'ThoracicTender',
                          'ThoracicTrauma',
                          'VomitWretch',
-                         'Age']
+                         'Age'] + \
+    ['Race', 'InitHeartRate', 'InitSysBPRange']
     # InjuryMechanism_1, hypotension?, femure fracture
     pecarn_feats = set()  # pecarn feats after encoding
     for pecarn_feat in PECARN_FEAT_NAMES:

@@ -96,6 +96,8 @@ def rename_values(df):
     binary = {
         0: 'no',
         1: 'yes',
+        False: 'no',
+        True: 'yes',
         'unknown': 'unknown'
     }
     df['SeatBeltSign'] = df['SeatBeltSign'].map(binary)
@@ -106,6 +108,9 @@ def rename_values(df):
     df['ThoracicTrauma'] = (1 - df['Evidence of thoracic trauma  (choice=None)']).map(binary)
     df['DecrBreathSound'] = df['Evidence of thoracic trauma  (choice=Decreased breath sounds)'].map(binary)
     # df['FemurFracture'] = df['Femur fracture'] #.map(binar)
+    df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
+                    (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
+                    (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
 
     abdTenderDegree = {
         'None': 'Mild',

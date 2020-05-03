@@ -216,9 +216,18 @@ def rename_values(df):
                       'AbdomenPain']
     for k in ks_categorical:
         df[k] = df[k].astype(str)    
-    
+    binary = {
+        0: 'no',
+        1: 'yes',
+        False: 'no',
+        True: 'yes',
+        'unknown': 'unknown'
+    }
     
     df['AbdomenPain'] = df['AbdomenPain'].replace('3.0', 'other')
+    df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
+                    (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
+                    (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
     
     # rename vars to values
     ks_remap = ['Hispanic', 'VomitWretch', 'RecodedMOI', 
