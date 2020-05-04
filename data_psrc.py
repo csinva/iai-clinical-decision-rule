@@ -9,7 +9,7 @@ NUM_PATIENTS = 12044
 import data
 
 
-def get_data(use_processed=False, processed_file='processed/df_psrc.pkl'):
+def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=False):
     '''Run all the preprocessing
     
     Params
@@ -64,8 +64,11 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl'):
         
         
         df = df.infer_objects()
-        df = data.add_dummies_and_cv_split(df, dset='psrc')
+        df = data.add_cv_split(df, dset='psrc')
+        if dummy:
+            df = data.to_dummies(df)
         # df = df.fillna('unknown')
+        df['dset'] = 'psrc'
         
         # save
         os.makedirs(os.path.dirname(processed_file), exist_ok=True)

@@ -11,7 +11,7 @@ NUM_PATIENTS = 12044
 DATA_DIR = 'data_pecarn/Datasets'
 
 
-def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='processed/df_pecarn.pkl'):
+def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='processed/df_pecarn.pkl', dummy=False):
     '''Run all the preprocessing
     
     Params
@@ -41,7 +41,10 @@ def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='pro
         '''
 
         df = impute(df)  # impute and fill
-        df = data.add_dummies_and_cv_split(df)  # add cv fold + dummies
+        df = data.add_cv_split(df, dset='pecarn')
+        if dummy:
+            df = data.to_dummies(df)
+        df['dset'] = 'pecarn'
         
         # save
         os.makedirs(os.path.dirname(processed_file), exist_ok=True)
@@ -251,7 +254,6 @@ def rename_values(df):
                     np.nan: 'unknown',
                 })
 
-                
     return df
 
 

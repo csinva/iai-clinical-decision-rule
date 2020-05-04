@@ -11,7 +11,7 @@ pecarn_test_idxs = [6]
 psrc_train_idxs = [8, 9, 10, 11, 12]
 psrc_test_idxs = [13]
 
-def add_dummies_and_cv_split(df: pd.DataFrame, dset='pecarn'):
+def to_dummies(df: pd.DataFrame):
     """Prepare the data for classification
     """
 
@@ -19,7 +19,9 @@ def add_dummies_and_cv_split(df: pd.DataFrame, dset='pecarn'):
     df = pd.get_dummies(df, dummy_na=True)  # treat na as a separate category
     # remove any col that is all 0s
     df = df.loc[:, (df != 0).any(axis=0)]
+    return df
 
+def add_cv_split(df: pd.DataFrame, dset='pecarn'):
     # set up train / test
     np.random.seed(42)
     if dset == 'pecarn':
@@ -27,7 +29,6 @@ def add_dummies_and_cv_split(df: pd.DataFrame, dset='pecarn'):
     elif dset == 'psrc':
         offset = 7
     df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0]) + offset  # 6 is the test set
-
     return df
 
 def get_feat_names(df):
