@@ -128,7 +128,7 @@ def rename_values(df):
         'Moderate': 'Moderate',
         'Severe': 'Severe',
         'Limited exam secondary to intubation/sedation': 'unknown',
-        'unknown': 'unknown'
+        'unknown': 'Mild'
     }
     df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].fillna('unknown').map(abdTenderDegree)
 
