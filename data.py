@@ -21,6 +21,22 @@ def to_dummies(df: pd.DataFrame):
     df = df.loc[:, (df != 0).any(axis=0)]
     return df
 
+def derived_feats(df):
+    '''Add derived features
+    '''
+    binary = {
+        0: 'no',
+        1: 'yes',
+        False: 'no',
+        True: 'yes',
+        'unknown': 'unknown'
+    }
+    df['AbdTrauma_or_SeatBeltSign'] = (df.AbdTrauma == 1) | (df.SeatBeltSign == 1)
+    df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
+                    (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
+                    (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
+    return df
+
 def add_cv_split(df: pd.DataFrame, dset='pecarn'):
     # set up train / test
     np.random.seed(42)
@@ -65,6 +81,7 @@ def get_feat_names(df):
                          'DecrBreathSound',
                          'DistractingPain',
                          'GCSScore',
+                         'Hypotension',
                          'LtCostalTender',
                          'RecodedMOI',
                          'RtCostalTender',
@@ -74,8 +91,7 @@ def get_feat_names(df):
                          'VomitWretch',
                          'Age'] + \
     ['Race', 'InitHeartRate', 'InitSysBPRange']
-    # InjuryMechanism_1, hypotension?, femure fracture
-    pecarn_feats = set()  # pecarn feats after encoding
+    pecarn_feats = set()
     for pecarn_feat in PECARN_FEAT_NAMES:
         for feat_name in feat_names:
             if pecarn_feat in feat_name:

@@ -209,9 +209,9 @@ def rename_values(df):
                            })
     # print('keys', list(df.keys()))
     df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) | (df.DecrBreathSound)
-    df['AbdTrauma_or_SeatBeltSign'] = (df.AbdTrauma == 1) | (df.SeatBeltSign == 1)
 
     # set types of these variables to categorical
+    df = data.derived_feats(df)
     ks_categorical = ['Sex', 'Race', 'Hispanic',
                       'VomitWretch', 'RecodedMOI', 'ThoracicTender', 'ThoracicTrauma',
                       'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
@@ -228,9 +228,8 @@ def rename_values(df):
     }
     
     df['AbdomenPain'] = df['AbdomenPain'].replace('3.0', 'other')
-    df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
-                    (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
-                    (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
+    
+    
     
     # rename vars to values
     ks_remap = ['Hispanic', 'VomitWretch', 'RecodedMOI', 

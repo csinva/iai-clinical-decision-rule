@@ -91,6 +91,7 @@ def rename_values(df):
     })
     
     # fill with median
+    df['CostalTender'] = df['LtCostalTender'] | df['RtCostalTender']
     df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
     df['Age'] = df['Age in years'].fillna(0) + df['Age in months'].fillna(0) / 12
     df['InitSysBPRange'] = df['Initial ED systolic BP'].fillna(df['Initial ED systolic BP'].median()).astype(int)
@@ -110,10 +111,11 @@ def rename_values(df):
     df['AbdomenPain'] = (df['Complainabd. pain']!='0').astype(int).map(binary).fillna('other')
     df['ThoracicTrauma'] = (1 - df['Evidence of thoracic trauma  (choice=None)']).map(binary)
     df['DecrBreathSound'] = df['Evidence of thoracic trauma  (choice=Decreased breath sounds)'].map(binary)
+    df['DistractingPain'] = np.array([False] * df.shape[0])
+    for k in ['Chest X-ray (choice=Rib fracture)', 'Indicate thoracic injury (choice=Clavicle fracture)']:
+        df['DistractingPain'] = df['DistractingPain'] | df[k]
     # df['FemurFracture'] = df['Femur fracture'] #.map(binar)
-    df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
-                    (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
-                    (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
+    df = data.derived_feats(df)
 
     abdTenderDegree = {
         'None': 'Mild',
