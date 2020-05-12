@@ -80,6 +80,7 @@ def get_feat_names(df):
                          'Costal',
                          'DecrBreathSound',
                          'DistractingPain',
+                         'FemurFracture',
                          'GCSScore',
                          'Hypotension',
                          'LtCostalTender',

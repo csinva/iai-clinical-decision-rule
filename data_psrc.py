@@ -97,6 +97,7 @@ def rename_values(df):
     df['InitSysBPRange'] = df['Initial ED systolic BP'].fillna(df['Initial ED systolic BP'].median()).astype(int)
     # these need matching
     df['InitHeartRate'] = df['Initial ED HR'].fillna(df['Initial ED HR'].median())
+    df['FemurFracture'] = df['Femur fracture'].sum(axis=1)
     binary = {
         0: 'no',
         1: 'yes',
@@ -111,8 +112,12 @@ def rename_values(df):
     df['AbdomenPain'] = (df['Complainabd. pain']!='0').astype(int).map(binary).fillna('other')
     df['ThoracicTrauma'] = (1 - df['Evidence of thoracic trauma  (choice=None)']).map(binary)
     df['DecrBreathSound'] = df['Evidence of thoracic trauma  (choice=Decreased breath sounds)'].map(binary)
+        
     df['DistractingPain'] = np.array([False] * df.shape[0])
-    for k in ['Chest X-ray (choice=Rib fracture)', 'Indicate thoracic injury (choice=Clavicle fracture)']:
+    for k in ['Chest X-ray (choice=Rib fracture)',
+              'Indicate thoracic injury (choice=Clavicle fracture)',
+              'Chest X-ray (choice=Scapula fracture)',
+              'FemurFracture',  'Pelvic fracture']:
         df['DistractingPain'] = df['DistractingPain'] | df[k]
     # df['FemurFracture'] = df['Femur fracture'] #.map(binar)
     df = data.derived_feats(df)
