@@ -208,14 +208,13 @@ def rename_values(df):
                             'ageinyrs': 'Age'
                            })
     # print('keys', list(df.keys()))
-    df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) | (df.DecrBreathSound)
+    df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) # | (df.DecrBreathSound)
 
     # set types of these variables to categorical
-    df = data.derived_feats(df)
     ks_categorical = ['Sex', 'Race', 'Hispanic',
                       'VomitWretch', 'RecodedMOI', 'ThoracicTender', 'ThoracicTrauma',
                       'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
-                      'AbdTrauma', 'SeatBeltSign', 'AbdTrauma_or_SeatBeltSign', 'DistractingPain',
+                      'AbdTrauma', 'SeatBeltSign', 'DistractingPain',
                       'AbdomenPain']
     for k in ks_categorical:
         df[k] = df[k].astype(str)    
@@ -252,7 +251,7 @@ def rename_values(df):
                     'other': 'other',
                     np.nan: 'unknown',
                 })
-
+    df = data.derived_feats(df)
     return df
 
 

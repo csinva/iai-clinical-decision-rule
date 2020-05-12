@@ -120,7 +120,6 @@ def rename_values(df):
               'FemurFracture',  'Pelvic fracture']:
         df['DistractingPain'] = df['DistractingPain'] | df[k]
     # df['FemurFracture'] = df['Femur fracture'] #.map(binar)
-    df = data.derived_feats(df)
 
     abdTenderDegree = {
         'None': 'Mild',
@@ -148,4 +147,6 @@ def rename_values(df):
     
     for k in moi:
         df.loc[df[k] == 1, 'RecodedMOI'] = moi[k]
+        
+    df = data.derived_feats(df)
     return df

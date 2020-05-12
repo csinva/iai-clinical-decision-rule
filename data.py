@@ -31,7 +31,7 @@ def derived_feats(df):
         True: 'yes',
         'unknown': 'unknown'
     }
-    df['AbdTrauma_or_SeatBeltSign'] = (df.AbdTrauma == 1) | (df.SeatBeltSign == 1)
+    df['AbdTrauma_or_SeatBeltSign'] = ((df.AbdTrauma == 'yes') | (df.SeatBeltSign == 'yes')).map(binary)
     df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
                     (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
                     (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
