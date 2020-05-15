@@ -108,7 +108,7 @@ def rename_values(df):
     df['SeatBeltSign'] = df['SeatBeltSign'].map(binary)
     df['AbdDistention'] = df['Abdominal distension'].fillna('unknown').map(binary)
     df['VomitWretch'] = df['Emesis post injury'].fillna('unknown').map(binary)
-    df['AbdTrauma'] = df['Evidence of abdominal wall trauma (choice=None)'].map(binary)
+    df['AbdTrauma'] = (1 - df['Evidence of abdominal wall trauma (choice=None)']).map(binary)
     df['AbdomenPain'] = (df['Complainabd. pain']!='0').astype(int).map(binary).fillna('other')
     df['ThoracicTrauma'] = (1 - df['Evidence of thoracic trauma  (choice=None)']).map(binary)
     df['DecrBreathSound'] = df['Evidence of thoracic trauma  (choice=Decreased breath sounds)'].map(binary)
