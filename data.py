@@ -8,8 +8,8 @@ from copy import deepcopy
 
 pecarn_train_idxs = [1, 2, 3, 4, 5]
 pecarn_test_idxs = [6]
-psrc_train_idxs = [8, 9, 10, 11, 12]
-psrc_test_idxs = [13]
+psrc_train_idxs = [8, 9, 10, 11]
+psrc_test_idxs = [12, 13]
 
 def to_dummies(df: pd.DataFrame):
     """Prepare the data for classification

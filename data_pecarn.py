@@ -177,8 +177,8 @@ def rename_values(df):
         3: 'Black or African American',
         4: 'Native Hawaiian or Other Pacific Islander',
         5: 'White',
-        6: 'Stated as unknown',
-        7: 'Other'
+        6: 'unknown', # stated as unknown
+        7: 'unknown' # other
     }
     moi = {
         1: 'Motor vehicle collision',

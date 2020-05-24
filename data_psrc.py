@@ -105,6 +105,7 @@ def rename_values(df):
         True: 'yes',
         'unknown': 'unknown'
     }
+    df['Race'] = df['Race'].fillna('unknown')
     df['SeatBeltSign'] = df['SeatBeltSign'].map(binary)
     df['AbdDistention'] = df['Abdominal distension'].fillna('unknown').map(binary)
     df['VomitWretch'] = df['Emesis post injury'].fillna('unknown').map(binary)
