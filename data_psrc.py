@@ -123,14 +123,16 @@ def rename_values(df):
     # df['FemurFracture'] = df['Femur fracture'] #.map(binar)
 
     abdTenderDegree = {
-        'None': 'Mild',
+        'None': 'unknown',
         'Mild': 'Mild',
         'Moderate': 'Moderate',
         'Severe': 'Severe',
         'Limited exam secondary to intubation/sedation': 'unknown',
-        'unknown': 'Mild'
+#         'unknown': 'Mild'
     }
-    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].fillna('unknown').map(abdTenderDegree)
+    print(df['Abdominal tenderness to palpation'].value_counts())
+    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree).fillna('unknown')
+    print(df['AbdTenderDegree'].value_counts())
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',
