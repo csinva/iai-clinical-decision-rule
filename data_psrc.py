@@ -130,9 +130,7 @@ def rename_values(df):
         'Limited exam secondary to intubation/sedation': 'unknown',
 #         'unknown': 'Mild'
     }
-    print(df['Abdominal tenderness to palpation'].value_counts())
     df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree).fillna('unknown')
-    print(df['AbdTenderDegree'].value_counts())
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',

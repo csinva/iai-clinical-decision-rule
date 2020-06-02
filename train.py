@@ -101,15 +101,21 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
         return tn / (tn + tp)
     
     # scores = ['balanced_accuracy'] # ['accuracy', 'precision', 'recall', 'f1', 'balanced_accuracy', 'roc_auc']
-    scorers = {'balanced_accuracy': metrics.balanced_accuracy_score, 
-               'accuracy': metrics.accuracy_score,
-               'precision': metrics.precision_score, 
-               'sensitivity': metrics.recall_score, 
-               'specificity': specificity_score,
-               'f1': metrics.f1_score, 
-               'roc_auc': metrics.roc_auc_score,
-               'precision_recall_curve': metrics.precision_recall_curve, 
-               'roc_curve': metrics.roc_curve}
+    scorers = {
+       'balanced_accuracy': metrics.balanced_accuracy_score, 
+       'accuracy': metrics.accuracy_score,
+       'precision': metrics.precision_score, 
+       'sensitivity': metrics.recall_score, 
+       'specificity': specificity_score,
+       'f1': metrics.f1_score, 
+       'roc_auc': metrics.roc_auc_score,
+       'precision_recall_curve': metrics.precision_recall_curve, 
+       'roc_curve': metrics.roc_curve,
+       'tn': lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[0],
+       'fp': lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[1],
+       'fn': lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[2],
+       'tp': lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[3],
+    }
     scores_cv = {s: [] for s in scorers.keys()}
     scores_test = {s: [] for s in scorers.keys()}
     imps = {'model': [], 'imps': []}
@@ -153,6 +159,7 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
                 scores_test[s].append(scorer(Y_test, preds_test))
         imps['model'].append(deepcopy(m))
         imps['imps'].append(get_feature_importance(m, model_type, X_val_cv, Y_val_cv))
+#         print(scores_cv, scores_test)
 
     # save results
     # os.makedirs(out_dir, exist_ok=True)
