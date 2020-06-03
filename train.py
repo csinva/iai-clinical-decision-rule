@@ -12,13 +12,14 @@ import pickle as pkl
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.model_selection import cross_validate, ShuffleSplit, train_test_split
 from sklearn.linear_model import LogisticRegressionCV
-from sklearn.linear_model import LinearRegression, LogisticRegression, RidgeCV
+from sklearn.linear_model import LinearRegression, LogisticRegression, RidgeCV, Lasso
 from sklearn.neural_network import MLPRegressor, MLPClassifier
 from sklearn.model_selection import cross_validate, train_test_split
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn import metrics
+from sklearn.feature_selection import SelectFromModel
 import eli5
 from imblearn.over_sampling import RandomOverSampler, SMOTE
 from sklearn.model_selection import KFold
@@ -26,7 +27,6 @@ import pandas as pd
 import data 
 from collections import Counter
 from typing import List
-
 
 def get_feature_importance(model, model_type, X_val, Y_val):
     '''Get feature importance based on model
@@ -69,7 +69,7 @@ def balance(X, y, balancing='ros', balancing_ratio: float=1):
 
 def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_intervention',
           balancing='ros', balancing_ratio=1, out_name='results/classify/test.pkl', 
-          train_idxs=[1, 2, 3, 4, 5], test_idxs=[6]):
+          train_idxs=[1, 2, 3, 4, 5], test_idxs=[6], feature_selection=None, feature_selection_num=3):
     '''Balance classes in y using strategy specified by balancing
     '''
     np.random.seed(42)
@@ -94,6 +94,25 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
         m = MLPClassifier()
     elif model_type == 'gb':
         m = GradientBoostingClassifier()
+    
+    # feature selection
+    feature_selector = None
+    if feature_selection is not None:
+        print('selecting features')
+        if feature_selection == 'select_lasso':
+            feature_selector_model = Lasso()
+        elif feature_selection == 'select_rf':
+            feature_selector_model = RandomForestClassifier()
+        # select only feature_selection_num features
+        feature_selector = SelectFromModel(feature_selector_model, threshold=-np.inf,
+                                           max_features=feature_selection_num)
+        feature_selector.fit(X, y)
+        X = feature_selector.transform(X)
+        X_test = feature_selector.transform(X_test)
+        print(X.shape)
+        support = np.array(feature_selector.get_support())
+    else:
+        support = np.ones(len(feat_names)).astype(np.bool)    
     
 
     def specificity_score(y_true, y_pred):
@@ -167,9 +186,10 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
                'cv': scores_cv, 
                'test': scores_test, 
                'imps': imps,
-               'feat_names': feat_names,
+#                'feat_names': feat_names,
                'model_type': model_type,
                'balancing': balancing,
+               'feat_names_selected': np.array(feat_names)[support],               
                'balacing_ratio': balancing_ratio,
               }
     pkl.dump(results, open(out_name, 'wb'))
