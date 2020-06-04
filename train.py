@@ -98,7 +98,7 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     # feature selection
     feature_selector = None
     if feature_selection is not None:
-        print('selecting features')
+#         print('selecting features')
         if feature_selection == 'select_lasso':
             feature_selector_model = Lasso()
         elif feature_selection == 'select_rf':
@@ -109,7 +109,7 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
         feature_selector.fit(X, y)
         X = feature_selector.transform(X)
         X_test = feature_selector.transform(X_test)
-        print(X.shape)
+#         print(X.shape)
         support = np.array(feature_selector.get_support())
     else:
         support = np.ones(len(feat_names)).astype(np.bool)    
