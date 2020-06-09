@@ -84,7 +84,7 @@ def get_feat_names(df):
                          'GCSScore',
                          'Hypotension',
                          'LtCostalTender',
-                         'RecodedMOI',
+                         'MOI',
                          'RtCostalTender',
                          'SeatBeltSign',
                          'ThoracicTender',

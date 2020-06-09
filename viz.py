@@ -29,6 +29,7 @@ from sklearn.model_selection import KFold
 from colorama import Fore
 import pickle as pkl
 from style import *
+import style
 
 def visualize_individual_results(results, X_test, Y_test, print_results=True):
     '''Print and visualize results from a single train.
@@ -200,3 +201,10 @@ def viz_errs_lifetime(X_test, preds, preds_proba, Y_test, norms):
     plt.ylabel('predicted probability')
     plt.legend()
     plt.show()
+    
+    
+def corrplot(corrs):
+    mask = np.triu(np.ones_like(corrs, dtype=np.bool))
+    corrs[mask] = np.nan
+    max_abs = np.nanmax(np.abs(corrs))
+    plt.imshow(corrs, cmap=style.cmap_div, vmax=max_abs, vmin=-max_abs)

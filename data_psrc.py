@@ -144,10 +144,10 @@ def rename_values(df):
         'Mechanism of injury (choice=Pedestrian struck by auto)': 'Pedestrian/bicyclist struck by moving vehicle',
         'Mechanism of injury (choice=Other blunt mechanism)': 'Object struck abdomen',
     }
-    df['RecodedMOI'] = ['unknown'] * df.shape[0]
+    df['MOI'] = ['unknown'] * df.shape[0]
     
     for k in moi:
-        df.loc[df[k] == 1, 'RecodedMOI'] = moi[k]
+        df.loc[df[k] == 1, 'MOI'] = moi[k]
         
     df = data.derived_feats(df)
     return df

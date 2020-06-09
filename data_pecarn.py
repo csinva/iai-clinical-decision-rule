@@ -199,7 +199,7 @@ def rename_values(df):
         4: 'unknown'
     }
     df.RACE = df.RACE.map(race)
-    df.RecodedMOI = df.RecodedMOI.map(moi)
+    df['MOI'] = df.RecodedMOI.map(moi)
     df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
     df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(4).map(abdTenderDegree)
     df = df.rename(columns={'RACE': 'Race', 
@@ -231,7 +231,7 @@ def rename_values(df):
     
     
     # rename vars to values
-    ks_remap = ['Hispanic', 'VomitWretch', 'RecodedMOI', 
+    ks_remap = ['Hispanic', 'VomitWretch', 'MOI', 
                 'ThoracicTender', 'ThoracicTrauma', 
                 'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
                 'AbdTrauma', 'SeatBeltSign', 
