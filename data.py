@@ -40,7 +40,25 @@ def derived_feats(df):
     df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
                     (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
                     (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
+    df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary)
     return df
+
+def select_final_feats(feat_names):
+    '''Return an interpretable set of the best features
+    '''
+    feat_names = [f for f in feat_names if not f.endswith('_no')]
+    # print(len(feat_names), feat_names)
+
+    # don't include race or 
+    feat_names = [f for f in feat_names if not 'Race' in f
+    #               and '_or_' not in f
+                  and not f == 'AbdTenderDegree_unknown'
+                  and not f in ['AbdTrauma_yes', 'SeatBeltSign_yes']
+                  and not f in ['GCSScore']
+                 ]
+    return feat_names
+    
+
 
 def add_cv_split(df: pd.DataFrame, dset='pecarn'):
     # set up train / test
