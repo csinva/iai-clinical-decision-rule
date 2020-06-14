@@ -11,6 +11,11 @@ pecarn_test_idxs = [6]
 psrc_train_idxs = [8, 9, 10, 11]
 psrc_test_idxs = [12, 13]
 
+# common feats
+feats_numerical = ['InitSysBPRange', 'InitHeartRate', 'GCSScore', 'Age']
+feats_categorical = ['AbdTenderDegree', 'Race', 'RecodedMOI']
+meta = ['iai_intervention', 'cv_fold', 'dset']
+
 def to_dummies(df: pd.DataFrame):
     """Prepare the data for classification
     """

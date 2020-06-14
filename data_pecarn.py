@@ -201,7 +201,7 @@ def rename_values(df):
     df.RACE = df.RACE.map(race)
     df['MOI'] = df.RecodedMOI.map(moi)
     df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
-    df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(4).map(abdTenderDegree)
+    df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(1).map(abdTenderDegree)
     df = df.rename(columns={'RACE': 'Race', 
                             'SEX': 'Sex', 
                             'HISPANIC_ETHNICITY': 'Hispanic',

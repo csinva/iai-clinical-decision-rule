@@ -91,7 +91,8 @@ def rename_values(df):
     })
     
     # fill with median
-    df['CostalTender'] = df['LtCostalTender'] | df['RtCostalTender']
+#     print(df['LtCostalTender'])
+    df['CostalTender'] = (df['LtCostalTender'] == 1) | (df['RtCostalTender'] == 1)
     df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
     df['Age'] = df['Age in years'].fillna(0) + df['Age in months'].fillna(0) / 12
     df['InitSysBPRange'] = df['Initial ED systolic BP'].fillna(df['Initial ED systolic BP'].median()).astype(int)
@@ -130,7 +131,7 @@ def rename_values(df):
         'Limited exam secondary to intubation/sedation': 'unknown',
 #         'unknown': 'Mild'
     }
-    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree).fillna('unknown')
+    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree).fillna('Mild')
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',

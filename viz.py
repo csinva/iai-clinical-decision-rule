@@ -11,7 +11,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
-
 from sklearn.metrics import confusion_matrix
 import numpy as np
 from collections import Counter
