@@ -113,7 +113,8 @@ def get_feat_names(df):
                          'ThoracicTender',
                          'ThoracicTrauma',
                          'VomitWretch',
-                         'Age'] + \
+                         'Age',
+                         'Sex'] + \
     ['Race', 'InitHeartRate', 'InitSysBPRange']
     pecarn_feats = set()
     for pecarn_feat in PECARN_FEAT_NAMES:
