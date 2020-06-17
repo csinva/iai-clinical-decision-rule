@@ -1,4 +1,6 @@
 **.ipynb_checkpoints
+processed/*.csv
+processed/*.pkl
 **cache*
 **.zip
 **.npy

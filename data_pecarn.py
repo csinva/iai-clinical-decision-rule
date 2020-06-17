@@ -11,7 +11,7 @@ NUM_PATIENTS = 12044
 DATA_DIR = 'data_pecarn/Datasets'
 
 
-def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='processed/df_pecarn.pkl', dummy=False):
+def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='processed/df_pecarn.pkl', dummy=False, impute_feats=True):
     '''Run all the preprocessing
     
     Params
@@ -39,8 +39,8 @@ def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='pro
         keys_to_remove = [k for k in keys if 'Repeat_instance' in k]
         df = df.drop(labels=keys_to_remove, axis=1)
         '''
-
-        df = impute(df)  # impute and fill
+        if impute_feats:
+            df = impute(df)  # impute and fill
         df = data.add_cv_split(df, dset='pecarn')
         if dummy:
             df = data.to_dummies(df)
@@ -195,10 +195,11 @@ def rename_values(df):
         1: 'Mild',
         2: 'Moderate',
         3: 'Severe',
-        4: 'unknown'
+        4: 'Mild'
     }
     df.RACE = df.RACE.map(race)
     df['MOI'] = df.RecodedMOI.map(moi)
+    df = df.drop(columns=['RecodedMOI'])
     
     df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(1).map(abdTenderDegree)
     df = df.rename(columns={'RACE': 'Race_orig', 
@@ -206,13 +207,10 @@ def rename_values(df):
                             'HISPANIC_ETHNICITY': 'Hispanic',
                             'ageinyrs': 'Age'
                            })
-    # print('keys', list(df.keys()))
-    
-    
 
     # set types of these variables to categorical
     ks_categorical = ['Sex', 'Race_orig', 'Hispanic',
-                      'VomitWretch', 'RecodedMOI', 'ThoracicTender', 'ThoracicTrauma',
+                      'VomitWretch', 'MOI', 'ThoracicTender', 'ThoracicTrauma',
                       'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
                       'AbdTrauma', 'SeatBeltSign', 'DistractingPain',
                       'AbdomenPain']
@@ -227,7 +225,6 @@ def rename_values(df):
     }
     
     df['AbdomenPain'] = df['AbdomenPain'].replace('3.0', 'other')
-#     print(df['Hispanic'].unique())
     df["Hispanic"]= (df['Hispanic'] == '-1').map(binary) # note: -1 is Hispanice (0 is not, 1 is unknown)
     
     

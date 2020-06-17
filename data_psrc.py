@@ -5,11 +5,10 @@ sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
 import numpy as np
 from tqdm import tqdm
 import pandas as pd
-NUM_PATIENTS = 12044
 import data
 
 
-def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=False):
+def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=False, impute_feats=True):
     '''Run all the preprocessing
     
     Params
@@ -23,21 +22,18 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=
         return pd.read_pickle(processed_file)
     else:
         print('computing psrc preprocessing...')
-        
         data_file='data_psrc/psrc_data_processed.csv'
         df = pd.read_csv(data_file)
 
-
-        NUM_PATIENTS = df.shape[0]
-
         # fix col names
-        df['id'] = -1 * np.arange(1, NUM_PATIENTS + 1)
+        df['id'] = -1 * np.arange(1, df.shape[0] + 1)
         df = df.rename(columns=lambda x: x.replace('choice=0ne', 'choice=None').strip())
         df = df.replace('0ne', 'None')
 
         # rename values
         df = rename_values(df)
-        df = impute(df)
+        if impute_feats:
+            df = impute(df)
         
         # drop unnecessary
         ks_drop = [k for k in df.keys() 
@@ -68,7 +64,6 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=
         df = data.add_cv_split(df, dset='psrc')
         if dummy:
             df = data.to_dummies(df)
-        # df = df.fillna('unknown')
         df['dset'] = 'psrc'
         
         # save
@@ -123,11 +118,11 @@ def rename_values(df):
     # df['FemurFracture'] = df['Femur fracture'] #.map(binar)
 
     abdTenderDegree = {
-        'None': 'unknown',
+        'None': 'Mild',
         'Mild': 'Mild',
         'Moderate': 'Moderate',
         'Severe': 'Severe',
-        'Limited exam secondary to intubation/sedation': 'unknown',
+        'Limited exam secondary to intubation/sedation': 'Mild',
 #         'unknown': 'Mild'
     }
     df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree)
