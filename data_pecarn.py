@@ -129,7 +129,6 @@ def get_outcomes():
             ids = form.id.values[form[key] == 1]
             for i in ids:
                 ids_all.add(i)
-            #             print(key, np.sum(form[key] == 1), np.unique(ids).size)
         return ids_all
 
     ids_iai = get_ids(form6b, ['IAIinED1']) # form6b.id[form6b['IAIinED1'] == 1]
