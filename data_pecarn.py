@@ -207,6 +207,7 @@ def rename_values(df):
                             'ageinyrs': 'Age'
                            })
     # print('keys', list(df.keys()))
+    
     df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) # | (df.DecrBreathSound)
 
     # set types of these variables to categorical
@@ -226,11 +227,12 @@ def rename_values(df):
     }
     
     df['AbdomenPain'] = df['AbdomenPain'].replace('3.0', 'other')
-    
+#     print(df['Hispanic'].unique())
+    df["Hispanic"]= (df['Hispanic'] == '-1').map(binary) # note: -1 is Hispanice (0 is not, 1 is unknown)
     
     
     # rename vars to values
-    ks_remap = ['Hispanic', 'VomitWretch', 'MOI', 
+    ks_remap = ['VomitWretch', 'MOI', 
                 'ThoracicTender', 'ThoracicTrauma', 
                 'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
                 'AbdTrauma', 'SeatBeltSign', 

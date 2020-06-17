@@ -42,6 +42,14 @@ def derived_feats(df):
                     (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
     df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary)
     df['Race'] = df['Race_orig']
+#     print(df.Hispanic == 'yes')
+#     print(df.Hispanic.unique(), print(np.sum((df.Hispanic == 'yes').values)))
+    
+    df.loc[df.Hispanic == 'yes', 'Race'] = 'White (Hispanic)'
+    df.loc[df.Race == 'White', 'Race'] = 'White (Non-Hispanic)'
+#     df['Race'][df.Hispanic == 'yes'] = 'White (Hispanic)'
+#     df['Race'][df.Race == 'White'] = 'White (Non-hispanic)'
+    print(df.Race.unique())
     return df
 
 def select_final_feats(feat_names):
