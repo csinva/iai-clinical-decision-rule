@@ -199,7 +199,7 @@ def rename_values(df):
     }
     df.RACE = df.RACE.map(race)
     df['MOI'] = df.RecodedMOI.map(moi)
-    df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
+    
     df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(1).map(abdTenderDegree)
     df = df.rename(columns={'RACE': 'Race_orig', 
                             'SEX': 'Sex', 
@@ -208,7 +208,7 @@ def rename_values(df):
                            })
     # print('keys', list(df.keys()))
     
-    df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) # | (df.DecrBreathSound)
+    
 
     # set types of these variables to categorical
     ks_categorical = ['Sex', 'Race_orig', 'Hispanic',
@@ -266,4 +266,5 @@ def impute(df: pd.DataFrame):
 
     # pandas impute missing values with median
     df = df.fillna(df.median())
+    df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
     return df

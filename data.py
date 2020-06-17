@@ -41,22 +41,19 @@ def derived_feats(df):
                     (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
                     (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
     df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary)
-    df['Race'] = df['Race_orig']
-#     print(df.Hispanic == 'yes')
-#     print(df.Hispanic.unique(), print(np.sum((df.Hispanic == 'yes').values)))
+    df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) # | (df.DecrBreathSound)
     
-    df.loc[df.Hispanic == 'yes', 'Race'] = 'White (Hispanic)'
+    # Combine hispanic as part of race
+    df['Race'] = df['Race_orig']
+    df.loc[df.Hispanic == 'yes', 'Race'] = 'Hispanic'
     df.loc[df.Race == 'White', 'Race'] = 'White (Non-Hispanic)'
-#     df['Race'][df.Hispanic == 'yes'] = 'White (Hispanic)'
-#     df['Race'][df.Race == 'White'] = 'White (Non-hispanic)'
-    print(df.Race.unique())
+
     return df
 
 def select_final_feats(feat_names):
     '''Return an interpretable set of the best features
     '''
     feat_names = [f for f in feat_names if not f.endswith('_no')]
-    # print(len(feat_names), feat_names)
 
     # don't include race or 
     feat_names = [f for f in feat_names if not 'Race' in f
@@ -124,7 +121,7 @@ def get_feat_names(df):
                          'VomitWretch',
                          'Age',
                          'Sex'] + \
-    ['Race', 'InitHeartRate', 'InitSysBPRange']
+    ['Race', 'InitHeartRate', 'InitSysBPRange'] # new ones to consider
     pecarn_feats = set()
     for pecarn_feat in PECARN_FEAT_NAMES:
         for feat_name in feat_names:

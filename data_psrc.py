@@ -37,6 +37,7 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=
 
         # rename values
         df = rename_values(df)
+        df = impute(df)
         
         # drop unnecessary
         ks_drop = [k for k in df.keys() 
@@ -91,13 +92,10 @@ def rename_values(df):
     })
     
     # fill with median
-#     print(df['LtCostalTender'])
-    df['CostalTender'] = (df['LtCostalTender'] == 1) | (df['RtCostalTender'] == 1)
-    df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
+    
     df['Age'] = df['Age in years'].fillna(0) + df['Age in months'].fillna(0) / 12
-    df['InitSysBPRange'] = df['Initial ED systolic BP'].fillna(df['Initial ED systolic BP'].median()).astype(int)
-    # these need matching
-    df['InitHeartRate'] = df['Initial ED HR'].fillna(df['Initial ED HR'].median())
+    df['InitSysBPRange'] = df['Initial ED systolic BP']
+    df['InitHeartRate'] = df['Initial ED HR']
     df['FemurFracture'] = df['Femur fracture'].sum(axis=1)
     binary = {
         0: 'no',
@@ -112,7 +110,7 @@ def rename_values(df):
     df['AbdDistention'] = df['Abdominal distension'].fillna('unknown').map(binary)
     df['VomitWretch'] = df['Emesis post injury'].fillna('unknown').map(binary)
     df['AbdTrauma'] = (1 - df['Evidence of abdominal wall trauma (choice=None)']).map(binary)
-    df['AbdomenPain'] = (df['Complainabd. pain']!='0').astype(int).map(binary).fillna('other')
+    df['AbdomenPain'] = (df['Complainabd. pain']!='0').astype(int).map(binary)
     df['ThoracicTrauma'] = (1 - df['Evidence of thoracic trauma  (choice=None)']).map(binary)
     df['DecrBreathSound'] = df['Evidence of thoracic trauma  (choice=Decreased breath sounds)'].map(binary)
         
@@ -132,7 +130,7 @@ def rename_values(df):
         'Limited exam secondary to intubation/sedation': 'unknown',
 #         'unknown': 'Mild'
     }
-    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree).fillna('Mild')
+    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree)
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',
@@ -152,4 +150,17 @@ def rename_values(df):
         df.loc[df[k] == 1, 'MOI'] = moi[k]
         
     df = data.derived_feats(df)
+    return df
+
+def impute(df: pd.DataFrame):
+    """Returns df with imputed features
+    """
+    # filling some continuous vars with median
+    df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
+    df['InitSysBPRange'] = df['InitSysBPRange'].fillna(df['InitSysBPRange'].median()).astype(int)
+    df['InitHeartRate'] = df['InitHeartRate'].fillna(df['InitHeartRate'].median())
+    
+    # other vars get specific imputations
+    df['AbdTenderDegree'] = df['AbdTenderDegree'].fillna('Mild')
+    df['AbdomenPain'] = df['AbdomenPain'].fillna('other')
     return df
