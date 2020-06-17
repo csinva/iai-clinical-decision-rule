@@ -195,7 +195,7 @@ def rename_values(df):
         1: 'Mild',
         2: 'Moderate',
         3: 'Severe',
-        4: 'Mild'
+        4: 'unknown'
     }
     df.RACE = df.RACE.map(race)
     df['MOI'] = df.RecodedMOI.map(moi)

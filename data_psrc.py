@@ -122,7 +122,7 @@ def rename_values(df):
         'Mild': 'Mild',
         'Moderate': 'Moderate',
         'Severe': 'Severe',
-        'Limited exam secondary to intubation/sedation': 'Mild',
+        'Limited exam secondary to intubation/sedation': 'unknown',
 #         'unknown': 'Mild'
     }
     df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree)
