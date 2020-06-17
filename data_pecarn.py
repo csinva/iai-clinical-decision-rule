@@ -201,7 +201,7 @@ def rename_values(df):
     df['MOI'] = df.RecodedMOI.map(moi)
     df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
     df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(1).map(abdTenderDegree)
-    df = df.rename(columns={'RACE': 'Race', 
+    df = df.rename(columns={'RACE': 'Race_orig', 
                             'SEX': 'Sex', 
                             'HISPANIC_ETHNICITY': 'Hispanic',
                             'ageinyrs': 'Age'
@@ -210,7 +210,7 @@ def rename_values(df):
     df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) # | (df.DecrBreathSound)
 
     # set types of these variables to categorical
-    ks_categorical = ['Sex', 'Race', 'Hispanic',
+    ks_categorical = ['Sex', 'Race_orig', 'Hispanic',
                       'VomitWretch', 'RecodedMOI', 'ThoracicTender', 'ThoracicTrauma',
                       'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
                       'AbdTrauma', 'SeatBeltSign', 'DistractingPain',

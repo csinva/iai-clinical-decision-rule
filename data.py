@@ -41,6 +41,7 @@ def derived_feats(df):
                     (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
                     (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
     df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary)
+    df['Race'] = df['Race_orig']
     return df
 
 def select_final_feats(feat_names):
