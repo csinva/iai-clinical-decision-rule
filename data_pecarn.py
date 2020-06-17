@@ -174,7 +174,7 @@ def rename_values(df):
         1: 'American Indian or Alaska Native',
         2: 'Asian',
         3: 'Black or African American',
-        4: 'Native Hawaiian or Other Pacific Islander',
+        4: 'Native Hawaiian or other Pacific Islander',
         5: 'White',
         6: 'unknown', # stated as unknown
         7: 'unknown' # other

@@ -13,7 +13,7 @@ psrc_test_idxs = [12, 13]
 
 # common feats
 feats_numerical = ['InitSysBPRange', 'InitHeartRate', 'GCSScore', 'Age']
-feats_categorical = ['AbdTenderDegree', 'Race', 'RecodedMOI']
+feats_categorical = ['AbdTenderDegree', 'Race', 'MOI']
 meta = ['iai_intervention', 'cv_fold', 'dset']
 
 def to_dummies(df: pd.DataFrame):

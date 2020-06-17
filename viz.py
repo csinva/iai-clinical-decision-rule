@@ -20,7 +20,7 @@ import torch.nn.functional as F
 import torch
 from copy import deepcopy
 from sklearn import metrics
-plt.style.use('dark_background')
+# plt.style.use('dark_background')
 import mat4py
 import pandas as pd
 from imblearn.over_sampling import RandomOverSampler
