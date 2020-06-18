@@ -69,22 +69,27 @@ def balance(X, y, balancing='ros', balancing_ratio: float=1):
 
 
 def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_intervention',
-          balancing='ros', balancing_ratio=1, out_name='results/classify/test.pkl', 
+          sample_weights=None, balancing='ros', balancing_ratio=1,
+          out_name='results/classify/test.pkl', 
           train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7], feature_selection=None, feature_selection_num=3):
     '''Balance classes in y using strategy specified by balancing
     '''
     np.random.seed(42)
-    # make logistic data
+    
+    # normalize the data
     X = df[feat_names]
     X = (X - X.mean()) / X.std()
     y = df[outcome_def].values
 
-    # split testing data based on cell num
+    # split data based on cv_fold
+    idxs_train = df.cv_fold.isin(train_idxs)
+    X_train, y_train = X[idxs_train], y[idxs_train]
     idxs_test1 = df.cv_fold.isin(test_idxs1)
     X_test1, Y_test1 = X[idxs_test1], y[idxs_test1]
     idxs_test2 = df.cv_fold.isin(test_idxs2)
     X_test2, Y_test2 = X[idxs_test2], y[idxs_test2]
     
+    # get model
     if model_type == 'rf':
         m = RandomForestClassifier(n_estimators=100)
     elif model_type == 'dt':
@@ -106,7 +111,7 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
                 feature_selector_model = LogisticRegression(penalty='l1', solver='liblinear')
             feature_selector = StabilitySelection(base_estimator=feature_selector_model, lambda_name='C',
                                                   lambda_grid=np.logspace(-5, -1, 20),
-                                                  max_features=feature_selection_num).fit(X, y)
+                                                  max_features=feature_selection_num)
         else:
             if feature_selection == 'select_lasso':
                 feature_selector_model = Lasso()
@@ -117,7 +122,7 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
             
             
         
-        feature_selector.fit(X, y)
+        feature_selector.fit(X_train, y_train)
         X = feature_selector.transform(X)
         X_test1 = feature_selector.transform(X_test1)
         X_test2 = feature_selector.transform(X_test2)
@@ -150,20 +155,23 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     scores_test2 = {s: [] for s in scorers.keys()}
     imps = {'model': [], 'imps': []}
 
-    kf = KFold(n_splits=5)
+    
     cv_folds_train = train_idxs
+    kf = KFold(n_splits=len(cv_folds_train))
     for cv_idx, cv_val_idx in kf.split(cv_folds_train):
+        
         # get sample indices
         idxs_cv = df.cv_fold.isin(cv_idx + 1)
         idxs_val_cv = df.cv_fold.isin(cv_val_idx + 1)
         X_train_cv, Y_train_cv = X[idxs_cv], y[idxs_cv]
         X_val_cv, Y_val_cv = X[idxs_val_cv], y[idxs_val_cv]
 
-        # resample training data
-        X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
-
-        # fit
-        m.fit(X_train_r_cv, Y_train_r_cv)
+        # fit with appropriate weighting
+        if balancing == 'sample_weights':
+            m.fit(X_train_cv, Y_train_cv, sample_weight=sample_weights[idxs_cv])
+        else:
+            X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
+            m.fit(X_train_r_cv, Y_train_r_cv)
 
         # get preds
         preds = m.predict(X_val_cv)
