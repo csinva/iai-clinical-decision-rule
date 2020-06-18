@@ -27,6 +27,7 @@ import pandas as pd
 import data 
 from collections import Counter
 from typing import List
+from stability_selection import StabilitySelection
 
 def get_feature_importance(model, model_type, X_val, Y_val):
     '''Get feature importance based on model
@@ -100,12 +101,21 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     # feature selection
     feature_selector = None
     if feature_selection is not None:
-        if feature_selection == 'select_lasso':
-            feature_selector_model = Lasso()
-        elif feature_selection == 'select_rf':
-            feature_selector_model = RandomForestClassifier()
-        feature_selector = SelectFromModel(feature_selector_model, threshold=-np.inf,
-                                           max_features=feature_selection_num)
+        if 'stab' in feature_selection:
+            if feature_selection == 'select_stab_lasso':
+                feature_selector_model = LogisticRegression(penalty='l1', solver='liblinear')
+            feature_selector = StabilitySelection(base_estimator=feature_selector_model, lambda_name='C',
+                              lambda_grid=np.logspace(-5, -1, 20)).fit(X, y)
+        else:
+            if feature_selection == 'select_lasso':
+                feature_selector_model = Lasso()
+            elif feature_selection == 'select_rf':
+                feature_selector_model = RandomForestClassifier()
+            feature_selector = SelectFromModel(feature_selector_model, threshold=-np.inf,
+                                               max_features=feature_selection_num)
+            
+            
+        
         feature_selector.fit(X, y)
         X = feature_selector.transform(X)
         X_test1 = feature_selector.transform(X_test1)
