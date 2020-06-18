@@ -14,7 +14,7 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=
     Params
     ------
     use_processed: bool, optional
-        determines whether to load df from cached pkl
+        determines whether to load df from cached pkl (only for reading from the csv
     save_processed: bool, optional
         if not using processed, determines whether to save the df
     '''
@@ -32,6 +32,7 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=
 
         # rename values
         df = rename_values(df)
+        df = data.derived_feats(df)
         if impute_feats:
             df = impute(df)
         
@@ -144,7 +145,6 @@ def rename_values(df):
     for k in moi:
         df.loc[df[k] == 1, 'MOI'] = moi[k]
         
-    df = data.derived_feats(df)
     return df
 
 def impute(df: pd.DataFrame):

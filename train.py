@@ -69,7 +69,7 @@ def balance(X, y, balancing='ros', balancing_ratio: float=1):
 
 def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_intervention',
           balancing='ros', balancing_ratio=1, out_name='results/classify/test.pkl', 
-          train_idxs=[1, 2, 3, 4, 5], test_idxs=[6], feature_selection=None, feature_selection_num=3):
+          train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7], feature_selection=None, feature_selection_num=3):
     '''Balance classes in y using strategy specified by balancing
     '''
     np.random.seed(42)
@@ -79,9 +79,11 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     y = df[outcome_def].values
 
     # split testing data based on cell num
-    idxs_test = df.cv_fold.isin(test_idxs)
-    X_test, Y_test = X[idxs_test], y[idxs_test]
-
+    idxs_test1 = df.cv_fold.isin(test_idxs1)
+    X_test1, Y_test1 = X[idxs_test1], y[idxs_test1]
+    idxs_test2 = df.cv_fold.isin(test_idxs2)
+    X_test2, Y_test2 = X[idxs_test2], y[idxs_test2]
+    
     if model_type == 'rf':
         m = RandomForestClassifier(n_estimators=100)
     elif model_type == 'dt':
@@ -98,18 +100,16 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     # feature selection
     feature_selector = None
     if feature_selection is not None:
-#         print('selecting features')
         if feature_selection == 'select_lasso':
             feature_selector_model = Lasso()
         elif feature_selection == 'select_rf':
             feature_selector_model = RandomForestClassifier()
-        # select only feature_selection_num features
         feature_selector = SelectFromModel(feature_selector_model, threshold=-np.inf,
                                            max_features=feature_selection_num)
         feature_selector.fit(X, y)
         X = feature_selector.transform(X)
-        X_test = feature_selector.transform(X_test)
-#         print(X.shape)
+        X_test1 = feature_selector.transform(X_test1)
+        X_test2 = feature_selector.transform(X_test2)
         support = np.array(feature_selector.get_support())
     else:
         support = np.ones(len(feat_names)).astype(np.bool)    
@@ -119,7 +119,6 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
         tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
         return tn / (tn + tp)
     
-    # scores = ['balanced_accuracy'] # ['accuracy', 'precision', 'recall', 'f1', 'balanced_accuracy', 'roc_auc']
     scorers = {
        'balanced_accuracy': metrics.balanced_accuracy_score, 
        'accuracy': metrics.accuracy_score,
@@ -136,7 +135,8 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
        'tp': lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[3],
     }
     scores_cv = {s: [] for s in scorers.keys()}
-    scores_test = {s: [] for s in scorers.keys()}
+    scores_test1 = {s: [] for s in scorers.keys()}
+    scores_test2 = {s: [] for s in scorers.keys()}
     imps = {'model': [], 'imps': []}
 
     kf = KFold(n_splits=5)
@@ -148,7 +148,6 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
         X_train_cv, Y_train_cv = X[idxs_cv], y[idxs_cv]
         X_val_cv, Y_val_cv = X[idxs_val_cv], y[idxs_val_cv]
 
-
         # resample training data
         X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
 
@@ -157,13 +156,16 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
 
         # get preds
         preds = m.predict(X_val_cv)
-        preds_test = m.predict(X_test)
+        preds_test1 = m.predict(X_test1)
+        preds_test2 = m.predict(X_test2)
         if model_type == 'svm':
             preds_proba = preds
-            preds_test_proba = preds_test
+            preds_test1_proba = preds_test1
+            preds_test2_proba = preds_test2
         else:
             preds_proba = m.predict_proba(X_val_cv)[:, 1]
-            preds_test_proba = m.predict_proba(X_test)[:, 1]
+            preds_test1_proba = m.predict_proba(X_test1)[:, 1]
+            preds_test2_proba = m.predict_proba(X_test2)[:, 1]
 
 
         # add scores
@@ -172,19 +174,21 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
             if 'roc' in s or 'curve' in s:
                 # print(np.unique(preds, return_counts=True), np.unique(Y_val_cv, return_counts=True))
                 scores_cv[s].append(scorer(Y_val_cv, preds_proba))
-                scores_test[s].append(scorer(Y_test, preds_test_proba))
+                scores_test1[s].append(scorer(Y_test1, preds_test1_proba))
+                scores_test2[s].append(scorer(Y_test2, preds_test2_proba))
             else:
                 scores_cv[s].append(scorer(Y_val_cv, preds))
-                scores_test[s].append(scorer(Y_test, preds_test))
+                scores_test1[s].append(scorer(Y_test1, preds_test1))
+                scores_test2[s].append(scorer(Y_test2, preds_test2))
         imps['model'].append(deepcopy(m))
         imps['imps'].append(get_feature_importance(m, model_type, X_val_cv, Y_val_cv))
-#         print(scores_cv, scores_test)
 
     # save results
     # os.makedirs(out_dir, exist_ok=True)
     results = {'metrics': list(scorers.keys()), 
                'cv': scores_cv, 
-               'test': scores_test, 
+               'test1': scores_test1,
+               'test2': scores_test2,
                'imps': imps,
 #                'feat_names': feat_names,
                'model_type': model_type,

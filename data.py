@@ -5,6 +5,7 @@ import numpy as np
 from tqdm import tqdm
 import pandas as pd
 from copy import deepcopy
+import data_pecarn, data_psrc
 
 pecarn_train_idxs = [1, 2, 3, 4, 5]
 pecarn_test_idxs = [6]
@@ -15,6 +16,24 @@ psrc_test_idxs = [12, 13]
 feats_numerical = ['InitSysBPRange', 'InitHeartRate', 'GCSScore', 'Age']
 feats_categorical = ['AbdTenderDegree', 'Race', 'MOI']
 meta = ['iai_intervention', 'cv_fold', 'dset']
+outcome_def = 'iai_intervention' # output
+
+def load_it_all(dummy=True):
+    df_pecarn = data_pecarn.get_data(use_processed=False,
+                                     frac_missing_allowed=0.1,
+                                     dummy=dummy)
+    all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
+    df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy)
+    all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
+
+    # resulting features
+    common_feats = list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
+    common_feats = common_feats + meta
+
+    feats_binary = [feat for feat in common_feats
+                    if not feat in feats_numerical + feats_categorical + meta]
+    return df_pecarn, df_psrc, common_feats, filtered_feats_pecarn, filtered_feats_psrc
+    
 
 def to_dummies(df: pd.DataFrame):
     """Prepare the data for classification
@@ -39,8 +58,9 @@ def derived_feats(df):
     df['AbdTrauma_or_SeatBeltSign'] = ((df.AbdTrauma == 'yes') | (df.SeatBeltSign == 'yes')).map(binary)
     df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
                     (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
-                    (df['Age'] >= 5) & (df['InitSysBPRange'] < 90).map(binary)
-    df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary)
+                    (df['Age'] >= 5) & (df['InitSysBPRange'] < 90)
+    df['Hypotension'] = df['Hypotension'].map(binary)
+    df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary).astype(str)
     df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) # | (df.DecrBreathSound)
     
     # Combine hispanic as part of race
@@ -53,14 +73,14 @@ def derived_feats(df):
 def select_final_feats(feat_names):
     '''Return an interpretable set of the best features
     '''
-    feat_names = [f for f in feat_names if not f.endswith('_no')]
-
-    # don't include race or 
-    feat_names = [f for f in feat_names if not 'Race' in f
-    #               and '_or_' not in f
+    feat_names = [f for f in feat_names
+                  if not f in meta
+                  and not f.endswith('_no')
+                  and not 'Race' in f
+#                   and '_or_' not in f
                   and not f == 'AbdTenderDegree_unknown'
                   and not f in ['AbdTrauma_yes', 'SeatBeltSign_yes']
-                  and not f in ['GCSScore']
+                  and not f in ['GCSScore']                  
                  ]
     return feat_names
     
@@ -73,7 +93,7 @@ def add_cv_split(df: pd.DataFrame, dset='pecarn'):
         offset = 0
     elif dset == 'psrc':
         offset = 7
-    df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0]) + offset  # 6 is the test set
+    df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0]) + offset
     return df
 
 def get_feat_names(df):

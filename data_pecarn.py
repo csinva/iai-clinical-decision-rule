@@ -17,7 +17,7 @@ def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='pro
     Params
     ------
     use_processed: bool, optional
-        determines whether to load df from cached pkl
+        determines whether to load df from cached pkl (only for reading from the csv)
     save_processed: bool, optional
         if not using processed, determines whether to save the df
     '''
@@ -29,6 +29,7 @@ def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='pro
         df_outcomes = get_outcomes()  # 2 outcomes: iai, and iai_intervention
         df = pd.merge(df_features, df_outcomes, on='id', how='left')
         df = rename_values(df)  # rename the features by their meaning
+        df = data.derived_feats(df)
         
         # drop cols with vals missing this percent of the time
         df = df.dropna(axis=1, thresh=(1 - frac_missing_allowed) * NUM_PATIENTS)
@@ -249,7 +250,6 @@ def rename_values(df):
                     'other': 'other',
                     np.nan: 'unknown',
                 })
-    df = data.derived_feats(df)
     return df
 
 
