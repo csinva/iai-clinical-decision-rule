@@ -7,8 +7,8 @@ import pandas as pd
 from copy import deepcopy
 import data_pecarn, data_psrc
 
-pecarn_train_idxs = [1, 2, 3, 4, 5]
-pecarn_test_idxs = [6]
+pecarn_train_idxs = [1, 2, 3, 4]
+pecarn_test_idxs = [5, 6]
 psrc_train_idxs = [8, 9, 10, 11]
 psrc_test_idxs = [12, 13]
 

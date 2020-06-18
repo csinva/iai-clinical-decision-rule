@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: stability-selection
+Version: 0.0.1
+Summary: A scikit-learn compatible implementation of stability selection for feature selection
+Home-page: UNKNOWN
+Author: Thomas Huijskens
+Author-email: thomas_huijskens@hotmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN

@@ -32,5 +32,6 @@ asd
 # Reference
 
 - docs generated with pdoc3
-
+- stability-selection is taken from [this repo](https://github.com/scikit-learn-contrib/stability-selection) with minor adjustments
+    - to use, cd to lib/stability-selection then run `python setup.py install develop`
 

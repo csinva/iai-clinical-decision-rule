@@ -105,7 +105,8 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
             if feature_selection == 'select_stab_lasso':
                 feature_selector_model = LogisticRegression(penalty='l1', solver='liblinear')
             feature_selector = StabilitySelection(base_estimator=feature_selector_model, lambda_name='C',
-                              lambda_grid=np.logspace(-5, -1, 20)).fit(X, y)
+                                                  lambda_grid=np.logspace(-5, -1, 20),
+                                                  max_features=feature_selection_num).fit(X, y)
         else:
             if feature_selection == 'select_lasso':
                 feature_selector_model = Lasso()
