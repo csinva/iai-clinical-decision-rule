@@ -78,12 +78,15 @@ def select_final_feats(feat_names):
                   and not f.endswith('_no')
                   and not 'Race' in f
 #                   and '_or_' not in f
-                  and not 'unknown' in f
+                  and not 'other' in f.lower()
+                  and not 'RtCost' in f
+                  and not 'LtCost' in f
+                  and not 'unknown' in f.lower()
                   and not f == 'AbdTenderDegree_unknown'
                   and not f in ['AbdTrauma_yes', 'SeatBeltSign_yes']
                   and not f in ['GCSScore']                  
                  ]
-    return feat_names
+    return sorted(feat_names)
     
 
 

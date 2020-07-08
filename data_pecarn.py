@@ -64,14 +64,17 @@ def get_features(processed_file='processed/df_pecarn_features.pkl'):
     if os.path.exists(processed_file):
         return pd.read_pickle(processed_file)
     
+    # all the fnames to be loaded and searched over
     fnames = sorted([fname for fname in os.listdir(DATA_DIR)
                      if 'csv' in fname
                      and not 'formats' in fname
                      and not 'form6' in fname])  # remove outcome
     # feature_names = [fname[:-4].replace('form', '').replace('-', '_') for fname in fnames]
     # demographics = pd.read_csv('iaip_data/Datasets/demographics.csv')
-    # print(fnames)
+    
+    # read through each fname and save into the r dictionary
     r = {}
+    print('read all the csvs...')
     for fname in tqdm(fnames):
         df = pd.read_csv(oj(DATA_DIR, fname), engine='python')
         df.rename(columns={'SubjectID': 'id'}, inplace=True)
@@ -79,7 +82,8 @@ def get_features(processed_file='processed/df_pecarn_features.pkl'):
         assert ('id' in df.keys())
         r[fname] = df
 
-    df = r[fnames[0]]
+    
+    # loop over the relevant forms and merge into one big df
     fnames_small = [fname for fname in fnames
                     if 'form1' in fname
                     or 'form2' in fname
@@ -87,20 +91,30 @@ def get_features(processed_file='processed/df_pecarn_features.pkl'):
                     or 'form5' in fname
                     or 'form7' in fname
                     ]
+    df = r[fnames[0]]
+    print('merge all the dfs...')
     for i, fname in tqdm(enumerate(fnames_small)):
         df2 = r[fname].copy()
-        df2 = df2.drop_duplicates(subset=['id'], keep='last')  # if subj has multiple entries, only keep first
+        
+        # if subj has multiple entries, only keep first
+        df2 = df2.drop_duplicates(subset=['id'], keep='last')
+        
+        '''
+        # possibly rename the columns to include form number
         rename_dict = {
-            key: key  # + '_' + fname[:-4].replace('form', '')
+            key: key + '_' + fname[:-4].replace('form', '')
             for key in df2.keys()
             if not key == 'id'
         }
         df2.rename(columns=rename_dict, inplace=True)
-        df = df.set_index('id').combine_first(df2.set_index('id')).reset_index()  # don't save duplicate columns
+        '''
+        
+        # don't save duplicate columns
+        df = df.set_index('id').combine_first(df2.set_index('id')).reset_index()
 
+    # save to pickle
     os.makedirs(os.path.dirname(processed_file), exist_ok=True)
     df.to_pickle(processed_file)
-    # df.to_pickle(oj(pdir, 'features.pkl'))
     return df
 
 
