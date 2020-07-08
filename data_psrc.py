@@ -119,14 +119,15 @@ def rename_values(df):
     # df['FemurFracture'] = df['Femur fracture'] #.map(binar)
 
     abdTenderDegree = {
-        'None': 'Mild',
+        'None': 'None',
         'Mild': 'Mild',
         'Moderate': 'Moderate',
         'Severe': 'Severe',
-        'Limited exam secondary to intubation/sedation': 'unknown',
-#         'unknown': 'Mild'
+        'Limited exam secondary to intubation/sedation': 'Intubated/Sedated',
+        'unknown': 'None'
     }
-    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].map(abdTenderDegree)
+    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].fillna('None').map(abdTenderDegree)
+    print('abd', df['AbdTenderDegree'].unique())
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',
@@ -156,6 +157,7 @@ def impute(df: pd.DataFrame):
     df['InitHeartRate'] = df['InitHeartRate'].fillna(df['InitHeartRate'].median())
     
     # other vars get specific imputations
-    df['AbdTenderDegree'] = df['AbdTenderDegree'].fillna('Mild')
+    # df['AbdTenderDegree'] = df['AbdTenderDegree'].fillna('None')
+    print('abd', df['AbdTenderDegree'].unique())
     df['AbdomenPain'] = df['AbdomenPain'].fillna('other')
     return df

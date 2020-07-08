@@ -196,13 +196,13 @@ def rename_values(df):
         1: 'Mild',
         2: 'Moderate',
         3: 'Severe',
-        4: 'unknown'
+        4: 'None'
     }
     df.RACE = df.RACE.map(race)
     df['MOI'] = df.RecodedMOI.map(moi)
     df = df.drop(columns=['RecodedMOI'])
     
-    df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(1).map(abdTenderDegree)
+    df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(4).map(abdTenderDegree)
     df = df.rename(columns={'RACE': 'Race_orig', 
                             'SEX': 'Sex', 
                             'HISPANIC_ETHNICITY': 'Hispanic',
@@ -217,6 +217,9 @@ def rename_values(df):
                       'AbdomenPain']
     for k in ks_categorical:
         df[k] = df[k].astype(str)    
+        
+        
+        
     binary = {
         0: 'no',
         1: 'yes',
@@ -232,7 +235,7 @@ def rename_values(df):
     # rename vars to values
     ks_remap = ['VomitWretch', 'MOI', 
                 'ThoracicTender', 'ThoracicTrauma', 
-                'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
+                'DecrBreathSound', 'AbdDistention',
                 'AbdTrauma', 'SeatBeltSign', 
                 'DistractingPain', 'AbdomenPain']
     for k in ks_remap:
