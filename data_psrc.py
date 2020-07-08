@@ -127,7 +127,6 @@ def rename_values(df):
         'unknown': 'None'
     }
     df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].fillna('None').map(abdTenderDegree)
-    print('abd', df['AbdTenderDegree'].unique())
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',
@@ -158,6 +157,5 @@ def impute(df: pd.DataFrame):
     
     # other vars get specific imputations
     # df['AbdTenderDegree'] = df['AbdTenderDegree'].fillna('None')
-    print('abd', df['AbdTenderDegree'].unique())
     df['AbdomenPain'] = df['AbdomenPain'].fillna('other')
     return df
