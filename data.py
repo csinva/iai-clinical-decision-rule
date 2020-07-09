@@ -61,8 +61,8 @@ def derived_feats(df):
                     (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
                     (df['Age'] >= 5) & (df['InitSysBPRange'] < 90)
     df['Hypotension'] = df['Hypotension'].map(binary)
-    df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary).astype(str)
-    df['CostalTender'] = (df.LtCostalTender == 1) | (df.RtCostalTender == 1) # | (df.DecrBreathSound)
+    df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary)
+    df['CostalTender'] = ((df.LtCostalTender == 1) | (df.RtCostalTender == 1)).map(binary) # | (df.DecrBreathSound)
     
     # Combine hispanic as part of race
     df['Race'] = df['Race_orig']

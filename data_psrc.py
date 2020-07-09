@@ -21,7 +21,6 @@ def get_data(use_processed=False, processed_file='processed/df_psrc.pkl', dummy=
     if use_processed and os.path.exists(processed_file):
         return pd.read_pickle(processed_file)
     else:
-        print('computing psrc preprocessing...')
         data_file='data_psrc/psrc_data_processed.csv'
         df = pd.read_csv(data_file)
 

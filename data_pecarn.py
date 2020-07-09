@@ -24,7 +24,6 @@ def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='pro
     if use_processed and os.path.exists(processed_file):
         return pd.read_pickle(processed_file)
     else:
-        print('computing pecarn preprocessing...')
         df_features = get_features()  # read all features into df
         df_outcomes = get_outcomes()  # 2 outcomes: iai, and iai_intervention
         df = pd.merge(df_features, df_outcomes, on='id', how='left')
@@ -50,6 +49,8 @@ def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='pro
         # save
         os.makedirs(os.path.dirname(processed_file), exist_ok=True)
         df.to_pickle(processed_file)
+        
+        unit_test(df)
         return df
 
 
@@ -116,7 +117,6 @@ def get_features(processed_file='processed/df_pecarn_features.pkl'):
     os.makedirs(os.path.dirname(processed_file), exist_ok=True)
     df.to_pickle(processed_file)
     return df
-
 
 def get_outcomes():
     """Read in the outcomes
@@ -185,6 +185,7 @@ def rename_values(df):
     set types of 
     '''
 
+    # map categorical vars values
     race = {
         1: 'American Indian or Alaska Native',
         2: 'Asian',
@@ -194,6 +195,7 @@ def rename_values(df):
         6: 'unknown', # stated as unknown
         7: 'unknown' # other
     }
+    df.RACE = df.RACE.map(race)
     moi = {
         1: 'Motor vehicle collision',
         2: 'Fall from an elevation',
@@ -206,17 +208,28 @@ def rename_values(df):
         9: 'unknown', # other mechanism
         10: 'unknown' # physician did not answer
     }
+    df['MOI'] = df.RecodedMOI.map(moi)
+    df = df.drop(columns=['RecodedMOI'])
     abdTenderDegree = {
         1: 'Mild',
         2: 'Moderate',
         3: 'Severe',
-        4: 'None'
+        4: 'None',
+        np.nan: 'unknown'
     }
-    df.RACE = df.RACE.map(race)
-    df['MOI'] = df.RecodedMOI.map(moi)
-    df = df.drop(columns=['RecodedMOI'])
+    # print(np.unique(df['AbdTenderDegree'], return_counts=True))    
+    df['AbdTenderDegree'] = df.AbdTenderDegree.map(abdTenderDegree)
+    # print(np.unique(df['AbdTenderDegree'], return_counts=True))
+    binary = {
+        0: 'no',
+        1: 'yes',
+        False: 'no',
+        True: 'yes',
+        'unknown': 'unknown'
+    }
+    df['HISPANIC_ETHNICITY']= (df['HISPANIC_ETHNICITY'] == '-1').map(binary) # note: -1 is Hispanic (0 is not, 1 is unknown)
     
-    df['AbdTenderDegree'] = df.AbdTenderDegree.fillna(4).map(abdTenderDegree)
+    # rename variables
     df = df.rename(columns={'RACE': 'Race_orig', 
                             'SEX': 'Sex', 
                             'HISPANIC_ETHNICITY': 'Hispanic',
@@ -232,22 +245,12 @@ def rename_values(df):
     for k in ks_categorical:
         df[k] = df[k].astype(str)    
         
-        
-        
-    binary = {
-        0: 'no',
-        1: 'yes',
-        False: 'no',
-        True: 'yes',
-        'unknown': 'unknown'
-    }
+    
     
     df['AbdomenPain'] = df['AbdomenPain'].replace('3.0', 'other')
-    df["Hispanic"]= (df['Hispanic'] == '-1').map(binary) # note: -1 is Hispanice (0 is not, 1 is unknown)
     
-    
-    # rename vars to values
-    ks_remap = ['VomitWretch', 'MOI', 
+    # remap values which take on values 0....4
+    ks_remap = ['VomitWretch', 
                 'ThoracicTender', 'ThoracicTrauma', 
                 'DecrBreathSound', 'AbdDistention',
                 'AbdTrauma', 'SeatBeltSign', 
@@ -271,14 +274,19 @@ def rename_values(df):
 
 
 def impute(df: pd.DataFrame):
-    """Returns df with imputed features
+    """Returns df with imputed features.
+    Note: lots of things have filled na with "unknown"
     """
 
-    # fill in values for some vars from NaN -> Unknown
-    df['AbdTrauma'] = df['AbdTrauma'].fillna('unknown')
+    # fill in values for some vars from unknown -> None
+    df.loc[df['AbdTenderDegree'] == 'unknown', 'AbdTenderDegree'] = 'None'
 
 
     # pandas impute missing values with median
     df = df.fillna(df.median())
     df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
     return df
+
+def unit_test(df):
+    assert df.shape[0] == 12044, 'should have 12044 patients'
+    assert np.sum(df['iai_intervention']) == 203, 'should have 203 patients IWI'
