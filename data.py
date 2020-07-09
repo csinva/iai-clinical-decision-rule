@@ -18,12 +18,13 @@ feats_categorical = ['AbdTenderDegree', 'Race', 'MOI']
 meta = ['iai_intervention', 'cv_fold', 'dset']
 outcome_def = 'iai_intervention' # output
 
-def load_it_all(dummy=True):
+def load_it_all(dummy=True, impute=True):
     df_pecarn = data_pecarn.get_data(use_processed=False,
                                      frac_missing_allowed=0.1,
-                                     dummy=dummy)
+                                     dummy=dummy,
+                                     impute_feats=impute)
     all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
-    df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy)
+    df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
     all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
 
     # resulting features
