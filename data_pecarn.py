@@ -214,9 +214,15 @@ def rename_values(df):
         1: 'Mild',
         2: 'Moderate',
         3: 'Severe',
-        4: 'None',
+        4: 'unknown',
         np.nan: 'unknown'
     }
+    
+    
+    # combine aggregate gcs into total gcs
+    idxs_to_replace = ~df['AggregateGCS'].isna() & df['GCSScore'].isna()
+    df.loc[idxs_to_replace, 'GCSScore']  = df['AggregateGCS'][idxs_to_replace]
+    
     # print(np.unique(df['AbdTenderDegree'], return_counts=True))    
     df['AbdTenderDegree'] = df.AbdTenderDegree.map(abdTenderDegree)
     # print(np.unique(df['AbdTenderDegree'], return_counts=True))
@@ -279,11 +285,16 @@ def impute(df: pd.DataFrame):
     """
 
     # fill in values for some vars from unknown -> None
+#     idxs_yes = (df['AbdTenderDegree']=='unknown') & (df['AbdomenTender']==1)
+#     df.loc[idxs_yes, 'AbdTenderDegree'] = 'Mild'
     df.loc[df['AbdTenderDegree'] == 'unknown', 'AbdTenderDegree'] = 'None'
+    
+    
 
 
     # pandas impute missing values with median
     df = df.fillna(df.median())
+    
     df.GCSScore = df.GCSScore.fillna(df.GCSScore.median())
     return df
 

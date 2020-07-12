@@ -18,9 +18,9 @@ feats_categorical = ['AbdTenderDegree', 'Race', 'MOI']
 meta = ['iai_intervention', 'cv_fold', 'dset']
 outcome_def = 'iai_intervention' # output
 
-def load_it_all(dummy=True, impute=True):
+def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):
     df_pecarn = data_pecarn.get_data(use_processed=False,
-                                     frac_missing_allowed=0.1,
+                                     frac_missing_allowed=frac_missing_allowed,
                                      dummy=dummy,
                                      impute_feats=impute)
     all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
@@ -89,7 +89,21 @@ def select_final_feats(feat_names):
                  ]
     return sorted(feat_names)
     
-
+fewest_feats = [
+#     'AbdDistention_yes',
+                'AbdTenderDegree_None',
+ 'AbdTrauma_or_SeatBeltSign_yes',
+ 'AbdomenPain_yes',
+ 'Age',
+ 'CostalTender_yes',
+ 'DecrBreathSound_yes',
+ 'GCSScore_Full_yes',
+ 'MOI_Fall from an elevation',
+ 'MOI_Motor vehicle collision',
+ 'MOI_Motorcycle/ATV/Scooter collision',
+#  'MOI_Pedestrian/bicyclist struck by moving vehicle',
+ 'ThoracicTrauma_yes',
+ 'VomitWretch_yes']
 
 def add_cv_split(df: pd.DataFrame, dset='pecarn'):
     # set up train / test
