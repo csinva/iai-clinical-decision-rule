@@ -247,7 +247,7 @@ def rename_values(df):
                       'VomitWretch', 'MOI', 'ThoracicTender', 'ThoracicTrauma',
                       'DecrBreathSound', 'AbdDistention', 'AbdTenderDegree',
                       'AbdTrauma', 'SeatBeltSign', 'DistractingPain',
-                      'AbdomenPain']
+                      'AbdomenPain', 'AbdomenTender']
     for k in ks_categorical:
         df[k] = df[k].astype(str)    
         
@@ -260,7 +260,7 @@ def rename_values(df):
                 'ThoracicTender', 'ThoracicTrauma', 
                 'DecrBreathSound', 'AbdDistention',
                 'AbdTrauma', 'SeatBeltSign', 
-                'DistractingPain', 'AbdomenPain']
+                'DistractingPain', 'AbdomenPain', 'AbdomenTender']
     for k in ks_remap:
         vals = df[k].values
         is_na = df[k].isna()
@@ -285,9 +285,9 @@ def impute(df: pd.DataFrame):
     """
 
     # fill in values for some vars from unknown -> None
-#     idxs_yes = (df['AbdTenderDegree']=='unknown') & (df['AbdomenTender']==1)
-#     df.loc[idxs_yes, 'AbdTenderDegree'] = 'Mild'
-    df.loc[df['AbdTenderDegree'] == 'unknown', 'AbdTenderDegree'] = 'None'
+    df.loc[df['AbdomenTender'].isin(['no', 'unknown']), 'AbdTenderDegree'] = 'None'
+    
+    
 
 
     # pandas impute missing values with median
