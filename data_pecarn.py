@@ -288,8 +288,6 @@ def impute(df: pd.DataFrame):
 #     idxs_yes = (df['AbdTenderDegree']=='unknown') & (df['AbdomenTender']==1)
 #     df.loc[idxs_yes, 'AbdTenderDegree'] = 'Mild'
     df.loc[df['AbdTenderDegree'] == 'unknown', 'AbdTenderDegree'] = 'None'
-    
-    
 
 
     # pandas impute missing values with median
