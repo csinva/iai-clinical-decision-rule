@@ -14,7 +14,7 @@ env
 **.idea
 *.pth
 **Icon*
-<<<<<<< HEAD
+data_psrc/*.csv
 
 # Setuptools distribution folder.
 /dist/
