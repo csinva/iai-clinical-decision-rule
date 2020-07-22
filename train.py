@@ -160,7 +160,7 @@ def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
 
 def specificity_score(y_true, y_pred):
     tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
-    return tn / (tn + tp)
+    return tn / (tn + fp)
 
 scorers = {
    'balanced_accuracy': metrics.balanced_accuracy_score, 
@@ -283,12 +283,12 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     
     # pick best model
     # print('best model scoring...')
-    print(list(scores.keys()))
+#     print(list(scores.keys()))
     idx_cv_best = np.argmin(scores['roc_auc_cv_folds'])
     
     # save results
     # print('preparing results...')
-    print(scores)
+#     print(scores)
     os.makedirs(os.path.dirname(out_name), exist_ok=True)
     results = {
         # params
@@ -306,6 +306,7 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
         
         # metrics
         'metrics': list(scorers.keys()), 
+        **scores,
     }
-    print('saving...')
+#     print('saving...')
     pkl.dump(results, open(out_name, 'wb'))

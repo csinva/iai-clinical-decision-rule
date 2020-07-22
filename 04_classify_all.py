@@ -19,21 +19,20 @@ from data import feats_numerical, feats_categorical, meta, outcome_def
 # load data
 df_pecarn, df_psrc, common_feats, filtered_feats_pecarn, filtered_feats_psrc = data.load_it_all(dummy=True)
 df = df_pecarn[common_feats].append(df_psrc[common_feats])
-
 processed_feats = data.select_final_feats(common_feats)
-train_idxs = data.pecarn_train_idxs
-test_idxs1 = data.pecarn_test_idxs
-test_idxs2 = data.psrc_train_idxs + data.psrc_test_idxs
 print(len(processed_feats), sorted(processed_feats))
-print(train_idxs, test_idxs1, test_idxs2)
 
+# params
 class p:
-    out_dir = f'results/jul22_17'
+    out_dir = f'results/jul22_19'
     balancing = ['sample_weights'] # 'ros', 'smote', sample_weights
     balancing_ratio = [1000, 750, 500, 100]
     model_type = ['logistic', 'dt'] #, 'rf', 'mlp2', 'svm']): # 'rf', 'mlp2', 'svm', 'gb'
     feature_selection = ['select_stab_lasso', 'select_lasso', 'select_rf'] #, 'select_lasso', 'select_rf']: # select_lasso, select_rf, None
     feature_selection_nums = [5, 6, 7, 10, len(processed_feats)]
+    train_idxs = data.pecarn_train_idxs
+    test_idxs1 = data.pecarn_test_idxs
+    test_idxs2 = data.psrc_train_idxs + data.psrc_test_idxs
 
 # predict
 for balancing in p.balancing:
@@ -53,6 +52,6 @@ for balancing in p.balancing:
                                 out_name=f'{p.out_dir}/{out_name}.pkl',
                                 feature_selection=feature_selection,
                                 feature_selection_num=feature_selection_num,
-                                train_idxs=train_idxs,
-                                test_idxs1=test_idxs1,
-                                test_idxs2=test_idxs2)
+                                train_idxs=p.train_idxs,
+                                test_idxs1=p.test_idxs1,
+                                test_idxs2=p.test_idxs2)
