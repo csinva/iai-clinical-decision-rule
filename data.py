@@ -168,3 +168,24 @@ def get_feat_names(df):
                 pecarn_feats.add(feat_name)
     pecarn_feats = sorted(list(pecarn_feats))
     return feat_names, set(pecarn_feats)
+
+def get_sample_weights(df, df_pecarn, df_psrc, balancing_ratio):
+    '''Get sample weights which also account for age / gender
+    '''
+    # class weights
+    class_weights = {0: 1, 1: balancing_ratio}
+    sample_weights_class = pd.Series(df[outcome_def]).map(class_weights).values
+    
+    # weights for different risk populations
+    age_discrete = pd.cut(df['Age'], bins=(-1, 4, 9, 1000), labels=['<5', '5-9', '>9']).values
+    # we don't have sex for psrc, so just fill in 0 (only matters for training anyway)
+    sex = pd.Series(np.hstack((df_pecarn['Sex_M'].values, np.zeros(df_psrc.shape[0])))).map({0: 'F', 1: 'M'}).values
+    risk_identity = [(sex[i], age_discrete[i]) for i in range(age_discrete.shape[0])]
+
+    risk_weights = {
+        ('F', '<5'): 33.9, ('F', '5-9'): 25.8, ('F', '>9'): 27.2,
+        ('M', '<5'): 14.8, ('M', '5-9'): 13.7, ('M', '>9'): 13.1                
+    }
+    sample_weights_identity = pd.Series(risk_identity).map(risk_weights).values
+    sample_weights = sample_weights_class * sample_weights_identity # elementwise multiply
+    return sample_weights

@@ -149,14 +149,14 @@ def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
             m.fit(X_train_r_cv, Y_train_r_cv)
         
         # append lists
-        preds_list.append(m.predict_proba(X_val_cv))
-        preds_test1_list.append(m.predict_proba(X_test1))
-        preds_test2_list.append(m.predict_proba(X_test2))                    
+        preds_list.append(m.predict_proba(X_val_cv)[:, 1])
+        preds_test1_list.append(m.predict_proba(X_test1)[:, 1])
+        preds_test2_list.append(m.predict_proba(X_test2)[:, 1])                    
         models.append(deepcopy(m))
         imps.append(get_feature_importance(m, model_type, X_val_cv, Y_val_cv))
         ys.append(Y_val_cv)
         
-    return models, imps, preds_list, preds_test1_list, preds_test2_list, ys
+    return models, imps, preds_list, preds_test1_list, preds_test2_list, np.array(ys)
 
 def specificity_score(y_true, y_pred):
     tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
@@ -177,39 +177,63 @@ scorers = {
    'fn': lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[2],
    'tp': lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[3],
 }
-
-def append_score_results(scores, pred, y, prefix=''):
+        
+def append_score_results(scores, pred, y, suffix1='', suffix2=''):
     '''Score given one pred, y
     '''
-    
+
     for k in scorers.keys():
-        k_new = prefix + '_' + k
+        k_new = k + suffix1 + suffix2
         if not k_new in scores.keys():
             scores[k_new] = []
-        
-        print(k_new)
         if 'roc' in k or 'curve' in k:
             scores[k_new].append(scorers[k](y, pred))
         else:
-            pred_thresh = (pred > 0.5).astype(int)
-            print(np.unique(y), np.unique(pred_thresh))
-#             scores[k_new].append(scorers[k](y, pred_thresh))
-        
-        
+            pred_thresh = (np.array(pred) > 0.5).astype(int)
+            scores[k_new].append(scorers[k](y, pred_thresh)) 
 
 def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
                Y_train, Y_test1, Y_test2):
+    '''
+    Params
+    ------
+    Y_train: (num_folds, pts_in_fold)
+        different folds have different ys
+    Y_test1: (num_test)
+        test ys 
+    Y_test2: (num_test)
+        test ys 
+    '''
+            
+            
+    # repeat for each fold
+    Y_test1 = np.tile(np.array(Y_test1).reshape((1, -1)), (len(predictions_list), 1))
+    Y_test2 = np.tile(np.array(Y_test2).reshape((1, -1)), (len(predictions_list), 1))
     
-    # score cv folds
     scores = {}
-    for preds_list, Y_list in zip([predictions_list, predictions_test1_list, predictions_test2_list], 
-                                  [Y_train, Y_test1, Y_test2]):
-        for i in range(len(preds_list)):
-            append_score_results(scores, preds_list[i], Y_list[i], prefix='cv')
+    for preds_list, Y_list, suffix1 in zip([predictions_list, predictions_test1_list, predictions_test2_list], 
+                                  [Y_train, Y_test1, Y_test2],
+                                  ['_cv', '_test1', '_test2']):
         
-        append_score_results(scores, np.vstack(preds_list), np.vstack(Y_list))
+        # score cv folds (less important)
+        # print('score cv folds...', len(preds_list))
+        for i in range(len(preds_list)):
+                append_score_results(scores, preds_list[i], Y_list[i], suffix1=suffix1, suffix2='_folds')
+        
+        # score total dset
+        # print('score total dset....')
+        all_preds = np.concatenate([p for p in preds_list]).flatten()
+        all_ys = np.concatenate([y for y in Y_list]).flatten()
+        append_score_results(scores, all_preds, all_ys, suffix1=suffix1)
     
-    return scores
+    # replace all length 1 lists with scalars
+    s = {}
+    for k in scores.keys():
+        if len(scores[k]) == 1:
+            s[k] = scores[k][0]
+        else:
+            s[k] = np.array(scores[k])
+    return s
 
 
 def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_intervention',
@@ -217,7 +241,9 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
           out_name='results/classify/test.pkl', 
           train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7], feature_selection=None, feature_selection_num=3):
     '''Balance classes in y using strategy specified by balancing
+        if balancing is sample_weights, then ignore balancing_ratio
     '''
+    # print('training', out_name)
     np.random.seed(42)
     
     # normalize the data
@@ -237,33 +263,49 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     m = get_model(model_type)
     
     # feature selection
+    # print('selecting features...')
     X_train, X_test1, X_test2, support = \
         select_features(feature_selection, feature_selection_num, X_train, X_test1, X_test2, y_train)
     
     
     # prediction
+    # print('fit + predict...')
     models, imps, predictions_list, predictions_test1_list, predictions_test2_list, y_train = \
         predict_over_folds(df.cv_fold[idxs_train], X_train, y_train,
                            X_test1, X_test2, m, sample_weights[idxs_train],
                            balancing, train_idxs, model_type)
     
     # scoring
-    scores = get_scores(predictions_list, predictions_test1_list, predictions_test2_list, y_train, Y_test1, Y_test2)
+    # print('scoring...')
+    scores = get_scores(predictions_list, predictions_test1_list,
+                        predictions_test2_list, y_train, Y_test1, Y_test2)
     
+    
+    # pick best model
+    # print('best model scoring...')
+    print(list(scores.keys()))
+    idx_cv_best = np.argmin(scores['roc_auc_cv_folds'])
     
     # save results
+    # print('preparing results...')
+    print(scores)
     os.makedirs(os.path.dirname(out_name), exist_ok=True)
     results = {
-        'models': models,
-        'imps': imps,        
-        **scores,
-        
-        'metrics': list(scorers.keys()), 
-        
         # params
         'model_type': model_type,
         'balancing': balancing,
         'feat_names_selected': np.array(feat_names)[support],               
         'balacing_ratio': balancing_ratio,
+
+        # models / importances
+#         'models': models,
+#         'imps': imps,        
+        'idx_cv_best': idx_cv_best,
+        'model_best': models[idx_cv_best],
+        'imps_best': imps[idx_cv_best],
+        
+        # metrics
+        'metrics': list(scorers.keys()), 
     }
+    print('saving...')
     pkl.dump(results, open(out_name, 'wb'))
