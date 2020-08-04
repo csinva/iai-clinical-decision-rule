@@ -1,2 +1,3 @@
 - start by converting .xls file to .csv
 - the run process_basic.py on the csv file to shrink it into a more manageable format
+- data is currently private (private data is stored [here](https://drive.google.com/drive/folders/1HeYXJGwuntEYVXA8UCJ7ktkhJLG2uP5I))

@@ -24,7 +24,7 @@ print(len(processed_feats), sorted(processed_feats))
 
 # params
 class p:
-    out_dir = f'results/jul22_19'
+    out_dir = f'results/aug4_1'
     balancing = ['sample_weights'] # 'ros', 'smote', sample_weights
     balancing_ratio = [1000, 750, 500, 100]
     model_type = ['logistic', 'dt'] #, 'rf', 'mlp2', 'svm']): # 'rf', 'mlp2', 'svm', 'gb'
