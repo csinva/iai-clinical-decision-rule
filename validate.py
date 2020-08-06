@@ -24,7 +24,8 @@ def sensitivity_specificity_curve(y_test, preds_proba, plot=True, thresholds=Non
     spec = []
     for threshold in tqdm(thresholds):
         preds = preds_proba > threshold
-        stats = sklearn.metrics.classification_report(y_test, preds, output_dict=True)
+        stats = sklearn.metrics.classification_report(y_test, preds,
+                                                      output_dict=True, zero_division=0)
         sens.append(stats['1']['recall'])
         spec.append(stats['0']['recall'])
 
@@ -117,6 +118,7 @@ def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
     ys_cv = np.concatenate([y for y in Y_train]).flatten()
     predictions_test1 = predictions_test1_list[idx_best]
     predictions_test2 = predictions_test2_list[idx_best]
+    scores['idx_best'] = idx_best
 
     # repeat for each fold
     for preds, ys, suffix1 in zip([predictions_cv, predictions_test1, predictions_test2],

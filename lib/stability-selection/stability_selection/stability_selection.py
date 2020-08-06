@@ -23,7 +23,7 @@ from warnings import warn
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin, clone
-from sklearn.externals.joblib import Parallel, delayed
+# from sklearn.externals.joblib import Parallel, delayed
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
@@ -339,7 +339,7 @@ class StabilitySelection(BaseEstimator, TransformerMixin):
             bootstrap_samples = _bootstrap_generator(self.n_bootstrap_iterations,
                                                      self.bootstrap_func, y,
                                                      n_subsamples, random_state=random_state)
-
+            '''
             selected_variables = Parallel(
                 n_jobs=self.n_jobs, verbose=self.verbose,
                 pre_dispatch=self.pre_dispatch
@@ -351,6 +351,15 @@ class StabilitySelection(BaseEstimator, TransformerMixin):
                                              threshold=self.bootstrap_threshold,
                                              max_features=self.max_features)
               for subsample in bootstrap_samples)
+            '''
+            selected_variables = [_fit_bootstrap_sample(clone(base_estimator),
+                                             X=X[safe_mask(X, subsample), :],
+                                             y=y[subsample],
+                                             lambda_name=self.lambda_name,
+                                             lambda_value=lambda_value,
+                                             threshold=self.bootstrap_threshold,
+                                             max_features=self.max_features)
+              for subsample in bootstrap_samples]
 
             stability_scores[:, idx] = np.vstack(selected_variables).mean(axis=0)
 

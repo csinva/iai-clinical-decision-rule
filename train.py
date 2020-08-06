@@ -20,6 +20,7 @@ from sklearn.model_selection import KFold
 import pandas as pd
 from stability_selection import StabilitySelection
 import validate
+import traceback
 
 def get_feature_importance(model, model_type, X_val, Y_val):
     '''Get feature importance based on model
@@ -147,7 +148,10 @@ def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
         if balancing == 'sample_weights':
             try:
                 m.fit(X_train_cv, Y_train_cv, sample_weight=sample_weights[idxs_cv])
+                balanced = True
             except:
+                print('sample weights failed!', model_type)
+                traceback.print_exc()
                 balanced = False
         if not balanced: # balancing failed or was not possible
             X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
@@ -209,13 +213,13 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     # scoring
     # print('scoring...')
     scores = validate.get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
-                        y_train, Y_test1, Y_test2)
+                                 y_train, Y_test1, Y_test2)
     
     
     # pick best model
     # print('best model scoring...')
 #     print(list(scores.keys()))
-    idx_cv_best = np.argmin(scores['roc_auc_cv_folds'])
+    idx_best = scores['idx_best']
     
     # save results
     # print('preparing results...')
@@ -229,11 +233,11 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
         'balacing_ratio': balancing_ratio,
 
         # models / importances
-#         'models': models,
-#         'imps': imps,        
-        'idx_cv_best': idx_cv_best,
-        'model_best': models[idx_cv_best],
-        'imps_best': imps[idx_cv_best],
+        'idx_best': idx_best,
+        'model_best': models[idx_best],
+        'imps_best': imps[idx_best],
+#         'models': models, # save models for all folds
+#         'imps': imps,     # save importances for all folds
         
         # metrics
         'metrics': list(validate.scorers.keys()), 

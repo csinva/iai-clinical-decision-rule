@@ -20,19 +20,18 @@ if __name__ == '__main__':
 
     # params
     class p:
-        out_dir = f'results/aug5_10'
+        out_dir = f'results/aug6_6'
         balancing = ['sample_weights']  # 'ros', 'smote', sample_weights
-        balancing_ratio = [1000, 750, 500, 100]
+        balancing_ratio = [1, 100, 1000, 750, 500]
         # options: brl, slim, grl, rulefit, logistic, dt, 'rf', 'mlp2', 'svm', 'gb'
         model_type = ['logistic', 'dt', 'slim', 'grl',
                       'brl']  # ['logistic', 'dt'] # ['grl', 'slim', 'brl', 'rulefit'] #, 'rf', 'mlp2', 'svm']): #
         feature_selection = ['select_stab_lasso', 'select_lasso',
                              'select_rf']  # , 'select_lasso', 'select_rf']: # select_lasso, select_rf, None
-        feature_selection_nums = [5, 6, 7, 10, 100]
+        feature_selection_nums = [5, 6, 7, 10, len(processed_feats)]
         train_idxs = data.pecarn_train_idxs
         test_idxs1 = data.pecarn_test_idxs
         test_idxs2 = data.psrc_train_idxs + data.psrc_test_idxs
-
 
     print('possible combos', len(p.balancing) * len(p.balancing_ratio) * len(p.model_type) * len(
         p.feature_selection * len(p.feature_selection_nums)))
@@ -49,6 +48,7 @@ if __name__ == '__main__':
                         # if job_num is passed, only run one job
                         if job_num is None or job_num == job_counter:
                             out_name = f'{model_type}_{feature_selection}={feature_selection_num}_{balancing}={balancing_ratio}'
+                            print('training', out_name)
                             train.train(df,
                                         feat_names=processed_feats,
                                         model_type=model_type,
@@ -62,3 +62,5 @@ if __name__ == '__main__':
                                         train_idxs=p.train_idxs,
                                         test_idxs1=p.test_idxs1,
                                         test_idxs2=p.test_idxs2)
+                            print('success!', out_name)
+                        job_counter += 1
