@@ -6,7 +6,6 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 from copy import deepcopy
 import pickle as pkl
 from sklearn.tree import DecisionTreeClassifier, plot_tree
@@ -20,7 +19,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn import metrics
 from sklearn.feature_selection import SelectFromModel
-import eli5
+from sklearn.inspection import permutation_importance
 import os.path
 from imodels import RuleListClassifier, RuleFit, SLIM, GreedyRuleList
 from imblearn.over_sampling import RandomOverSampler, SMOTE
@@ -41,8 +40,9 @@ def get_feature_importance(model, model_type, X_val, Y_val):
     elif model_type == 'logistic':
         imps = model.coef_
     else:
-        perm = eli5.sklearn.permutation_importance.PermutationImportance(model).fit(X_val, Y_val)
-        imps = perm.feature_importances_
+        perm = permutation_importance(model, X_val, Y_val, scoring='roc_auc',
+                                      random_state=0)
+        imps = perm.importances_mean
     return imps.squeeze()
 
 def balance(X, y, balancing='ros', balancing_ratio: float=1):
@@ -65,6 +65,8 @@ def balance(X, y, balancing='ros', balancing_ratio: float=1):
         sampler = RandomOverSampler(desired_ratio, random_state=42)
     elif balancing == 'smote':
         sampler = SMOTE(desired_ratio, random_state=42)
+    else:
+        sampler = RandomOverSampler(desired_ratio, random_state=42)
         
     X_r, Y_r = sampler.fit_resample(X, y)   
     return X_r, Y_r
@@ -82,6 +84,14 @@ def get_model(model_type):
         m = MLPClassifier()
     elif model_type == 'gb':
         m = GradientBoostingClassifier()
+    elif model_type == 'brl':
+        m = RuleListClassifier()
+    elif model_type == 'slim':
+        m = SLIM()
+    elif model_type == 'grl':
+        m = GreedyRuleList()
+    elif model_type == 'rulefit':
+        m = RuleFit()
     return m
 
     
@@ -117,7 +127,7 @@ def select_features(feature_selection, feature_selection_num, X_train, X_test1, 
     return X_train, X_test1, X_test2, support
 
 def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
-                       m, sample_weights, balancing, train_idxs, model_type):
+                       m, sample_weights, balancing, balancing_ratio, train_idxs, model_type):
     '''loop over folds
     Returns
     -------
@@ -143,9 +153,13 @@ def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
         X_val_cv, Y_val_cv = X[idxs_val_cv], y[idxs_val_cv]
 
         # fit with appropriate weighting
+        balanced = False
         if balancing == 'sample_weights':
-            m.fit(X_train_cv, Y_train_cv, sample_weight=sample_weights[idxs_cv])
-        else:
+            try:
+                m.fit(X_train_cv, Y_train_cv, sample_weight=sample_weights[idxs_cv])
+            except:
+                balanced = False
+        if not balanced: # balancing failed or was not possible
             X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
             m.fit(X_train_r_cv, Y_train_r_cv)
         
@@ -188,18 +202,18 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
     m = get_model(model_type)
     
     # feature selection
-    # print('selecting features...')
+    print('selecting features...')
     X_train, X_test1, X_test2, support = \
         select_features(feature_selection, feature_selection_num, X_train, X_test1, X_test2, y_train)
 #     print('shapes', X_train.shape[0], X_test1.shape[0], X_test2.shape[0])
     
     
     # prediction
-    # print('fit + predict...')
+    print('fit + predict...')
     models, imps, predictions_list, predictions_test1_list, predictions_test2_list, y_train = \
         predict_over_folds(df.cv_fold[idxs_train], X_train, y_train,
                            X_test1, X_test2, m, sample_weights[idxs_train],
-                           balancing, train_idxs, model_type)
+                           balancing, balancing_ratio, train_idxs, model_type)
 #     print('prediction shapes', len(predictions_list), len(predictions_test1_list), len(predictions_test2_list), y_train.size)
     
     # scoring

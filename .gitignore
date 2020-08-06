@@ -25,3 +25,5 @@ data_psrc/*.csv
 build
 .gitmodules
 results
+clean.sh
+cancel_jobs.py
