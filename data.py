@@ -1,11 +1,8 @@
-import os
-from os.path import join as oj
-import sys
 import numpy as np
-from tqdm import tqdm
 import pandas as pd
-from copy import deepcopy
-import data_pecarn, data_psrc
+
+import data_pecarn
+import data_psrc
 
 pecarn_train_idxs = [1, 2, 3, 4]
 pecarn_test_idxs = [5, 6]
@@ -16,7 +13,8 @@ psrc_test_idxs = [12, 13]
 feats_numerical = ['InitSysBPRange', 'InitHeartRate', 'GCSScore', 'Age']
 feats_categorical = ['AbdTenderDegree', 'Race', 'MOI']
 meta = ['iai_intervention', 'cv_fold', 'dset']
-outcome_def = 'iai_intervention' # output
+outcome_def = 'iai_intervention'  # output
+
 
 def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):
     df_pecarn = data_pecarn.get_data(use_processed=False,
@@ -34,7 +32,7 @@ def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):
     feats_binary = [feat for feat in common_feats
                     if not feat in feats_numerical + feats_categorical + meta]
     return df_pecarn, df_psrc, common_feats, filtered_feats_pecarn, filtered_feats_psrc
-    
+
 
 def to_dummies(df: pd.DataFrame):
     """Prepare the data for classification
@@ -45,6 +43,7 @@ def to_dummies(df: pd.DataFrame):
     # remove any col that is all 0s
     df = df.loc[:, (df != 0).any(axis=0)]
     return df
+
 
 def derived_feats(df):
     '''Add derived features
@@ -57,19 +56,20 @@ def derived_feats(df):
         'unknown': 'unknown'
     }
     df['AbdTrauma_or_SeatBeltSign'] = ((df.AbdTrauma == 'yes') | (df.SeatBeltSign == 'yes')).map(binary)
-    df['Hypotension'] = (df['Age'] < 1/12) & (df['InitSysBPRange'] < 70) | \
-                    (df['Age'] >= 1/12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
-                    (df['Age'] >= 5) & (df['InitSysBPRange'] < 90)
+    df['Hypotension'] = (df['Age'] < 1 / 12) & (df['InitSysBPRange'] < 70) | \
+                        (df['Age'] >= 1 / 12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
+                        (df['Age'] >= 5) & (df['InitSysBPRange'] < 90)
     df['Hypotension'] = df['Hypotension'].map(binary)
     df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary)
-    df['CostalTender'] = ((df.LtCostalTender == 1) | (df.RtCostalTender == 1)).map(binary) # | (df.DecrBreathSound)
-    
+    df['CostalTender'] = ((df.LtCostalTender == 1) | (df.RtCostalTender == 1)).map(binary)  # | (df.DecrBreathSound)
+
     # Combine hispanic as part of race
     df['Race'] = df['Race_orig']
     df.loc[df.Hispanic == 'yes', 'Race'] = 'Hispanic'
     df.loc[df.Race == 'White', 'Race'] = 'White (Non-Hispanic)'
 
     return df
+
 
 def select_final_feats(feat_names):
     '''Return an interpretable set of the best features
@@ -78,32 +78,34 @@ def select_final_feats(feat_names):
                   if not f in meta
                   and not f.endswith('_no')
                   and not 'Race' in f
-#                   and '_or_' not in f
+                  #                   and '_or_' not in f
                   and not 'other' in f.lower()
                   and not 'RtCost' in f
                   and not 'LtCost' in f
                   and not 'unknown' in f.lower()
                   and not f == 'AbdTenderDegree_unknown'
                   and not f in ['AbdTrauma_yes', 'SeatBeltSign_yes']
-                  and not f in ['GCSScore']                  
-                 ]
+                  and not f in ['GCSScore']
+                  ]
     return sorted(feat_names)
-    
+
+
 fewest_feats = [
-#     'AbdDistention_yes',
-                'AbdTenderDegree_None',
- 'AbdTrauma_or_SeatBeltSign_yes',
- 'AbdomenPain_yes',
- 'Age',
- 'CostalTender_yes',
- 'DecrBreathSound_yes',
- 'GCSScore_Full_yes',
- 'MOI_Fall from an elevation',
- 'MOI_Motor vehicle collision',
- 'MOI_Motorcycle/ATV/Scooter collision',
-#  'MOI_Pedestrian/bicyclist struck by moving vehicle',
- 'ThoracicTrauma_yes',
- 'VomitWretch_yes']
+    #     'AbdDistention_yes',
+    'AbdTenderDegree_None',
+    'AbdTrauma_or_SeatBeltSign_yes',
+    'AbdomenPain_yes',
+    'Age',
+    'CostalTender_yes',
+    'DecrBreathSound_yes',
+    'GCSScore_Full_yes',
+    'MOI_Fall from an elevation',
+    'MOI_Motor vehicle collision',
+    'MOI_Motorcycle/ATV/Scooter collision',
+    #  'MOI_Pedestrian/bicyclist struck by moving vehicle',
+    'ThoracicTrauma_yes',
+    'VomitWretch_yes']
+
 
 def add_cv_split(df: pd.DataFrame, dset='pecarn'):
     # set up train / test
@@ -114,6 +116,7 @@ def add_cv_split(df: pd.DataFrame, dset='pecarn'):
         offset = 7
     df['cv_fold'] = np.random.randint(1, 7, size=df.shape[0]) + offset
     return df
+
 
 def get_feat_names(df):
     '''Get feature names for pecarn
@@ -160,7 +163,7 @@ def get_feat_names(df):
                          'VomitWretch',
                          'Age',
                          'Sex'] + \
-    ['Race', 'InitHeartRate', 'InitSysBPRange'] # new ones to consider
+                        ['Race', 'InitHeartRate', 'InitSysBPRange']  # new ones to consider
     pecarn_feats = set()
     for pecarn_feat in PECARN_FEAT_NAMES:
         for feat_name in feat_names:
@@ -169,13 +172,14 @@ def get_feat_names(df):
     pecarn_feats = sorted(list(pecarn_feats))
     return feat_names, set(pecarn_feats)
 
+
 def get_sample_weights(df, df_pecarn, df_psrc, balancing_ratio):
     '''Get sample weights which also account for age / gender
     '''
     # class weights
     class_weights = {0: 1, 1: balancing_ratio}
     sample_weights_class = pd.Series(df[outcome_def]).map(class_weights).values
-    
+
     # weights for different risk populations
     age_discrete = pd.cut(df['Age'], bins=(-1, 4, 9, 1000), labels=['<5', '5-9', '>9']).values
     # we don't have sex for psrc, so just fill in 0 (only matters for training anyway)
@@ -184,8 +188,8 @@ def get_sample_weights(df, df_pecarn, df_psrc, balancing_ratio):
 
     risk_weights = {
         ('F', '<5'): 33.9, ('F', '5-9'): 25.8, ('F', '>9'): 27.2,
-        ('M', '<5'): 14.8, ('M', '5-9'): 13.7, ('M', '>9'): 13.1                
+        ('M', '<5'): 14.8, ('M', '5-9'): 13.7, ('M', '>9'): 13.1
     }
     sample_weights_identity = pd.Series(risk_identity).map(risk_weights).values
-    sample_weights = sample_weights_class * sample_weights_identity # elementwise multiply
+    sample_weights = sample_weights_class * sample_weights_identity  # elementwise multiply
     return sample_weights

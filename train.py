@@ -1,23 +1,16 @@
 import os
+import sys
 from os.path import join as oj
-import sys, time
+
 sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
-import seaborn as sns
-from sklearn.model_selection import train_test_split
 import numpy as np
-import matplotlib.pyplot as plt
 from copy import deepcopy
 import pickle as pkl
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-from sklearn.model_selection import cross_validate, ShuffleSplit, train_test_split
-from sklearn.linear_model import LogisticRegressionCV
-from sklearn.linear_model import LinearRegression, LogisticRegression, RidgeCV, Lasso
-from sklearn.neural_network import MLPRegressor, MLPClassifier
-from sklearn.model_selection import cross_validate, train_test_split
+from sklearn.linear_model import LogisticRegression, Lasso
+from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
-from sklearn import metrics
 from sklearn.feature_selection import SelectFromModel
 from sklearn.inspection import permutation_importance
 import os.path
@@ -25,9 +18,6 @@ from imodels import RuleListClassifier, RuleFit, SLIM, GreedyRuleList
 from imblearn.over_sampling import RandomOverSampler, SMOTE
 from sklearn.model_selection import KFold
 import pandas as pd
-import data 
-from collections import Counter
-from typing import List
 from stability_selection import StabilitySelection
 import validate
 

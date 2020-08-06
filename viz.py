@@ -1,34 +1,23 @@
-from matplotlib import pyplot as plt
-import seaborn as sns
 import numpy as np
-import os
-from os.path import join as oj
-from sklearn.feature_extraction.image import extract_patches_2d
-from sklearn.linear_model import LinearRegression, LogisticRegression, RidgeCV
-from sklearn.neural_network import MLPRegressor
-from sklearn.model_selection import cross_validate, train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
+# plt.style.use('dark_background')
+import pandas as pd
+from colorama import Fore
+from matplotlib import pyplot as plt
+from matplotlib_venn import venn2
 from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
-from sklearn.metrics import confusion_matrix
-import numpy as np
-from collections import Counter
-from sklearn.datasets import make_classification
-from torch import nn
-import torch.nn.functional as F
-import torch
-from copy import deepcopy
-from sklearn import metrics
-# plt.style.use('dark_background')
-import mat4py
-import pandas as pd
-from imblearn.over_sampling import RandomOverSampler
-from sklearn.model_selection import KFold
-from colorama import Fore
-import pickle as pkl
-from style import *
+
 import style
+from style import *
+
+
+def venn_overlap(df, col1: str, col2: str, val1=1, val2=1):
+    '''Plots venn diagram of overlap between 2 cols with values specified
+    '''
+    cind = df[df[col1] == val1].index.values
+    rind = df[df[col2] == val2].index.values
+    venn2((set(cind), set(rind)), (f'{col1} ({str(val1)})', f'{col2} ({str(val2)})'))
+
 
 def visualize_individual_results(results, X_test, Y_test, print_results=True):
     '''Print and visualize results from a single train.
@@ -37,9 +26,9 @@ def visualize_individual_results(results, X_test, Y_test, print_results=True):
     scores_test = results['test']
     imps = results['imps']
     m = imps['model'][0]
-    
+
     if print_results:
-        print(Fore.CYAN + f'{"metric":<25}\tvalidation') #\ttest')
+        print(Fore.CYAN + f'{"metric":<25}\tvalidation')  # \ttest')
         for s in results['metrics']:
             if not 'curve' in s:
                 print(Fore.WHITE + f'{s:<25}\t{np.mean(scores_cv[s]):.3f} ~ {np.std(scores_cv[s]):.3f}')
@@ -58,7 +47,7 @@ def visualize_individual_results(results, X_test, Y_test, print_results=True):
     plt.subplot(R, C, 1)
     # print(X_test.shape, results['feat_names'])
     preds = m.predict(X_test[results['feat_names']])
-    preds_proba = m.predict_proba(X_test[results['feat_names']])[:, 1]    
+    preds_proba = m.predict_proba(X_test[results['feat_names']])[:, 1]
     plot_confusion_matrix(Y_test, preds, classes=np.array(['Failure', 'Success']))
 
     plt.subplot(R, C, 2)
@@ -68,19 +57,19 @@ def visualize_individual_results(results, X_test, Y_test, print_results=True):
     plt.ylim((-0.1, 1.1))
     plt.ylabel('Precision')
     plt.xlabel('Recall')
-    
-    
+
     plt.subplot(R, C, 3)
-    plt.hist(preds_proba[Y_test==0], alpha=0.5, label='Failure')
-    plt.hist(preds_proba[Y_test==1], alpha=0.5, label='Success')
+    plt.hist(preds_proba[Y_test == 0], alpha=0.5, label='Failure')
+    plt.hist(preds_proba[Y_test == 1], alpha=0.5, label='Success')
     plt.xlabel('Predicted probability')
     plt.ylabel('Count')
     plt.legend()
-    
+
     plt.tight_layout()
     plt.show()
-    
+
     return preds, preds_proba
+
 
 def plot_confusion_matrix(y_true, y_pred, classes,
                           normalize=False,
@@ -103,16 +92,16 @@ def plot_confusion_matrix(y_true, y_pred, classes,
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
-#     fig, ax = plt.subplots()
+    #     fig, ax = plt.subplots()
     im = plt.imshow(cm, interpolation='nearest', cmap=cmap)
     ax = plt.gca()
-#     ax.figure.colorbar(im, ax=ax)
+    #     ax.figure.colorbar(im, ax=ax)
     # We want to show all ticks...
     ax.set(xticks=np.arange(cm.shape[1]),
            yticks=np.arange(cm.shape[0]),
            # ... and label them with the respective list entries
            xticklabels=classes, yticklabels=classes,
-#            title=title,
+           #            title=title,
            ylabel='True label',
            xlabel='Predicted label')
 
@@ -130,6 +119,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,
                     color="white" if cm[i, j] > thresh else "black")
     return ax
 
+
 def highlight_max(data, color='#0e5c99'):
     '''
     highlight the maximum in a Series or DataFrame
@@ -142,74 +132,76 @@ def highlight_max(data, color='#0e5c99'):
         is_max = data == data.max().max()
         return pd.DataFrame(np.where(is_max, attr, ''),
                             index=data.index, columns=data.columns)
-    
-    
+
+
 # visualize biggest errs
 def viz_biggest_errs(X_traces_test, Y_test, preds, preds_proba):
-#     print(preds_proba.shape, X_traces_test.shape)
+    #     print(preds_proba.shape, X_traces_test.shape)
     residuals = np.abs(Y_test - preds_proba)
-    
+
     R, C = 4, 4
     args = np.argsort(residuals)[::-1][:R * C]
-#     print(Y_test[args])
-#     print(preds[args])
-#     print(residuals[args][:10])
+    #     print(Y_test[args])
+    #     print(preds[args])
+    #     print(residuals[args][:10])
     plt.figure(figsize=(C * 3, R * 2.5), dpi=200)
-    
+
     i = 0
     for r in range(R):
         for c in range(C):
             plt.subplot(R, C, i + 1)
             plt.plot(X_traces_test.iloc[args[i]], color=cr)
             i += 1
-    
+
     plt.tight_layout()
-    
+
+
 # visualize biggest errs
 def viz_errs_spatially(df, idxs_test, preds, Y_test):
     x_pos = df['x_pos'][idxs_test]
     y_pos = df['y_pos'][idxs_test]
-    
+
     plt.figure(dpi=200)
 
-    plt.plot(x_pos[(preds==Y_test) & (preds==1)], y_pos[(preds==Y_test) & (preds==1)], 'o',
+    plt.plot(x_pos[(preds == Y_test) & (preds == 1)], y_pos[(preds == Y_test) & (preds == 1)], 'o',
              color=cb, alpha=0.5, label='true pos')
-    plt.plot(x_pos[(preds==Y_test) & (preds==0)], y_pos[(preds==Y_test) & (preds==0)], 'x',
+    plt.plot(x_pos[(preds == Y_test) & (preds == 0)], y_pos[(preds == Y_test) & (preds == 0)], 'x',
              color=cb, alpha=0.5, label='true neg')
-    plt.plot(x_pos[preds > Y_test], y_pos[preds > Y_test], 'o', color=cr, alpha=0.5, label='false pos')    
-    plt.plot(x_pos[preds < Y_test], y_pos[preds < Y_test], 'x', color=cr, alpha=0.5, label='false neg')    
+    plt.plot(x_pos[preds > Y_test], y_pos[preds > Y_test], 'o', color=cr, alpha=0.5, label='false pos')
+    plt.plot(x_pos[preds < Y_test], y_pos[preds < Y_test], 'x', color=cr, alpha=0.5, label='false neg')
     plt.legend()
-#     plt.scatter(x_pos, y_pos, c=preds==Y_test, alpha=0.5)
+    #     plt.scatter(x_pos, y_pos, c=preds==Y_test, alpha=0.5)
     plt.xlabel('x position')
     plt.ylabel('y position')
     plt.tight_layout()
-    
-    
+
+
 def viz_errs_lifetime(X_test, preds, preds_proba, Y_test, norms):
     plt.figure(dpi=200)
     correct_idxs = preds == Y_test
     lifetime = X_test['lifetime'] * norms['lifetime']['std'] + norms['lifetime']['mu']
 
-    plt.plot(lifetime[(preds==Y_test) & (preds==1)], preds_proba[(preds==Y_test) & (preds==1)], 'o',
+    plt.plot(lifetime[(preds == Y_test) & (preds == 1)], preds_proba[(preds == Y_test) & (preds == 1)], 'o',
              color=cb, alpha=0.5, label='true pos')
-    plt.plot(lifetime[(preds==Y_test) & (preds==0)], preds_proba[(preds==Y_test) & (preds==0)], 'x',
+    plt.plot(lifetime[(preds == Y_test) & (preds == 0)], preds_proba[(preds == Y_test) & (preds == 0)], 'x',
              color=cb, alpha=0.5, label='true neg')
-    plt.plot(lifetime[preds > Y_test], preds_proba[preds > Y_test], 'o', color=cr, alpha=0.5, label='false pos')    
-    plt.plot(lifetime[preds < Y_test], preds_proba[preds < Y_test], 'x', color=cr, alpha=0.5, label='false neg')    
+    plt.plot(lifetime[preds > Y_test], preds_proba[preds > Y_test], 'o', color=cr, alpha=0.5, label='false pos')
+    plt.plot(lifetime[preds < Y_test], preds_proba[preds < Y_test], 'x', color=cr, alpha=0.5, label='false neg')
     plt.xlabel('lifetime')
     plt.ylabel('predicted probability')
     plt.legend()
     plt.show()
-    
-    
+
+
 def corrplot(corrs):
     mask = np.triu(np.ones_like(corrs, dtype=np.bool))
     corrs[mask] = np.nan
     max_abs = np.nanmax(np.abs(corrs))
     plt.imshow(corrs, cmap=style.cmap_div, vmax=max_abs, vmin=-max_abs)
-    
-def jointplot_grouped(col_x: str, col_y: str, col_k: str, df, 
-                      k_is_color=False, scatter_alpha=.5, add_global_hists: bool=True):
+
+
+def jointplot_grouped(col_x: str, col_y: str, col_k: str, df,
+                      k_is_color=False, scatter_alpha=.5, add_global_hists: bool = True):
     '''Jointplot of hists + densities
     Params
     ------
@@ -222,6 +214,7 @@ def jointplot_grouped(col_x: str, col_y: str, col_k: str, df,
     add_global_hists
         whether to plot the global hist as well
     '''
+
     def colored_scatter(x, y, c=None):
         def scatter(*args, **kwargs):
             args = (x, y)
@@ -238,13 +231,13 @@ def jointplot_grouped(col_x: str, col_y: str, col_k: str, df,
         data=df
     )
     color = None
-    legends=[]
+    legends = []
     for name, df_group in df.groupby(col_k):
         legends.append(name)
         if k_is_color:
-            color=name
+            color = name
         g.plot_joint(
-            colored_scatter(df_group[col_x],df_group[col_y],color),
+            colored_scatter(df_group[col_x], df_group[col_y], color),
         )
         sns.distplot(
             df_group[col_x].values,
@@ -254,7 +247,7 @@ def jointplot_grouped(col_x: str, col_y: str, col_k: str, df,
         sns.distplot(
             df_group[col_y].values,
             ax=g.ax_marg_y,
-            color=color,            
+            color=color,
             vertical=True
         )
     if add_global_hists:

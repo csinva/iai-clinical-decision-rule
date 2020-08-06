@@ -1,4 +1,3 @@
-import itertools
 from slurmpy import Slurm
 
 partition = 'low'
