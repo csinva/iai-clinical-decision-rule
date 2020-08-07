@@ -1,7 +1,7 @@
 from slurmpy import Slurm
 
 if __name__ == '__main__':
-    partition = 'high'
+    partition = 'low'
 
     # sweep different ways to initialize weights
     params_to_vary = range(400)

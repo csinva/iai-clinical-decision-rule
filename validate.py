@@ -118,7 +118,6 @@ def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
     ys_cv = np.concatenate([y for y in Y_train]).flatten()
     predictions_test1 = predictions_test1_list[idx_best]
     predictions_test2 = predictions_test2_list[idx_best]
-    scores['idx_best'] = idx_best
 
     # repeat for each fold
     for preds, ys, suffix1 in zip([predictions_cv, predictions_test1, predictions_test2],
@@ -135,4 +134,5 @@ def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
             s[k] = scores[k][0]
         else:
             s[k] = np.array(scores[k])
+    s['idx_best'] = idx_best
     return s

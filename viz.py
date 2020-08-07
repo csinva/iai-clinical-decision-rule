@@ -7,8 +7,18 @@ from matplotlib_venn import venn2
 from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
 
-import style
-from style import *
+import seaborn as sns
+
+cb2 = '#66ccff'
+cb = '#1f77b4'
+cr = '#cc0000'
+cp = '#cc3399'
+cy = '#d8b365'
+cg = '#5ab4ac'
+cm = sns.diverging_palette(10, 240, n=1000, as_cmap=True)
+cm_rev = sns.diverging_palette(240, 10, n=1000, as_cmap=True)
+cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
+
 
 
 def venn_overlap(df, col1: str, col2: str, val1=1, val2=1):

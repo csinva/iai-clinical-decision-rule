@@ -8,14 +8,14 @@ from data import outcome_def
 
 # params
 class p:
-    out_dir = f'results/aug6_combined_abd_tender'
+    out_dir = 'results/aug7_1'
     balancing = ['sample_weights']  # 'ros', 'smote', sample_weights
     balancing_ratio = [1, 10, 100, 500, 750, 1000]
     # options: brl, slim, grl, rulefit, logistic, dt, 'rf', 'mlp2', 'svm', 'gb'
     model_type = ['logistic', 'dt', 'grl', 'slim', 'brl']
     # , 'select_lasso', 'select_rf']: # select_lasso, select_rf, None
     feature_selection = ['select_stab_lasso', 'select_lasso', 'select_rf']  
-    feature_selection_nums = [5, 6, 7, 10, 100]
+    feature_selection_nums = [5, 6, 7, 10, 20]
     train_idxs = data.pecarn_train_idxs
     test_idxs1 = data.pecarn_test_idxs
     test_idxs2 = data.psrc_train_idxs + data.psrc_test_idxs
