@@ -56,6 +56,7 @@ def derived_feats(df):
         'unknown': 'unknown'
     }
     df['AbdTrauma_or_SeatBeltSign'] = ((df.AbdTrauma == 'yes') | (df.SeatBeltSign == 'yes')).map(binary)
+    df['AbdDistention_or_AbdomenPain'] = ((df.AbdDistention == 'AbdomenPain') | (df.SeatBeltSign == 'yes')).map(binary)
     df['Hypotension'] = (df['Age'] < 1 / 12) & (df['InitSysBPRange'] < 70) | \
                         (df['Age'] >= 1 / 12) & (df['Age'] < 5) & (df['InitSysBPRange'] < 80) | \
                         (df['Age'] >= 5) & (df['InitSysBPRange'] < 90)
@@ -71,7 +72,7 @@ def derived_feats(df):
     return df
 
 
-def select_final_feats(feat_names, collapse_abd_tender=True):
+def select_final_feats(feat_names, collapse_abd_tender=True, collapse_abd_distention=True):
     '''Return an interpretable set of the best features
     '''
     feat_names = [f for f in feat_names
@@ -90,6 +91,13 @@ def select_final_feats(feat_names, collapse_abd_tender=True):
     if collapse_abd_tender:
         feat_names = [f for f in feat_names
                       if not f in ['AbdTenderDegree_Mild', 'AbdTenderDegree_Moderate', 'AbdTenderDegree_Severe']]
+        
+    if collapse_abd_distention:
+        feat_names = [f for f in feat_names
+                      if not f in ['AbdomenPain_yes', 'AbdDistention_yes']]
+    else:
+        feat_names = [f for f in feat_names
+                      if not f in ['AbdDistention_or_AbdomenPain_yes']]
     return sorted(feat_names)
 
 

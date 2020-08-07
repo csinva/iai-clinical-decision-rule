@@ -4,7 +4,7 @@ if __name__ == '__main__':
     partition = 'low'
 
     # sweep different ways to initialize weights
-    params_to_vary = range(400)
+    params_to_vary = range(600)
 
     # run
     s = Slurm("iai classfy", {"partition": partition, "time": "3-0"})

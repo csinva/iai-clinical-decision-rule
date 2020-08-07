@@ -62,13 +62,20 @@ def balance(X, y, balancing='ros', balancing_ratio: float=1):
     X_r, Y_r = sampler.fit_resample(X, y)   
     return X_r, Y_r
 
-def get_model(model_type):
+def get_model(model_type, hyperparam=0):
     if model_type == 'rf':
         m = RandomForestClassifier(n_estimators=100)
     elif model_type == 'dt':
         m = DecisionTreeClassifier()
     elif model_type == 'logistic':
-        m = LogisticRegression(solver='lbfgs')
+        hyperparams = {
+            0: ('l2', 1.0),
+            1: ('l1', 1.0),
+            2: ('l2', 10),
+            3: ('l1', 10),
+        }
+        h = hyperparams[hyperparam]
+        m = LogisticRegression(penalty=h[0], C=h[1])
     elif model_type == 'svm':
         m = SVC(gamma='scale')
     elif model_type == 'mlp2':
@@ -168,7 +175,9 @@ def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
     return models, imps, preds_list, preds_test1_list, preds_test2_list, np.array(ys)
 
 
-def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_intervention',
+def train(df: pd.DataFrame, feat_names: list, 
+          model_type='rf', hyperparam=0,
+          outcome_def='iai_intervention',
           sample_weights=None, balancing='ros', balancing_ratio=1,
           out_name='results/classify/test.pkl', 
           train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7], feature_selection=None, feature_selection_num=3):
@@ -193,7 +202,7 @@ def train(df: pd.DataFrame, feat_names: list, model_type='rf', outcome_def='iai_
 #     print('shapes', X_train.shape[0], X_test1.shape[0], X_test2.shape[0])
     
     # get model
-    m = get_model(model_type)
+    m = get_model(model_type, hyperparam)
     
     # feature selection
     print('selecting features...')
