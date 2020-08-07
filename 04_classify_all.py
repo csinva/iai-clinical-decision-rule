@@ -6,35 +6,33 @@ import data
 import train
 from data import outcome_def
 
+# params
+class p:
+    out_dir = f'results/aug6_combined_abd_tender'
+    balancing = ['sample_weights']  # 'ros', 'smote', sample_weights
+    balancing_ratio = [1, 10, 100, 500, 750, 1000]
+    # options: brl, slim, grl, rulefit, logistic, dt, 'rf', 'mlp2', 'svm', 'gb'
+    model_type = ['logistic', 'dt', 'grl', 'slim', 'brl']
+    # , 'select_lasso', 'select_rf']: # select_lasso, select_rf, None
+    feature_selection = ['select_stab_lasso', 'select_lasso', 'select_rf']  
+    feature_selection_nums = [5, 6, 7, 10, 100]
+    train_idxs = data.pecarn_train_idxs
+    test_idxs1 = data.pecarn_test_idxs
+    test_idxs2 = data.psrc_train_idxs + data.psrc_test_idxs
+    collapse_abd_tender = True
+
 if __name__ == '__main__':
     job_num = None
     if len(sys.argv) > 1:
         job_num = int(sys.argv[1])
+    print('possible combos', len(p.balancing) * len(p.balancing_ratio) * len(p.model_type) * len(p.feature_selection * len(p.feature_selection_nums)))
 
     # load data
     df_pecarn, df_psrc, common_feats, filtered_feats_pecarn, filtered_feats_psrc = data.load_it_all(dummy=True)
     df = df_pecarn[common_feats].append(df_psrc[common_feats])
-    processed_feats = data.select_final_feats(common_feats)
+    processed_feats = data.select_final_feats(common_feats, p.collapse_abd_tender)
     print(len(processed_feats), sorted(processed_feats))
 
-
-    # params
-    class p:
-        out_dir = f'results/aug6_6'
-        balancing = ['sample_weights']  # 'ros', 'smote', sample_weights
-        balancing_ratio = [1, 100, 1000, 750, 500]
-        # options: brl, slim, grl, rulefit, logistic, dt, 'rf', 'mlp2', 'svm', 'gb'
-        model_type = ['logistic', 'dt', 'slim', 'grl',
-                      'brl']  # ['logistic', 'dt'] # ['grl', 'slim', 'brl', 'rulefit'] #, 'rf', 'mlp2', 'svm']): #
-        feature_selection = ['select_stab_lasso', 'select_lasso',
-                             'select_rf']  # , 'select_lasso', 'select_rf']: # select_lasso, select_rf, None
-        feature_selection_nums = [5, 6, 7, 10, len(processed_feats)]
-        train_idxs = data.pecarn_train_idxs
-        test_idxs1 = data.pecarn_test_idxs
-        test_idxs2 = data.psrc_train_idxs + data.psrc_test_idxs
-
-    print('possible combos', len(p.balancing) * len(p.balancing_ratio) * len(p.model_type) * len(
-        p.feature_selection * len(p.feature_selection_nums)))
 
     # predict
     job_counter = 0

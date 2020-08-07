@@ -71,7 +71,7 @@ def derived_feats(df):
     return df
 
 
-def select_final_feats(feat_names):
+def select_final_feats(feat_names, collapse_abd_tender=True):
     '''Return an interpretable set of the best features
     '''
     feat_names = [f for f in feat_names
@@ -87,6 +87,9 @@ def select_final_feats(feat_names):
                   and not f in ['AbdTrauma_yes', 'SeatBeltSign_yes']
                   and not f in ['GCSScore']
                   ]
+    if collapse_abd_tender:
+        feat_names = [f for f in feat_names
+                      if not f in ['AbdTenderDegree_Mild', 'AbdTenderDegree_Moderate', 'AbdTenderDegree_Severe']]
     return sorted(feat_names)
 
 
