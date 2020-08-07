@@ -13,6 +13,10 @@ def specificity_score(y_true, y_pred):
     tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
     return tn / (tn + fp)
 
+def sensitivity_score(y_true, y_pred):
+    tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
+    return tp / (tp + fn)
+
 
 def sensitivity_specificity_curve(y_test, preds_proba, plot=True, thresholds=None):
     '''
