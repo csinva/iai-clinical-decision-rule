@@ -62,6 +62,7 @@ def derived_feats(df):
                         (df['Age'] >= 5) & (df['InitSysBPRange'] < 90)
     df['Hypotension'] = df['Hypotension'].map(binary)
     df['GCSScore_Full'] = (df['GCSScore'] == 15).map(binary)
+    df['Age<2'] = (df['Age'] < 2).map(binary)
     df['CostalTender'] = ((df.LtCostalTender == 1) | (df.RtCostalTender == 1)).map(binary)  # | (df.DecrBreathSound)
 
     # Combine hispanic as part of race
@@ -72,7 +73,14 @@ def derived_feats(df):
     return df
 
 
-def select_final_feats(feat_names, collapse_abd_tender=True, collapse_abd_distention=True):
+def remove_from_list(l, removes):
+    '''deletes all elements in removes from the list l and returns
+    '''
+    return [x for x in l
+            if not x in removes]
+
+def select_final_feats(feat_names, collapse_abd_tender=True,
+                       collapse_abd_distention=True, collapse_age=True):
     '''Return an interpretable set of the best features
     '''
     feat_names = [f for f in feat_names
@@ -81,23 +89,32 @@ def select_final_feats(feat_names, collapse_abd_tender=True, collapse_abd_disten
                   and not 'Race' in f
                   #                   and '_or_' not in f
                   and not 'other' in f.lower()
-                  and not 'RtCost' in f
-                  and not 'LtCost' in f
                   and not 'unknown' in f.lower()
                   and not f == 'AbdTenderDegree_unknown'
-                  and not f in ['AbdTrauma_yes', 'SeatBeltSign_yes']
-                  and not f in ['GCSScore']
                   ]
+    feat_names = remove_from_list(feat_names, ['RtCost', 'LtCost'])
+    feat_names = remove_from_list(feat_names, ['AbdTrauma_yes', 'SeatBeltSign_yes'])
+    feat_names = remove_from_list(feat_names, ['GCSScore'])
+    feat_names = remove_from_list(feat_names, ['InitHeartRate', 'InitSysBPRange']) # remove these so we can only have binary vars
+    
+    
+    # make abd tender into a None or not-None variable
     if collapse_abd_tender:
-        feat_names = [f for f in feat_names
-                      if not f in ['AbdTenderDegree_Mild', 'AbdTenderDegree_Moderate', 'AbdTenderDegree_Severe']]
+        feat_names = remove_from_list(feat_names, ['AbdTenderDegree_Mild', 'AbdTenderDegree_Moderate', 'AbdTenderDegree_Severe'])
         
+    # whether to combine AbdomenPain and AbdDistention
     if collapse_abd_distention:
-        feat_names = [f for f in feat_names
-                      if not f in ['AbdomenPain_yes', 'AbdDistention_yes']]
+        feat_names = remove_from_list(feat_names, ['AbdomenPain_yes', 'AbdDistention_yes'])
     else:
-        feat_names = [f for f in feat_names
-                      if not f in ['AbdDistention_or_AbdomenPain_yes']]
+        feat_names = remove_from_list(feat_names, ['AbdDistention_or_AbdomenPain_yes'])
+    
+    if collapse_age:
+        feat_names = remove_from_list(feat_names, ['Age'])
+    else:
+        feat_names = remove_from_list(feat_names, ['Age<2_yes'])
+        
+    
+        
     return sorted(feat_names)
 
 
