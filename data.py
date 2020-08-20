@@ -87,10 +87,8 @@ def select_final_feats(feat_names, collapse_abd_tender=True,
                   if not f in meta
                   and not f.endswith('_no')
                   and not 'Race' in f
-                  #                   and '_or_' not in f
                   and not 'other' in f.lower()
                   and not 'unknown' in f.lower()
-                  and not f == 'AbdTenderDegree_unknown'
                   ]
     feat_names = remove_from_list(feat_names, ['RtCost', 'LtCost'])
     feat_names = remove_from_list(feat_names, ['AbdTrauma_yes', 'SeatBeltSign_yes'])

@@ -19,8 +19,7 @@ def sensitivity_score(y_true, y_pred):
 
 
 def sensitivity_specificity_curve(y_test, preds_proba, plot=True, thresholds=None):
-    '''
-    preds_proba should be 1d
+    '''preds_proba should be 1d
     '''
     if thresholds is None:
         thresholds = sorted(np.unique(preds_proba))
