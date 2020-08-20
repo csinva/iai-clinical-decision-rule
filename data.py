@@ -90,7 +90,7 @@ def select_final_feats(feat_names, collapse_abd_tender=True,
                   and not 'other' in f.lower()
                   and not 'unknown' in f.lower()
                   ]
-    feat_names = remove_from_list(feat_names, ['RtCost', 'LtCost'])
+    feat_names = remove_from_list(feat_names, ['LtCostalTender', 'RtCostalTender'])
     feat_names = remove_from_list(feat_names, ['AbdTrauma_yes', 'SeatBeltSign_yes'])
     feat_names = remove_from_list(feat_names, ['GCSScore'])
     feat_names = remove_from_list(feat_names, ['InitHeartRate', 'InitSysBPRange']) # remove these so we can only have binary vars

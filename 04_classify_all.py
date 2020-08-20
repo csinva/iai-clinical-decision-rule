@@ -8,11 +8,11 @@ from data import outcome_def
 
 # params
 class p:
-    out_dir = 'results/aug7_logistics'
+    out_dir = 'results/aug19_full'
     balancing = ['sample_weights']  # 'ros', 'smote', sample_weights
     balancing_ratio = [1, 10, 100, 500, 750, 1000]
     # options: brl, slim, grl, rulefit, logistic, dt, 'rf', 'mlp2', 'svm', 'gb'
-    model_type = ['logistic'] #, 'dt', 'grl', 'slim', 'brl']
+    model_type = ['logistic', 'dt', 'grl', 'slim', 'brl'] #, 'dt', 'grl', 'slim', 'brl']
     # , 'select_lasso', 'select_rf']: # select_lasso, select_rf, None
     feature_selection = ['select_stab_lasso', 'select_lasso', 'select_rf']  
     feature_selection_nums = [5, 6, 7, 10, 20]
