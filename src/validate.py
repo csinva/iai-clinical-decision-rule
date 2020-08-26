@@ -18,7 +18,7 @@ def sensitivity_score(y_true, y_pred):
     return tp / (tp + fn)
 
 
-def sensitivity_specificity_curve(y_test, preds_proba, plot=True, thresholds=None):
+def sensitivity_specificity_curve(y_test, preds_proba, plot=False, thresholds=None):
     '''preds_proba should be 1d
     '''
     if thresholds is None:

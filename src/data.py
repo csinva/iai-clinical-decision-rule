@@ -1,3 +1,6 @@
+# directories
+PROCESSED_DIR = '../data/processed'
+
 import numpy as np
 import pandas as pd
 
@@ -14,6 +17,7 @@ feats_numerical = ['InitSysBPRange', 'InitHeartRate', 'GCSScore', 'Age']
 feats_categorical = ['AbdTenderDegree', 'Race', 'MOI']
 meta = ['iai_intervention', 'cv_fold', 'dset']
 outcome_def = 'iai_intervention'  # output
+
 
 
 def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):

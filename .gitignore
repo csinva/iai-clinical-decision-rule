@@ -1,6 +1,6 @@
 **.ipynb_checkpoints
-processed/*.csv
-processed/*.pkl
+data/processed/*.csv
+data/processed/*.pkl
 **cache*
 **.zip
 **.npy
@@ -14,7 +14,7 @@ env
 **.idea
 *.pth
 **Icon*
-data_psrc/*.csv
+data/psrc/*.csv
 
 # Setuptools distribution folder.
 /dist/

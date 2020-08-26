@@ -8,10 +8,11 @@ from tqdm import tqdm
 import data
 
 NUM_PATIENTS = 12044
-DATA_DIR = 'data_pecarn/Datasets'
+DATA_DIR = '../data/pecarn/Datasets'
 
 
-def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='processed/df_pecarn.pkl', dummy=False,
+def get_data(use_processed=False, frac_missing_allowed=0.05,
+             processed_file=oj(data.PROCESSED_DIR, 'df_pecarn.pkl'), dummy=False,
              impute_feats=True):
     '''Run all the preprocessing
     
@@ -55,7 +56,7 @@ def get_data(use_processed=False, frac_missing_allowed=0.05, processed_file='pro
         return df
 
 
-def get_features(processed_file='processed/df_pecarn_features.pkl'):
+def get_features(processed_file=oj(data.PROCESSED_DIR, 'df_pecarn_features.pkl')):
     '''Read all features into df
     
     Returns
