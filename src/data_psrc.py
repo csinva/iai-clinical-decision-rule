@@ -1,15 +1,15 @@
 import os
 import sys
 from os.path import join as oj
-
+from config import PROCESSED_DIR, PSRC_DIR
 sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
 import numpy as np
 import pandas as pd
 import data
 
-DATA_DIR = '../data/psrc'
 
-def get_data(use_processed=False, processed_file=oj(data.PROCESSED_DIR, 'df_psrc.pkl'), dummy=False, impute_feats=True):
+
+def get_data(use_processed=False, processed_file=oj(PROCESSED_DIR, 'df_psrc.pkl'), dummy=False, impute_feats=True):
     '''Run all the preprocessing
     
     Params
@@ -22,7 +22,7 @@ def get_data(use_processed=False, processed_file=oj(data.PROCESSED_DIR, 'df_psrc
     if use_processed and os.path.exists(processed_file):
         return pd.read_pickle(processed_file)
     else:
-        data_file = oj(DATA_DIR, 'psrc_data_processed.csv')
+        data_file = oj(PSRC_DIR, 'psrc_data_processed.csv')
         df = pd.read_csv(data_file)
 
         # fix col names

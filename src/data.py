@@ -1,5 +1,4 @@
 # directories
-PROCESSED_DIR = '../data/processed'
 
 import numpy as np
 import pandas as pd
@@ -124,8 +123,8 @@ fewest_feats = [
     #     'AbdDistention_yes',
     'AbdTenderDegree_None',
     'AbdTrauma_or_SeatBeltSign_yes',
-    'AbdomenPain_yes',
-    'Age',
+#     'AbdomenPain_yes',
+#     'Age',
     'CostalTender_yes',
     'DecrBreathSound_yes',
     'GCSScore_Full_yes',

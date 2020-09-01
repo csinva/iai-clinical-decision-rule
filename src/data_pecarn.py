@@ -6,13 +6,13 @@ import pandas as pd
 from tqdm import tqdm
 
 import data
+from config import PROCESSED_DIR, PECARN_DIR
 
 NUM_PATIENTS = 12044
-DATA_DIR = '../data/pecarn/Datasets'
 
 
 def get_data(use_processed=False, frac_missing_allowed=0.05,
-             processed_file=oj(data.PROCESSED_DIR, 'df_pecarn.pkl'), dummy=False,
+             processed_file=oj(PROCESSED_DIR, 'df_pecarn.pkl'), dummy=False,
              impute_feats=True):
     '''Run all the preprocessing
     
@@ -56,7 +56,7 @@ def get_data(use_processed=False, frac_missing_allowed=0.05,
         return df
 
 
-def get_features(processed_file=oj(data.PROCESSED_DIR, 'df_pecarn_features.pkl')):
+def get_features(processed_file=oj(PROCESSED_DIR, 'df_pecarn_features.pkl')):
     '''Read all features into df
     
     Returns
@@ -68,7 +68,7 @@ def get_features(processed_file=oj(data.PROCESSED_DIR, 'df_pecarn_features.pkl')
         return pd.read_pickle(processed_file)
 
     # all the fnames to be loaded and searched over
-    fnames = sorted([fname for fname in os.listdir(DATA_DIR)
+    fnames = sorted([fname for fname in os.listdir(PECARN_DIR)
                      if 'csv' in fname
                      and not 'formats' in fname
                      and not 'form6' in fname])  # remove outcome
@@ -79,7 +79,7 @@ def get_features(processed_file=oj(data.PROCESSED_DIR, 'df_pecarn_features.pkl')
     r = {}
     print('read all the csvs...')
     for fname in tqdm(fnames):
-        df = pd.read_csv(oj(DATA_DIR, fname), engine='python')
+        df = pd.read_csv(oj(PECARN_DIR, fname), engine='python')
         df.rename(columns={'SubjectID': 'id'}, inplace=True)
         df.rename(columns={'subjectid': 'id'}, inplace=True)
         assert ('id' in df.keys())
@@ -129,10 +129,10 @@ def get_outcomes():
         iai (has 761 positives)
         iai_intervention (has 203 positives)
     """
-    form4abdangio = pd.read_csv(oj(DATA_DIR, 'form4bother_abdangio.csv')).rename(columns={'subjectid': 'id'})
-    # form6a = pd.read_csv(oj(DATA_DIR, 'form6a.csv')).rename(columns={'subjectid': 'id'})
-    form6b = pd.read_csv(oj(DATA_DIR, 'form6b.csv')).rename(columns={'SubjectID': 'id'})
-    form6c = pd.read_csv(oj(DATA_DIR, 'form6c.csv')).rename(columns={'subjectid': 'id'})
+    form4abdangio = pd.read_csv(oj(PECARN_DIR, 'form4bother_abdangio.csv')).rename(columns={'subjectid': 'id'})
+    # form6a = pd.read_csv(oj(PECARN_DIR, 'form6a.csv')).rename(columns={'subjectid': 'id'})
+    form6b = pd.read_csv(oj(PECARN_DIR, 'form6b.csv')).rename(columns={'SubjectID': 'id'})
+    form6c = pd.read_csv(oj(PECARN_DIR, 'form6c.csv')).rename(columns={'subjectid': 'id'})
 
     # (6b) Intra-abdominal injury diagnosed in the ED/during hospitalization by any diagnostic method
     # 1 is yes, 761 have intra-abdominal injury

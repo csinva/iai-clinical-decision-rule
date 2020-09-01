@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>src.train API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.train</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import os
+import sys
+from os.path import join as oj
+
+sys.path.insert(1, oj(sys.path[0], &#39;..&#39;))  # insert parent path
+import numpy as np
+from copy import deepcopy
+import pickle as pkl
+from sklearn.linear_model import LogisticRegression, Lasso
+from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.feature_selection import SelectFromModel
+from sklearn.inspection import permutation_importance
+import os.path
+from imodels import RuleListClassifier, RuleFit, SLIM, GreedyRuleList
+from imblearn.over_sampling import RandomOverSampler, SMOTE
+from sklearn.model_selection import KFold
+import pandas as pd
+from stability_selection import StabilitySelection
+import validate
+import traceback
+
+def get_feature_importance(model, model_type, X_val, Y_val):
+    &#39;&#39;&#39;Get feature importance based on model
+    &#39;&#39;&#39;
+    
+    if model_type in [&#39;rf&#39;, &#39;dt&#39;]:
+        imps = model.feature_importances_
+    elif model_type == &#39;logistic&#39;:
+        imps = model.coef_
+    else:
+        perm = permutation_importance(model, X_val, Y_val, scoring=&#39;roc_auc&#39;,
+                                      random_state=0)
+        imps = perm.importances_mean
+    return imps.squeeze()
+
+def balance(X, y, balancing=&#39;ros&#39;, balancing_ratio: float=1):
+    &#39;&#39;&#39;Balance classes in y using strategy specified by balancing
+    
+    Params
+    ------
+    balancing_ratio: float
+        num positive / num negative desired, negative class is left the same
+    &#39;&#39;&#39;
+    if balancing == &#39;none&#39;:
+        return X, y
+    
+    class0 = np.sum(y==0)
+    class0_new = class0
+    class1_new = int(class0 * balancing_ratio)
+    desired_ratio = {0: class0_new, 1: class1_new}
+    
+    if balancing == &#39;ros&#39;:
+        sampler = RandomOverSampler(desired_ratio, random_state=42)
+    elif balancing == &#39;smote&#39;:
+        sampler = SMOTE(desired_ratio, random_state=42)
+    else:
+        sampler = RandomOverSampler(desired_ratio, random_state=42)
+        
+    X_r, Y_r = sampler.fit_resample(X, y)   
+    return X_r, Y_r
+
+def get_model(model_type, hyperparam=0):
+    if model_type == &#39;rf&#39;:
+        m = RandomForestClassifier(n_estimators=100)
+    elif model_type == &#39;dt&#39;:
+        m = DecisionTreeClassifier()
+    elif model_type == &#39;logistic&#39;:
+        hyperparams = {
+            0: (&#39;l2&#39;, 1.0),
+            1: (&#39;l1&#39;, 1.0),
+            2: (&#39;l2&#39;, 10),
+            3: (&#39;l1&#39;, 10),
+        }
+        h = hyperparams[hyperparam]
+        m = LogisticRegression(penalty=h[0], C=h[1])
+    elif model_type == &#39;svm&#39;:
+        m = SVC(gamma=&#39;scale&#39;)
+    elif model_type == &#39;mlp2&#39;:
+        m = MLPClassifier()
+    elif model_type == &#39;gb&#39;:
+        m = GradientBoostingClassifier()
+    elif model_type == &#39;brl&#39;:
+        m = RuleListClassifier()
+    elif model_type == &#39;slim&#39;:
+        m = SLIM()
+    elif model_type == &#39;grl&#39;:
+        m = GreedyRuleList()
+    elif model_type == &#39;rulefit&#39;:
+        m = RuleFit()
+    return m
+
+    
+def select_features(feature_selection, feature_selection_num, X_train, X_test1, X_test2, y_train):
+    &#39;&#39;&#39;Select features and return the selected ones
+    &#39;&#39;&#39;
+    # don&#39;t perform any features selection
+    if feature_selection is None:
+        return X_train, X_test1, X_test2, np.ones(len(feat_names)).astype(np.bool)
+
+
+    # perform some feature selection
+    if &#39;stab&#39; in feature_selection:
+        if feature_selection == &#39;select_stab_lasso&#39;:
+            feature_selector_model = LogisticRegression(penalty=&#39;l1&#39;, solver=&#39;liblinear&#39;)
+        feature_selector = StabilitySelection(base_estimator=feature_selector_model,
+                                              lambda_name=&#39;C&#39;,
+                                              lambda_grid=np.logspace(-5, -1, 20),
+                                              max_features=feature_selection_num)
+    else:
+        if feature_selection == &#39;select_lasso&#39;:
+            feature_selector_model = Lasso()
+        elif feature_selection == &#39;select_rf&#39;:
+            feature_selector_model = RandomForestClassifier()
+        feature_selector = SelectFromModel(feature_selector_model, threshold=-np.inf,
+                                           max_features=feature_selection_num)
+    feature_selector.fit(X_train, y_train)
+    X_train = feature_selector.transform(X_train)
+    X_test1 = feature_selector.transform(X_test1)
+    X_test2 = feature_selector.transform(X_test2)
+    support = np.array(feature_selector.get_support())
+
+    return X_train, X_test1, X_test2, support
+
+def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
+                       m, sample_weights, balancing, balancing_ratio, train_idxs, model_type):
+    &#39;&#39;&#39;loop over folds
+    Returns
+    -------
+    predictions
+        predictions on test should be based on the model which has best performance on individual fold
+    fitted models
+    importances
+    &#39;&#39;&#39;
+
+    models = []
+    imps = []
+    preds_list = []
+    preds_test1_list = []    
+    preds_test2_list = []    
+    ys = []
+    splits = KFold(n_splits=len(train_idxs)).split(train_idxs)
+    for cv_idx, cv_val_idx in splits:
+
+        # get sample indices
+        idxs_cv = cv_folds.isin(cv_idx + 1)
+        idxs_val_cv = cv_folds.isin(cv_val_idx + 1)
+        X_train_cv, Y_train_cv = X[idxs_cv], y[idxs_cv]
+        X_val_cv, Y_val_cv = X[idxs_val_cv], y[idxs_val_cv]
+
+        # fit with appropriate weighting
+        balanced = False
+        if balancing == &#39;sample_weights&#39;:
+            try:
+                m.fit(X_train_cv, Y_train_cv, sample_weight=sample_weights[idxs_cv])
+                balanced = True
+            except:
+                print(&#39;sample weights failed!&#39;, model_type)
+                traceback.print_exc()
+                balanced = False
+        if not balanced: # balancing failed or was not possible
+            X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
+            m.fit(X_train_r_cv, Y_train_r_cv)
+        
+        # append lists
+        preds_list.append(m.predict_proba(X_val_cv)[:, 1])
+        preds_test1_list.append(m.predict_proba(X_test1)[:, 1])
+        preds_test2_list.append(m.predict_proba(X_test2)[:, 1])                    
+        models.append(deepcopy(m))
+        imps.append(get_feature_importance(m, model_type, X_val_cv, Y_val_cv))
+        ys.append(Y_val_cv)
+        
+    return models, imps, preds_list, preds_test1_list, preds_test2_list, np.array(ys)
+
+
+def train(df: pd.DataFrame, feat_names: list, 
+          model_type=&#39;rf&#39;, hyperparam=0,
+          outcome_def=&#39;iai_intervention&#39;,
+          sample_weights=None, balancing=&#39;ros&#39;, balancing_ratio=1,
+          out_name=&#39;results/classify/test.pkl&#39;, 
+          train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7], feature_selection=None, feature_selection_num=3):
+    &#39;&#39;&#39;Balance classes in y using strategy specified by balancing
+        if balancing is sample_weights, then ignore balancing_ratio
+    &#39;&#39;&#39;
+    # print(&#39;training&#39;, out_name)
+    np.random.seed(42)
+    
+    # normalize the data
+    X = df[feat_names]
+    X = (X - X.mean()) / X.std()
+    y = df[outcome_def].values
+
+    # split data based on cv_fold
+    idxs_train = df.cv_fold.isin(train_idxs)
+    X_train, y_train = X[idxs_train], y[idxs_train]
+    idxs_test1 = df.cv_fold.isin(test_idxs1)
+    X_test1, Y_test1 = X[idxs_test1], y[idxs_test1]
+    idxs_test2 = df.cv_fold.isin(test_idxs2)
+    X_test2, Y_test2 = X[idxs_test2], y[idxs_test2]
+#     print(&#39;shapes&#39;, X_train.shape[0], X_test1.shape[0], X_test2.shape[0])
+    
+    # get model
+    m = get_model(model_type, hyperparam)
+    
+    # feature selection
+    print(&#39;selecting features...&#39;)
+    X_train, X_test1, X_test2, support = \
+        select_features(feature_selection, feature_selection_num, X_train, X_test1, X_test2, y_train)
+#     print(&#39;shapes&#39;, X_train.shape[0], X_test1.shape[0], X_test2.shape[0])
+    
+    
+    # prediction
+    print(&#39;fit + predict...&#39;)
+    models, imps, predictions_list, predictions_test1_list, predictions_test2_list, y_train = \
+        predict_over_folds(df.cv_fold[idxs_train], X_train, y_train,
+                           X_test1, X_test2, m, sample_weights[idxs_train],
+                           balancing, balancing_ratio, train_idxs, model_type)
+#     print(&#39;prediction shapes&#39;, len(predictions_list), len(predictions_test1_list), len(predictions_test2_list), y_train.size)
+    
+    # scoring
+    # print(&#39;scoring...&#39;)
+    scores = validate.get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
+                                 y_train, Y_test1, Y_test2)
+    
+    
+    # pick best model
+    # print(&#39;best model scoring...&#39;)
+#     print(list(scores.keys()))
+    idx_best = scores[&#39;idx_best&#39;]
+    
+    # save results
+    # print(&#39;preparing results...&#39;)
+#     print(scores)
+    os.makedirs(os.path.dirname(out_name), exist_ok=True)
+    results = {
+        # params
+        &#39;model_type&#39;: model_type,
+        &#39;balancing&#39;: balancing,
+        &#39;feat_names_selected&#39;: np.array(feat_names)[support],               
+        &#39;balacing_ratio&#39;: balancing_ratio,
+
+        # models / importances
+        &#39;idx_best&#39;: idx_best,
+        &#39;model_best&#39;: models[idx_best],
+        &#39;imps_best&#39;: imps[idx_best],
+#         &#39;models&#39;: models, # save models for all folds
+#         &#39;imps&#39;: imps,     # save importances for all folds
+        
+        # metrics
+        &#39;metrics&#39;: list(validate.scorers.keys()), 
+        **scores,
+    }
+#     print(&#39;saving...&#39;)
+    pkl.dump(results, open(out_name, &#39;wb&#39;))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.train.balance"><code class="name flex">
+<span>def <span class="ident">balance</span></span>(<span>X, y, balancing='ros', balancing_ratio=1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Balance classes in y using strategy specified by balancing</p>
+<h2 id="params">Params</h2>
+<dl>
+<dt><strong><code>balancing_ratio</code></strong> :&ensp;<code>float</code></dt>
+<dd>num positive / num negative desired, negative class is left the same</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def balance(X, y, balancing=&#39;ros&#39;, balancing_ratio: float=1):
+    &#39;&#39;&#39;Balance classes in y using strategy specified by balancing
+    
+    Params
+    ------
+    balancing_ratio: float
+        num positive / num negative desired, negative class is left the same
+    &#39;&#39;&#39;
+    if balancing == &#39;none&#39;:
+        return X, y
+    
+    class0 = np.sum(y==0)
+    class0_new = class0
+    class1_new = int(class0 * balancing_ratio)
+    desired_ratio = {0: class0_new, 1: class1_new}
+    
+    if balancing == &#39;ros&#39;:
+        sampler = RandomOverSampler(desired_ratio, random_state=42)
+    elif balancing == &#39;smote&#39;:
+        sampler = SMOTE(desired_ratio, random_state=42)
+    else:
+        sampler = RandomOverSampler(desired_ratio, random_state=42)
+        
+    X_r, Y_r = sampler.fit_resample(X, y)   
+    return X_r, Y_r</code></pre>
+</details>
+</dd>
+<dt id="src.train.get_feature_importance"><code class="name flex">
+<span>def <span class="ident">get_feature_importance</span></span>(<span>model, model_type, X_val, Y_val)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get feature importance based on model</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_feature_importance(model, model_type, X_val, Y_val):
+    &#39;&#39;&#39;Get feature importance based on model
+    &#39;&#39;&#39;
+    
+    if model_type in [&#39;rf&#39;, &#39;dt&#39;]:
+        imps = model.feature_importances_
+    elif model_type == &#39;logistic&#39;:
+        imps = model.coef_
+    else:
+        perm = permutation_importance(model, X_val, Y_val, scoring=&#39;roc_auc&#39;,
+                                      random_state=0)
+        imps = perm.importances_mean
+    return imps.squeeze()</code></pre>
+</details>
+</dd>
+<dt id="src.train.get_model"><code class="name flex">
+<span>def <span class="ident">get_model</span></span>(<span>model_type, hyperparam=0)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_model(model_type, hyperparam=0):
+    if model_type == &#39;rf&#39;:
+        m = RandomForestClassifier(n_estimators=100)
+    elif model_type == &#39;dt&#39;:
+        m = DecisionTreeClassifier()
+    elif model_type == &#39;logistic&#39;:
+        hyperparams = {
+            0: (&#39;l2&#39;, 1.0),
+            1: (&#39;l1&#39;, 1.0),
+            2: (&#39;l2&#39;, 10),
+            3: (&#39;l1&#39;, 10),
+        }
+        h = hyperparams[hyperparam]
+        m = LogisticRegression(penalty=h[0], C=h[1])
+    elif model_type == &#39;svm&#39;:
+        m = SVC(gamma=&#39;scale&#39;)
+    elif model_type == &#39;mlp2&#39;:
+        m = MLPClassifier()
+    elif model_type == &#39;gb&#39;:
+        m = GradientBoostingClassifier()
+    elif model_type == &#39;brl&#39;:
+        m = RuleListClassifier()
+    elif model_type == &#39;slim&#39;:
+        m = SLIM()
+    elif model_type == &#39;grl&#39;:
+        m = GreedyRuleList()
+    elif model_type == &#39;rulefit&#39;:
+        m = RuleFit()
+    return m</code></pre>
+</details>
+</dd>
+<dt id="src.train.predict_over_folds"><code class="name flex">
+<span>def <span class="ident">predict_over_folds</span></span>(<span>cv_folds, X, y, X_test1, X_test2, m, sample_weights, balancing, balancing_ratio, train_idxs, model_type)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>loop over folds
+Returns</p>
+<hr>
+<dl>
+<dt><code>predictions</code></dt>
+<dd>predictions on test should be based on the model which has best performance on individual fold</dd>
+<dt><code>fitted</code> <code>models</code></dt>
+<dd>&nbsp;</dd>
+<dt><code>importances</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
+                       m, sample_weights, balancing, balancing_ratio, train_idxs, model_type):
+    &#39;&#39;&#39;loop over folds
+    Returns
+    -------
+    predictions
+        predictions on test should be based on the model which has best performance on individual fold
+    fitted models
+    importances
+    &#39;&#39;&#39;
+
+    models = []
+    imps = []
+    preds_list = []
+    preds_test1_list = []    
+    preds_test2_list = []    
+    ys = []
+    splits = KFold(n_splits=len(train_idxs)).split(train_idxs)
+    for cv_idx, cv_val_idx in splits:
+
+        # get sample indices
+        idxs_cv = cv_folds.isin(cv_idx + 1)
+        idxs_val_cv = cv_folds.isin(cv_val_idx + 1)
+        X_train_cv, Y_train_cv = X[idxs_cv], y[idxs_cv]
+        X_val_cv, Y_val_cv = X[idxs_val_cv], y[idxs_val_cv]
+
+        # fit with appropriate weighting
+        balanced = False
+        if balancing == &#39;sample_weights&#39;:
+            try:
+                m.fit(X_train_cv, Y_train_cv, sample_weight=sample_weights[idxs_cv])
+                balanced = True
+            except:
+                print(&#39;sample weights failed!&#39;, model_type)
+                traceback.print_exc()
+                balanced = False
+        if not balanced: # balancing failed or was not possible
+            X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
+            m.fit(X_train_r_cv, Y_train_r_cv)
+        
+        # append lists
+        preds_list.append(m.predict_proba(X_val_cv)[:, 1])
+        preds_test1_list.append(m.predict_proba(X_test1)[:, 1])
+        preds_test2_list.append(m.predict_proba(X_test2)[:, 1])                    
+        models.append(deepcopy(m))
+        imps.append(get_feature_importance(m, model_type, X_val_cv, Y_val_cv))
+        ys.append(Y_val_cv)
+        
+    return models, imps, preds_list, preds_test1_list, preds_test2_list, np.array(ys)</code></pre>
+</details>
+</dd>
+<dt id="src.train.select_features"><code class="name flex">
+<span>def <span class="ident">select_features</span></span>(<span>feature_selection, feature_selection_num, X_train, X_test1, X_test2, y_train)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Select features and return the selected ones</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def select_features(feature_selection, feature_selection_num, X_train, X_test1, X_test2, y_train):
+    &#39;&#39;&#39;Select features and return the selected ones
+    &#39;&#39;&#39;
+    # don&#39;t perform any features selection
+    if feature_selection is None:
+        return X_train, X_test1, X_test2, np.ones(len(feat_names)).astype(np.bool)
+
+
+    # perform some feature selection
+    if &#39;stab&#39; in feature_selection:
+        if feature_selection == &#39;select_stab_lasso&#39;:
+            feature_selector_model = LogisticRegression(penalty=&#39;l1&#39;, solver=&#39;liblinear&#39;)
+        feature_selector = StabilitySelection(base_estimator=feature_selector_model,
+                                              lambda_name=&#39;C&#39;,
+                                              lambda_grid=np.logspace(-5, -1, 20),
+                                              max_features=feature_selection_num)
+    else:
+        if feature_selection == &#39;select_lasso&#39;:
+            feature_selector_model = Lasso()
+        elif feature_selection == &#39;select_rf&#39;:
+            feature_selector_model = RandomForestClassifier()
+        feature_selector = SelectFromModel(feature_selector_model, threshold=-np.inf,
+                                           max_features=feature_selection_num)
+    feature_selector.fit(X_train, y_train)
+    X_train = feature_selector.transform(X_train)
+    X_test1 = feature_selector.transform(X_test1)
+    X_test2 = feature_selector.transform(X_test2)
+    support = np.array(feature_selector.get_support())
+
+    return X_train, X_test1, X_test2, support</code></pre>
+</details>
+</dd>
+<dt id="src.train.train"><code class="name flex">
+<span>def <span class="ident">train</span></span>(<span>df, feat_names, model_type='rf', hyperparam=0, outcome_def='iai_intervention', sample_weights=None, balancing='ros', balancing_ratio=1, out_name='results/classify/test.pkl', train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7], feature_selection=None, feature_selection_num=3)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Balance classes in y using strategy specified by balancing
+if balancing is sample_weights, then ignore balancing_ratio</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def train(df: pd.DataFrame, feat_names: list, 
+          model_type=&#39;rf&#39;, hyperparam=0,
+          outcome_def=&#39;iai_intervention&#39;,
+          sample_weights=None, balancing=&#39;ros&#39;, balancing_ratio=1,
+          out_name=&#39;results/classify/test.pkl&#39;, 
+          train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7], feature_selection=None, feature_selection_num=3):
+    &#39;&#39;&#39;Balance classes in y using strategy specified by balancing
+        if balancing is sample_weights, then ignore balancing_ratio
+    &#39;&#39;&#39;
+    # print(&#39;training&#39;, out_name)
+    np.random.seed(42)
+    
+    # normalize the data
+    X = df[feat_names]
+    X = (X - X.mean()) / X.std()
+    y = df[outcome_def].values
+
+    # split data based on cv_fold
+    idxs_train = df.cv_fold.isin(train_idxs)
+    X_train, y_train = X[idxs_train], y[idxs_train]
+    idxs_test1 = df.cv_fold.isin(test_idxs1)
+    X_test1, Y_test1 = X[idxs_test1], y[idxs_test1]
+    idxs_test2 = df.cv_fold.isin(test_idxs2)
+    X_test2, Y_test2 = X[idxs_test2], y[idxs_test2]
+#     print(&#39;shapes&#39;, X_train.shape[0], X_test1.shape[0], X_test2.shape[0])
+    
+    # get model
+    m = get_model(model_type, hyperparam)
+    
+    # feature selection
+    print(&#39;selecting features...&#39;)
+    X_train, X_test1, X_test2, support = \
+        select_features(feature_selection, feature_selection_num, X_train, X_test1, X_test2, y_train)
+#     print(&#39;shapes&#39;, X_train.shape[0], X_test1.shape[0], X_test2.shape[0])
+    
+    
+    # prediction
+    print(&#39;fit + predict...&#39;)
+    models, imps, predictions_list, predictions_test1_list, predictions_test2_list, y_train = \
+        predict_over_folds(df.cv_fold[idxs_train], X_train, y_train,
+                           X_test1, X_test2, m, sample_weights[idxs_train],
+                           balancing, balancing_ratio, train_idxs, model_type)
+#     print(&#39;prediction shapes&#39;, len(predictions_list), len(predictions_test1_list), len(predictions_test2_list), y_train.size)
+    
+    # scoring
+    # print(&#39;scoring...&#39;)
+    scores = validate.get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
+                                 y_train, Y_test1, Y_test2)
+    
+    
+    # pick best model
+    # print(&#39;best model scoring...&#39;)
+#     print(list(scores.keys()))
+    idx_best = scores[&#39;idx_best&#39;]
+    
+    # save results
+    # print(&#39;preparing results...&#39;)
+#     print(scores)
+    os.makedirs(os.path.dirname(out_name), exist_ok=True)
+    results = {
+        # params
+        &#39;model_type&#39;: model_type,
+        &#39;balancing&#39;: balancing,
+        &#39;feat_names_selected&#39;: np.array(feat_names)[support],               
+        &#39;balacing_ratio&#39;: balancing_ratio,
+
+        # models / importances
+        &#39;idx_best&#39;: idx_best,
+        &#39;model_best&#39;: models[idx_best],
+        &#39;imps_best&#39;: imps[idx_best],
+#         &#39;models&#39;: models, # save models for all folds
+#         &#39;imps&#39;: imps,     # save importances for all folds
+        
+        # metrics
+        &#39;metrics&#39;: list(validate.scorers.keys()), 
+        **scores,
+    }
+#     print(&#39;saving...&#39;)
+    pkl.dump(results, open(out_name, &#39;wb&#39;))</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src" href="index.html">src</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.train.balance" href="#src.train.balance">balance</a></code></li>
+<li><code><a title="src.train.get_feature_importance" href="#src.train.get_feature_importance">get_feature_importance</a></code></li>
+<li><code><a title="src.train.get_model" href="#src.train.get_model">get_model</a></code></li>
+<li><code><a title="src.train.predict_over_folds" href="#src.train.predict_over_folds">predict_over_folds</a></code></li>
+<li><code><a title="src.train.select_features" href="#src.train.select_features">select_features</a></code></li>
+<li><code><a title="src.train.train" href="#src.train.train">train</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

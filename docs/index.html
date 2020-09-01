@@ -4,8 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.2" />
-<title>iai-interpretability.style API documentation</title>
-<meta name="description" content="" />
+<title>src API documentation</title>
+<meta name="description" content="Python package for documenting all the functions used in the
+derivation of the iai clinical decision rule.
+Demonstrating the use of PDR/PCS in …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,18 +19,88 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>iai-interpretability.style</code></h1>
+<h1 class="title">Module <code>src</code></h1>
 </header>
 <section id="section-intro">
+<p>Python package for documenting all the functions used in the
+derivation of the iai clinical decision rule.
+Demonstrating the use of PDR/PCS in emergency medicine on the PECARN dataset.</p>
+<h1 id="pcs-documentation">PCS documentation</h1>
+<ol>
+<li>Domain problem formulation (narrative). Clearly state the real-world question and describe prior work related to this question. Indicate how this question can be answered in the context of a model or analysis.</li>
+</ol>
+<p>Want to be able to identify the risk of clinically important traumatic brain injury (ciTBI) among children. This information can be used to triage CT imaging.</p>
+<ol>
+<li>Data collection and storage (narrative). Describe how the data were generated, including experimental design principles, and reasons why data is relevant to answer the domain question. Describe where data is stored and how it can be accessed by others.</li>
+</ol>
+<p>Protocol for screening subjects is given in the paper (i.e. children presenting within 24 h of non-trivial head trauma). Data is now open-source and available as a series of csv and accompanying pdf files providing details on how it was collected.</p>
+<ol>
+<li>Data cleaning and preprocessing (narrative, code, visualization). Describe steps taken to convert raw data into data used for analysis, and why these preprocessing steps are justified. Ask whether more than one preprocessing methods should be used and examine their impacts on the final data results.</li>
+</ol>
+<p>The definition of the outcome is the most difficult part. Categorical features are on-hot encoded.</p>
+<ol>
+<li>Exploratory data analysis (narrative, code, visualization). Describe any preliminary analyses that influenced modeling decisions or conclusions along with code and visualizations to support these decisions.</li>
+</ol>
+<p>Split up preverbal (&lt;2 years of age) and verbal (&gt;=2 years of age) patients.</p>
+<ol>
+<li>Modeling and Post-hoc analysis (narrative, code, visualization). Carry out PCS inference in the context of the domain question. Specify appropriate model and data perturbations. If necessary, specify null hypotheses and associated perturbations.</li>
+</ol>
+<p>sfdg</p>
+<ol>
+<li>Interpretation of results (narrative and visualization). Translate the data results to draw conclusions and/or make recommendations in the context of domain problem.</li>
+</ol>
+<p>asd</p>
+<h1 id="reference">Reference</h1>
+<ul>
+<li>docs generated with pdoc3</li>
+<li>stability-selection is taken from <a href="https://github.com/scikit-learn-contrib/stability-selection">this repo</a> with minor adjustments<ul>
+<li>to use, cd to lib/stability-selection then run <code>python setup.py install develop</code></li>
+</ul>
+</li>
+</ul>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">cb = &#39;#66ccff&#39;
-cr = &#39;#cc0000&#39;</code></pre>
+<pre><code class="python">&#34;&#34;&#34;
+Python package for documenting all the functions used in the
+derivation of the iai clinical decision rule.
+.. include:: ./documentation.md
+&#34;&#34;&#34;</code></pre>
 </details>
 </section>
 <section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="src.config" href="config.html">src.config</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="src.data" href="data.html">src.data</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="src.data_pecarn" href="data_pecarn.html">src.data_pecarn</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="src.data_psrc" href="data_psrc.html">src.data_psrc</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="src.train" href="train.html">src.train</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="src.validate" href="validate.html">src.validate</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="src.viz" href="viz.html">src.viz</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 </section>
 <section>
 </section>
@@ -40,12 +112,21 @@ cr = &#39;#cc0000&#39;</code></pre>
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#pcs-documentation">PCS documentation</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
 </div>
 <ul id="index">
-<li><h3>Super-module</h3>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="iai-interpretability" href="index.html">iai-interpretability</a></code></li>
+<li><code><a title="src.config" href="config.html">src.config</a></code></li>
+<li><code><a title="src.data" href="data.html">src.data</a></code></li>
+<li><code><a title="src.data_pecarn" href="data_pecarn.html">src.data_pecarn</a></code></li>
+<li><code><a title="src.data_psrc" href="data_psrc.html">src.data_psrc</a></code></li>
+<li><code><a title="src.train" href="train.html">src.train</a></code></li>
+<li><code><a title="src.validate" href="validate.html">src.validate</a></code></li>
+<li><code><a title="src.viz" href="viz.html">src.viz</a></code></li>
 </ul>
 </li>
 </ul>

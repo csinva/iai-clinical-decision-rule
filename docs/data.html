@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>src.data API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.data</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># directories
+
+import numpy as np
+import pandas as pd
+
+import data_pecarn
+import data_psrc
+
+pecarn_train_idxs = [1, 2, 3, 4]
+pecarn_test_idxs = [5, 6]
+psrc_train_idxs = [8, 9, 10, 11]
+psrc_test_idxs = [12, 13]
+
+# common feats
+feats_numerical = [&#39;InitSysBPRange&#39;, &#39;InitHeartRate&#39;, &#39;GCSScore&#39;, &#39;Age&#39;]
+feats_categorical = [&#39;AbdTenderDegree&#39;, &#39;Race&#39;, &#39;MOI&#39;]
+meta = [&#39;iai_intervention&#39;, &#39;cv_fold&#39;, &#39;dset&#39;]
+outcome_def = &#39;iai_intervention&#39;  # output
+
+
+
+def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):
+    df_pecarn = data_pecarn.get_data(use_processed=False,
+                                     frac_missing_allowed=frac_missing_allowed,
+                                     dummy=dummy,
+                                     impute_feats=impute)
+    all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
+    df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
+    all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
+
+    # resulting features
+    common_feats = list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
+    common_feats = common_feats + meta
+
+    feats_binary = [feat for feat in common_feats
+                    if not feat in feats_numerical + feats_categorical + meta]
+    return df_pecarn, df_psrc, common_feats, filtered_feats_pecarn, filtered_feats_psrc
+
+
+def to_dummies(df: pd.DataFrame):
+    &#34;&#34;&#34;Prepare the data for classification
+    &#34;&#34;&#34;
+
+    # convert feats to dummy
+    df = pd.get_dummies(df, dummy_na=True)  # treat na as a separate category
+    # remove any col that is all 0s
+    df = df.loc[:, (df != 0).any(axis=0)]
+    return df
+
+
+def derived_feats(df):
+    &#39;&#39;&#39;Add derived features
+    &#39;&#39;&#39;
+    binary = {
+        0: &#39;no&#39;,
+        1: &#39;yes&#39;,
+        False: &#39;no&#39;,
+        True: &#39;yes&#39;,
+        &#39;unknown&#39;: &#39;unknown&#39;
+    }
+    df[&#39;AbdTrauma_or_SeatBeltSign&#39;] = ((df.AbdTrauma == &#39;yes&#39;) | (df.SeatBeltSign == &#39;yes&#39;)).map(binary)
+    df[&#39;AbdDistention_or_AbdomenPain&#39;] = ((df.AbdDistention == &#39;AbdomenPain&#39;) | (df.SeatBeltSign == &#39;yes&#39;)).map(binary)
+    df[&#39;Hypotension&#39;] = (df[&#39;Age&#39;] &lt; 1 / 12) &amp; (df[&#39;InitSysBPRange&#39;] &lt; 70) | \
+                        (df[&#39;Age&#39;] &gt;= 1 / 12) &amp; (df[&#39;Age&#39;] &lt; 5) &amp; (df[&#39;InitSysBPRange&#39;] &lt; 80) | \
+                        (df[&#39;Age&#39;] &gt;= 5) &amp; (df[&#39;InitSysBPRange&#39;] &lt; 90)
+    df[&#39;Hypotension&#39;] = df[&#39;Hypotension&#39;].map(binary)
+    df[&#39;GCSScore_Full&#39;] = (df[&#39;GCSScore&#39;] == 15).map(binary)
+    df[&#39;Age&lt;2&#39;] = (df[&#39;Age&#39;] &lt; 2).map(binary)
+    df[&#39;CostalTender&#39;] = ((df.LtCostalTender == 1) | (df.RtCostalTender == 1)).map(binary)  # | (df.DecrBreathSound)
+
+    # Combine hispanic as part of race
+    df[&#39;Race&#39;] = df[&#39;Race_orig&#39;]
+    df.loc[df.Hispanic == &#39;yes&#39;, &#39;Race&#39;] = &#39;Hispanic&#39;
+    df.loc[df.Race == &#39;White&#39;, &#39;Race&#39;] = &#39;White (Non-Hispanic)&#39;
+
+    return df
+
+
+def remove_from_list(l, removes):
+    &#39;&#39;&#39;deletes all elements in removes from the list l and returns
+    &#39;&#39;&#39;
+    return [x for x in l
+            if not x in removes]
+
+def select_final_feats(feat_names, collapse_abd_tender=True,
+                       collapse_abd_distention=True, collapse_age=True):
+    &#39;&#39;&#39;Return an interpretable set of the best features
+    &#39;&#39;&#39;
+    feat_names = [f for f in feat_names
+                  if not f in meta
+                  and not f.endswith(&#39;_no&#39;)
+                  and not &#39;Race&#39; in f
+                  and not &#39;other&#39; in f.lower()
+                  and not &#39;unknown&#39; in f.lower()
+                  ]
+    feat_names = remove_from_list(feat_names, [&#39;LtCostalTender&#39;, &#39;RtCostalTender&#39;])
+    feat_names = remove_from_list(feat_names, [&#39;AbdTrauma_yes&#39;, &#39;SeatBeltSign_yes&#39;])
+    feat_names = remove_from_list(feat_names, [&#39;GCSScore&#39;])
+    feat_names = remove_from_list(feat_names, [&#39;InitHeartRate&#39;, &#39;InitSysBPRange&#39;]) # remove these so we can only have binary vars
+    
+    
+    # make abd tender into a None or not-None variable
+    if collapse_abd_tender:
+        feat_names = remove_from_list(feat_names, [&#39;AbdTenderDegree_Mild&#39;, &#39;AbdTenderDegree_Moderate&#39;, &#39;AbdTenderDegree_Severe&#39;])
+        
+    # whether to combine AbdomenPain and AbdDistention
+    if collapse_abd_distention:
+        feat_names = remove_from_list(feat_names, [&#39;AbdomenPain_yes&#39;, &#39;AbdDistention_yes&#39;])
+    else:
+        feat_names = remove_from_list(feat_names, [&#39;AbdDistention_or_AbdomenPain_yes&#39;])
+    
+    if collapse_age:
+        feat_names = remove_from_list(feat_names, [&#39;Age&#39;])
+    else:
+        feat_names = remove_from_list(feat_names, [&#39;Age&lt;2_yes&#39;])
+        
+    
+        
+    return sorted(feat_names)
+
+
+fewest_feats = [
+    #     &#39;AbdDistention_yes&#39;,
+    &#39;AbdTenderDegree_None&#39;,
+    &#39;AbdTrauma_or_SeatBeltSign_yes&#39;,
+#     &#39;AbdomenPain_yes&#39;,
+#     &#39;Age&#39;,
+    &#39;CostalTender_yes&#39;,
+    &#39;DecrBreathSound_yes&#39;,
+    &#39;GCSScore_Full_yes&#39;,
+    &#39;MOI_Fall from an elevation&#39;,
+    &#39;MOI_Motor vehicle collision&#39;,
+    &#39;MOI_Motorcycle/ATV/Scooter collision&#39;,
+    #  &#39;MOI_Pedestrian/bicyclist struck by moving vehicle&#39;,
+    &#39;ThoracicTrauma_yes&#39;,
+    &#39;VomitWretch_yes&#39;]
+
+
+def add_cv_split(df: pd.DataFrame, dset=&#39;pecarn&#39;):
+    # set up train / test
+    np.random.seed(42)
+    if dset == &#39;pecarn&#39;:
+        offset = 0
+    elif dset == &#39;psrc&#39;:
+        offset = 7
+    df[&#39;cv_fold&#39;] = np.random.randint(1, 7, size=df.shape[0]) + offset
+    return df
+
+
+def get_feat_names(df):
+    &#39;&#39;&#39;Get feature names for pecarn
+    
+    Original PECARN feats
+    ---------------------
+    Originally used features: age &lt; 2, severe mechanism of injury (includes many things),
+    vomiting, hypotension, GCS
+    thoracic tenderness, evidence of thoracic wall trauma
+    costal marign tenderness, decreased breath sounds, abdominal distention
+    complaints of abdominal pain, abdominal tenderness (3 levels)
+    evidence of abdominal wall trauma or seat belt sign
+    distracting patinful injury
+    femur fracture
+    
+    Returns
+    -------
+    feat_names: List[Str]
+        All valid feature names
+    pecarn_feats: List[Str]
+        All valid feature names corresponding to original pecarn iai study
+    &#39;&#39;&#39;
+    feat_names = [k for k in df.keys()  # features to use
+                  if not k in [&#39;id&#39;, &#39;cv_fold&#39;]
+                  and not &#39;iai&#39; in k.lower()]
+
+    PECARN_FEAT_NAMES = [&#39;AbdDistention&#39;,
+                         &#39;AbdTenderDegree&#39;,
+                         &#39;AbdTrauma&#39;,
+                         &#39;AbdTrauma_or_SeatBeltSign&#39;,
+                         &#39;AbdomenPain&#39;,
+                         &#39;Costal&#39;,
+                         &#39;DecrBreathSound&#39;,
+                         &#39;DistractingPain&#39;,
+                         &#39;FemurFracture&#39;,
+                         &#39;GCSScore&#39;,
+                         &#39;Hypotension&#39;,
+                         &#39;LtCostalTender&#39;,
+                         &#39;MOI&#39;,
+                         &#39;RtCostalTender&#39;,
+                         &#39;SeatBeltSign&#39;,
+                         &#39;ThoracicTender&#39;,
+                         &#39;ThoracicTrauma&#39;,
+                         &#39;VomitWretch&#39;,
+                         &#39;Age&#39;,
+                         &#39;Sex&#39;] + \
+                        [&#39;Race&#39;, &#39;InitHeartRate&#39;, &#39;InitSysBPRange&#39;]  # new ones to consider
+    pecarn_feats = set()
+    for pecarn_feat in PECARN_FEAT_NAMES:
+        for feat_name in feat_names:
+            if pecarn_feat in feat_name:
+                pecarn_feats.add(feat_name)
+    pecarn_feats = sorted(list(pecarn_feats))
+    return feat_names, set(pecarn_feats)
+
+
+def get_sample_weights(df, df_pecarn, df_psrc, balancing_ratio):
+    &#39;&#39;&#39;Get sample weights which also account for age / gender
+    &#39;&#39;&#39;
+    # class weights
+    class_weights = {0: 1, 1: balancing_ratio}
+    sample_weights_class = pd.Series(df[outcome_def]).map(class_weights).values
+
+    # weights for different risk populations
+    age_discrete = pd.cut(df[&#39;Age&#39;], bins=(-1, 4, 9, 1000), labels=[&#39;&lt;5&#39;, &#39;5-9&#39;, &#39;&gt;9&#39;]).values
+    # we don&#39;t have sex for psrc, so just fill in 0 (only matters for training anyway)
+    sex = pd.Series(np.hstack((df_pecarn[&#39;Sex_M&#39;].values, np.zeros(df_psrc.shape[0])))).map({0: &#39;F&#39;, 1: &#39;M&#39;}).values
+    risk_identity = [(sex[i], age_discrete[i]) for i in range(age_discrete.shape[0])]
+
+    risk_weights = {
+        (&#39;F&#39;, &#39;&lt;5&#39;): 33.9, (&#39;F&#39;, &#39;5-9&#39;): 25.8, (&#39;F&#39;, &#39;&gt;9&#39;): 27.2,
+        (&#39;M&#39;, &#39;&lt;5&#39;): 14.8, (&#39;M&#39;, &#39;5-9&#39;): 13.7, (&#39;M&#39;, &#39;&gt;9&#39;): 13.1
+    }
+    sample_weights_identity = pd.Series(risk_identity).map(risk_weights).values
+    sample_weights = sample_weights_class * sample_weights_identity  # elementwise multiply
+    return sample_weights</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.data.add_cv_split"><code class="name flex">
+<span>def <span class="ident">add_cv_split</span></span>(<span>df, dset='pecarn')</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_cv_split(df: pd.DataFrame, dset=&#39;pecarn&#39;):
+    # set up train / test
+    np.random.seed(42)
+    if dset == &#39;pecarn&#39;:
+        offset = 0
+    elif dset == &#39;psrc&#39;:
+        offset = 7
+    df[&#39;cv_fold&#39;] = np.random.randint(1, 7, size=df.shape[0]) + offset
+    return df</code></pre>
+</details>
+</dd>
+<dt id="src.data.derived_feats"><code class="name flex">
+<span>def <span class="ident">derived_feats</span></span>(<span>df)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add derived features</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def derived_feats(df):
+    &#39;&#39;&#39;Add derived features
+    &#39;&#39;&#39;
+    binary = {
+        0: &#39;no&#39;,
+        1: &#39;yes&#39;,
+        False: &#39;no&#39;,
+        True: &#39;yes&#39;,
+        &#39;unknown&#39;: &#39;unknown&#39;
+    }
+    df[&#39;AbdTrauma_or_SeatBeltSign&#39;] = ((df.AbdTrauma == &#39;yes&#39;) | (df.SeatBeltSign == &#39;yes&#39;)).map(binary)
+    df[&#39;AbdDistention_or_AbdomenPain&#39;] = ((df.AbdDistention == &#39;AbdomenPain&#39;) | (df.SeatBeltSign == &#39;yes&#39;)).map(binary)
+    df[&#39;Hypotension&#39;] = (df[&#39;Age&#39;] &lt; 1 / 12) &amp; (df[&#39;InitSysBPRange&#39;] &lt; 70) | \
+                        (df[&#39;Age&#39;] &gt;= 1 / 12) &amp; (df[&#39;Age&#39;] &lt; 5) &amp; (df[&#39;InitSysBPRange&#39;] &lt; 80) | \
+                        (df[&#39;Age&#39;] &gt;= 5) &amp; (df[&#39;InitSysBPRange&#39;] &lt; 90)
+    df[&#39;Hypotension&#39;] = df[&#39;Hypotension&#39;].map(binary)
+    df[&#39;GCSScore_Full&#39;] = (df[&#39;GCSScore&#39;] == 15).map(binary)
+    df[&#39;Age&lt;2&#39;] = (df[&#39;Age&#39;] &lt; 2).map(binary)
+    df[&#39;CostalTender&#39;] = ((df.LtCostalTender == 1) | (df.RtCostalTender == 1)).map(binary)  # | (df.DecrBreathSound)
+
+    # Combine hispanic as part of race
+    df[&#39;Race&#39;] = df[&#39;Race_orig&#39;]
+    df.loc[df.Hispanic == &#39;yes&#39;, &#39;Race&#39;] = &#39;Hispanic&#39;
+    df.loc[df.Race == &#39;White&#39;, &#39;Race&#39;] = &#39;White (Non-Hispanic)&#39;
+
+    return df</code></pre>
+</details>
+</dd>
+<dt id="src.data.get_feat_names"><code class="name flex">
+<span>def <span class="ident">get_feat_names</span></span>(<span>df)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get feature names for pecarn</p>
+<h2 id="original-pecarn-feats">Original PECARN feats</h2>
+<dl>
+<dt>Originally used features: age &lt; 2, severe mechanism of injury (includes many things),</dt>
+<dt><strong><code>vomiting</code></strong>, <strong><code>hypotension</code></strong>, <strong><code>GCS</code></strong></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>thoracic tenderness, evidence of thoracic wall trauma
+costal marign tenderness, decreased breath sounds, abdominal distention
+complaints of abdominal pain, abdominal tenderness (3 levels)
+evidence of abdominal wall trauma or seat belt sign
+distracting patinful injury
+femur fracture</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>feat_names</code></strong> :&ensp;<code>List</code>[<code>Str</code>]</dt>
+<dd>All valid feature names</dd>
+<dt><strong><code>pecarn_feats</code></strong> :&ensp;<code>List</code>[<code>Str</code>]</dt>
+<dd>All valid feature names corresponding to original pecarn iai study</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_feat_names(df):
+    &#39;&#39;&#39;Get feature names for pecarn
+    
+    Original PECARN feats
+    ---------------------
+    Originally used features: age &lt; 2, severe mechanism of injury (includes many things),
+    vomiting, hypotension, GCS
+    thoracic tenderness, evidence of thoracic wall trauma
+    costal marign tenderness, decreased breath sounds, abdominal distention
+    complaints of abdominal pain, abdominal tenderness (3 levels)
+    evidence of abdominal wall trauma or seat belt sign
+    distracting patinful injury
+    femur fracture
+    
+    Returns
+    -------
+    feat_names: List[Str]
+        All valid feature names
+    pecarn_feats: List[Str]
+        All valid feature names corresponding to original pecarn iai study
+    &#39;&#39;&#39;
+    feat_names = [k for k in df.keys()  # features to use
+                  if not k in [&#39;id&#39;, &#39;cv_fold&#39;]
+                  and not &#39;iai&#39; in k.lower()]
+
+    PECARN_FEAT_NAMES = [&#39;AbdDistention&#39;,
+                         &#39;AbdTenderDegree&#39;,
+                         &#39;AbdTrauma&#39;,
+                         &#39;AbdTrauma_or_SeatBeltSign&#39;,
+                         &#39;AbdomenPain&#39;,
+                         &#39;Costal&#39;,
+                         &#39;DecrBreathSound&#39;,
+                         &#39;DistractingPain&#39;,
+                         &#39;FemurFracture&#39;,
+                         &#39;GCSScore&#39;,
+                         &#39;Hypotension&#39;,
+                         &#39;LtCostalTender&#39;,
+                         &#39;MOI&#39;,
+                         &#39;RtCostalTender&#39;,
+                         &#39;SeatBeltSign&#39;,
+                         &#39;ThoracicTender&#39;,
+                         &#39;ThoracicTrauma&#39;,
+                         &#39;VomitWretch&#39;,
+                         &#39;Age&#39;,
+                         &#39;Sex&#39;] + \
+                        [&#39;Race&#39;, &#39;InitHeartRate&#39;, &#39;InitSysBPRange&#39;]  # new ones to consider
+    pecarn_feats = set()
+    for pecarn_feat in PECARN_FEAT_NAMES:
+        for feat_name in feat_names:
+            if pecarn_feat in feat_name:
+                pecarn_feats.add(feat_name)
+    pecarn_feats = sorted(list(pecarn_feats))
+    return feat_names, set(pecarn_feats)</code></pre>
+</details>
+</dd>
+<dt id="src.data.get_sample_weights"><code class="name flex">
+<span>def <span class="ident">get_sample_weights</span></span>(<span>df, df_pecarn, df_psrc, balancing_ratio)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get sample weights which also account for age / gender</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_sample_weights(df, df_pecarn, df_psrc, balancing_ratio):
+    &#39;&#39;&#39;Get sample weights which also account for age / gender
+    &#39;&#39;&#39;
+    # class weights
+    class_weights = {0: 1, 1: balancing_ratio}
+    sample_weights_class = pd.Series(df[outcome_def]).map(class_weights).values
+
+    # weights for different risk populations
+    age_discrete = pd.cut(df[&#39;Age&#39;], bins=(-1, 4, 9, 1000), labels=[&#39;&lt;5&#39;, &#39;5-9&#39;, &#39;&gt;9&#39;]).values
+    # we don&#39;t have sex for psrc, so just fill in 0 (only matters for training anyway)
+    sex = pd.Series(np.hstack((df_pecarn[&#39;Sex_M&#39;].values, np.zeros(df_psrc.shape[0])))).map({0: &#39;F&#39;, 1: &#39;M&#39;}).values
+    risk_identity = [(sex[i], age_discrete[i]) for i in range(age_discrete.shape[0])]
+
+    risk_weights = {
+        (&#39;F&#39;, &#39;&lt;5&#39;): 33.9, (&#39;F&#39;, &#39;5-9&#39;): 25.8, (&#39;F&#39;, &#39;&gt;9&#39;): 27.2,
+        (&#39;M&#39;, &#39;&lt;5&#39;): 14.8, (&#39;M&#39;, &#39;5-9&#39;): 13.7, (&#39;M&#39;, &#39;&gt;9&#39;): 13.1
+    }
+    sample_weights_identity = pd.Series(risk_identity).map(risk_weights).values
+    sample_weights = sample_weights_class * sample_weights_identity  # elementwise multiply
+    return sample_weights</code></pre>
+</details>
+</dd>
+<dt id="src.data.load_it_all"><code class="name flex">
+<span>def <span class="ident">load_it_all</span></span>(<span>dummy=True, impute=True, frac_missing_allowed=0.1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):
+    df_pecarn = data_pecarn.get_data(use_processed=False,
+                                     frac_missing_allowed=frac_missing_allowed,
+                                     dummy=dummy,
+                                     impute_feats=impute)
+    all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
+    df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
+    all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
+
+    # resulting features
+    common_feats = list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
+    common_feats = common_feats + meta
+
+    feats_binary = [feat for feat in common_feats
+                    if not feat in feats_numerical + feats_categorical + meta]
+    return df_pecarn, df_psrc, common_feats, filtered_feats_pecarn, filtered_feats_psrc</code></pre>
+</details>
+</dd>
+<dt id="src.data.remove_from_list"><code class="name flex">
+<span>def <span class="ident">remove_from_list</span></span>(<span>l, removes)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>deletes all elements in removes from the list l and returns</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_from_list(l, removes):
+    &#39;&#39;&#39;deletes all elements in removes from the list l and returns
+    &#39;&#39;&#39;
+    return [x for x in l
+            if not x in removes]</code></pre>
+</details>
+</dd>
+<dt id="src.data.select_final_feats"><code class="name flex">
+<span>def <span class="ident">select_final_feats</span></span>(<span>feat_names, collapse_abd_tender=True, collapse_abd_distention=True, collapse_age=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Return an interpretable set of the best features</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def select_final_feats(feat_names, collapse_abd_tender=True,
+                       collapse_abd_distention=True, collapse_age=True):
+    &#39;&#39;&#39;Return an interpretable set of the best features
+    &#39;&#39;&#39;
+    feat_names = [f for f in feat_names
+                  if not f in meta
+                  and not f.endswith(&#39;_no&#39;)
+                  and not &#39;Race&#39; in f
+                  and not &#39;other&#39; in f.lower()
+                  and not &#39;unknown&#39; in f.lower()
+                  ]
+    feat_names = remove_from_list(feat_names, [&#39;LtCostalTender&#39;, &#39;RtCostalTender&#39;])
+    feat_names = remove_from_list(feat_names, [&#39;AbdTrauma_yes&#39;, &#39;SeatBeltSign_yes&#39;])
+    feat_names = remove_from_list(feat_names, [&#39;GCSScore&#39;])
+    feat_names = remove_from_list(feat_names, [&#39;InitHeartRate&#39;, &#39;InitSysBPRange&#39;]) # remove these so we can only have binary vars
+    
+    
+    # make abd tender into a None or not-None variable
+    if collapse_abd_tender:
+        feat_names = remove_from_list(feat_names, [&#39;AbdTenderDegree_Mild&#39;, &#39;AbdTenderDegree_Moderate&#39;, &#39;AbdTenderDegree_Severe&#39;])
+        
+    # whether to combine AbdomenPain and AbdDistention
+    if collapse_abd_distention:
+        feat_names = remove_from_list(feat_names, [&#39;AbdomenPain_yes&#39;, &#39;AbdDistention_yes&#39;])
+    else:
+        feat_names = remove_from_list(feat_names, [&#39;AbdDistention_or_AbdomenPain_yes&#39;])
+    
+    if collapse_age:
+        feat_names = remove_from_list(feat_names, [&#39;Age&#39;])
+    else:
+        feat_names = remove_from_list(feat_names, [&#39;Age&lt;2_yes&#39;])
+        
+    
+        
+    return sorted(feat_names)</code></pre>
+</details>
+</dd>
+<dt id="src.data.to_dummies"><code class="name flex">
+<span>def <span class="ident">to_dummies</span></span>(<span>df)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Prepare the data for classification</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dummies(df: pd.DataFrame):
+    &#34;&#34;&#34;Prepare the data for classification
+    &#34;&#34;&#34;
+
+    # convert feats to dummy
+    df = pd.get_dummies(df, dummy_na=True)  # treat na as a separate category
+    # remove any col that is all 0s
+    df = df.loc[:, (df != 0).any(axis=0)]
+    return df</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src" href="index.html">src</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="src.data.add_cv_split" href="#src.data.add_cv_split">add_cv_split</a></code></li>
+<li><code><a title="src.data.derived_feats" href="#src.data.derived_feats">derived_feats</a></code></li>
+<li><code><a title="src.data.get_feat_names" href="#src.data.get_feat_names">get_feat_names</a></code></li>
+<li><code><a title="src.data.get_sample_weights" href="#src.data.get_sample_weights">get_sample_weights</a></code></li>
+<li><code><a title="src.data.load_it_all" href="#src.data.load_it_all">load_it_all</a></code></li>
+<li><code><a title="src.data.remove_from_list" href="#src.data.remove_from_list">remove_from_list</a></code></li>
+<li><code><a title="src.data.select_final_feats" href="#src.data.select_final_feats">select_final_feats</a></code></li>
+<li><code><a title="src.data.to_dummies" href="#src.data.to_dummies">to_dummies</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

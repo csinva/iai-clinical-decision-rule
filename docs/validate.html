@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>src.validate API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.validate</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from os.path import join as oj
+import sys
+
+sys.path.insert(1, oj(sys.path[0], &#39;..&#39;))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from sklearn import metrics
+import sklearn.metrics
+
+
+def specificity_score(y_true, y_pred):
+    tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
+    return tn / (tn + fp)
+
+def sensitivity_score(y_true, y_pred):
+    tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
+    return tp / (tp + fn)
+
+
+def sensitivity_specificity_curve(y_test, preds_proba, plot=False, thresholds=None):
+    &#39;&#39;&#39;preds_proba should be 1d
+    &#39;&#39;&#39;
+    if thresholds is None:
+        thresholds = sorted(np.unique(preds_proba))
+    sens = []
+    spec = []
+    for threshold in tqdm(thresholds):
+        preds = preds_proba &gt; threshold
+        stats = sklearn.metrics.classification_report(y_test, preds,
+                                                      output_dict=True, zero_division=0)
+        sens.append(stats[&#39;1&#39;][&#39;recall&#39;])
+        spec.append(stats[&#39;0&#39;][&#39;recall&#39;])
+
+    if plot:
+        plt.plot(sens, spec, &#39;.-&#39;)
+        plt.xlabel(&#39;sensitivity&#39;)
+        plt.ylabel(&#39;specificity&#39;)
+        plt.grid()
+    return sens, spec, thresholds
+
+
+scorers = {
+    &#39;balanced_accuracy&#39;: metrics.balanced_accuracy_score,
+    &#39;accuracy&#39;: metrics.accuracy_score,
+    &#39;precision&#39;: metrics.precision_score,
+    &#39;sensitivity&#39;: metrics.recall_score,
+    &#39;specificity&#39;: specificity_score,
+    &#39;f1&#39;: metrics.f1_score,
+    &#39;roc_auc&#39;: metrics.roc_auc_score,
+    &#39;precision_recall_curve&#39;: metrics.precision_recall_curve,
+    &#39;sensitivity_specificity_curve&#39;: sensitivity_specificity_curve,
+    &#39;roc_curve&#39;: metrics.roc_curve,
+    &#39;tn&#39;: lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[0],
+    &#39;fp&#39;: lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[1],
+    &#39;fn&#39;: lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[2],
+    &#39;tp&#39;: lambda y_true, y_pred: metrics.confusion_matrix(y_true, y_pred).ravel()[3],
+}
+
+
+def append_score_results(scores, pred, y, suffix1=&#39;&#39;, suffix2=&#39;&#39;, thresh=None):
+    &#39;&#39;&#39;Score given one pred, y
+    &#39;&#39;&#39;
+
+    # find best thresh
+    &#39;&#39;&#39;
+    if thresh is None:
+        prec, rec, thresholds = metrics.precision_recall_curve(y, pred)
+        sens, spec, thresholds = sensitivity_specificity_curve(y, pred, thresholds=thresholds)
+    &#39;&#39;&#39;
+    thresh = 0.5
+
+    # compute scores
+    for k in scorers.keys():
+        k_new = k + suffix1 + suffix2
+        if not k_new in scores.keys():
+            scores[k_new] = []
+        if &#39;roc&#39; in k or &#39;curve&#39; in k:
+            scores[k_new].append(scorers[k](y, pred))
+        else:
+            pred_thresholded = (np.array(pred) &gt; thresh).astype(int)
+            scores[k_new].append(scorers[k](y, pred_thresholded))
+    return thresh
+
+
+def select_best_fold(scores):
+    &#39;&#39;&#39;Calculate the index of the best fold
+    &#39;&#39;&#39;
+    return np.argmax(scores[&#39;roc_auc_cv_folds&#39;])
+
+
+def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
+               Y_train, Y_test1, Y_test2):
+    &#39;&#39;&#39;
+    Params
+    ------
+    predictions_list: (num_folds, num_in_fold)
+        predictions for different cv folds
+    predictions_test1_list: (num_folds, num_test)
+        predictions for test trained on different cv folds
+    predictions_test2_list: (num_folds, num_test)
+        predictions for test trained on different cv folds
+    Y_train: (num_folds, num_in_fold)
+        different folds have different ys
+    Y_test1: (num_test1)
+        test ys 
+    Y_test2: (num_test2)
+        test ys
+    &#39;&#39;&#39;
+    scores = {}
+
+    # calc scores for individual folds
+    # print(&#39;score cv folds...&#39;, len(preds_list))
+    for i in range(len(predictions_list)):
+        thresh = append_score_results(scores, predictions_list[i],
+                                      Y_train[i], suffix1=&#39;_cv&#39;, suffix2=&#39;_folds&#39;)
+
+    # select best model
+    idx_best = select_best_fold(scores)
+    predictions_cv = np.concatenate([p for p in predictions_list]).flatten()
+    ys_cv = np.concatenate([y for y in Y_train]).flatten()
+    predictions_test1 = predictions_test1_list[idx_best]
+    predictions_test2 = predictions_test2_list[idx_best]
+
+    # repeat for each fold
+    for preds, ys, suffix1 in zip([predictions_cv, predictions_test1, predictions_test2],
+                                  [ys_cv, Y_test1, Y_test2],
+                                  [&#39;_cv&#39;, &#39;_test1&#39;, &#39;_test2&#39;]):
+        # score total dset
+        # print(&#39;score total dset....&#39;)
+        append_score_results(scores, preds, ys, suffix1=suffix1, thresh=thresh)
+
+    # replace all length 1 lists with scalars
+    s = {}
+    for k in scores.keys():
+        if len(scores[k]) == 1:
+            s[k] = scores[k][0]
+        else:
+            s[k] = np.array(scores[k])
+    s[&#39;idx_best&#39;] = idx_best
+    return s</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.validate.append_score_results"><code class="name flex">
+<span>def <span class="ident">append_score_results</span></span>(<span>scores, pred, y, suffix1='', suffix2='', thresh=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Score given one pred, y</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append_score_results(scores, pred, y, suffix1=&#39;&#39;, suffix2=&#39;&#39;, thresh=None):
+    &#39;&#39;&#39;Score given one pred, y
+    &#39;&#39;&#39;
+
+    # find best thresh
+    &#39;&#39;&#39;
+    if thresh is None:
+        prec, rec, thresholds = metrics.precision_recall_curve(y, pred)
+        sens, spec, thresholds = sensitivity_specificity_curve(y, pred, thresholds=thresholds)
+    &#39;&#39;&#39;
+    thresh = 0.5
+
+    # compute scores
+    for k in scorers.keys():
+        k_new = k + suffix1 + suffix2
+        if not k_new in scores.keys():
+            scores[k_new] = []
+        if &#39;roc&#39; in k or &#39;curve&#39; in k:
+            scores[k_new].append(scorers[k](y, pred))
+        else:
+            pred_thresholded = (np.array(pred) &gt; thresh).astype(int)
+            scores[k_new].append(scorers[k](y, pred_thresholded))
+    return thresh</code></pre>
+</details>
+</dd>
+<dt id="src.validate.get_scores"><code class="name flex">
+<span>def <span class="ident">get_scores</span></span>(<span>predictions_list, predictions_test1_list, predictions_test2_list, Y_train, Y_test1, Y_test2)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="params">Params</h2>
+<dl>
+<dt><strong><code>predictions_list</code></strong> :&ensp;(<code>num_folds</code>, <code>num_in_fold</code>)</dt>
+<dd>predictions for different cv folds</dd>
+<dt><strong><code>predictions_test1_list</code></strong> :&ensp;(<code>num_folds</code>, <code>num_test</code>)</dt>
+<dd>predictions for test trained on different cv folds</dd>
+<dt><strong><code>predictions_test2_list</code></strong> :&ensp;(<code>num_folds</code>, <code>num_test</code>)</dt>
+<dd>predictions for test trained on different cv folds</dd>
+<dt><strong><code>Y_train</code></strong> :&ensp;(<code>num_folds</code>, <code>num_in_fold</code>)</dt>
+<dd>different folds have different ys</dd>
+<dt><strong><code>Y_test1</code></strong> :&ensp;(<code>num_test1</code>)</dt>
+<dd>test ys</dd>
+<dt><strong><code>Y_test2</code></strong> :&ensp;(<code>num_test2</code>)</dt>
+<dd>test ys</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
+               Y_train, Y_test1, Y_test2):
+    &#39;&#39;&#39;
+    Params
+    ------
+    predictions_list: (num_folds, num_in_fold)
+        predictions for different cv folds
+    predictions_test1_list: (num_folds, num_test)
+        predictions for test trained on different cv folds
+    predictions_test2_list: (num_folds, num_test)
+        predictions for test trained on different cv folds
+    Y_train: (num_folds, num_in_fold)
+        different folds have different ys
+    Y_test1: (num_test1)
+        test ys 
+    Y_test2: (num_test2)
+        test ys
+    &#39;&#39;&#39;
+    scores = {}
+
+    # calc scores for individual folds
+    # print(&#39;score cv folds...&#39;, len(preds_list))
+    for i in range(len(predictions_list)):
+        thresh = append_score_results(scores, predictions_list[i],
+                                      Y_train[i], suffix1=&#39;_cv&#39;, suffix2=&#39;_folds&#39;)
+
+    # select best model
+    idx_best = select_best_fold(scores)
+    predictions_cv = np.concatenate([p for p in predictions_list]).flatten()
+    ys_cv = np.concatenate([y for y in Y_train]).flatten()
+    predictions_test1 = predictions_test1_list[idx_best]
+    predictions_test2 = predictions_test2_list[idx_best]
+
+    # repeat for each fold
+    for preds, ys, suffix1 in zip([predictions_cv, predictions_test1, predictions_test2],
+                                  [ys_cv, Y_test1, Y_test2],
+                                  [&#39;_cv&#39;, &#39;_test1&#39;, &#39;_test2&#39;]):
+        # score total dset
+        # print(&#39;score total dset....&#39;)
+        append_score_results(scores, preds, ys, suffix1=suffix1, thresh=thresh)
+
+    # replace all length 1 lists with scalars
+    s = {}
+    for k in scores.keys():
+        if len(scores[k]) == 1:
+            s[k] = scores[k][0]
+        else:
+            s[k] = np.array(scores[k])
+    s[&#39;idx_best&#39;] = idx_best
+    return s</code></pre>
+</details>
+</dd>
+<dt id="src.validate.select_best_fold"><code class="name flex">
+<span>def <span class="ident">select_best_fold</span></span>(<span>scores)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Calculate the index of the best fold</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def select_best_fold(scores):
+    &#39;&#39;&#39;Calculate the index of the best fold
+    &#39;&#39;&#39;
+    return np.argmax(scores[&#39;roc_auc_cv_folds&#39;])</code></pre>
+</details>
+</dd>
+<dt id="src.validate.sensitivity_score"><code class="name flex">
+<span>def <span class="ident">sensitivity_score</span></span>(<span>y_true, y_pred)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sensitivity_score(y_true, y_pred):
+    tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
+    return tp / (tp + fn)</code></pre>
+</details>
+</dd>
+<dt id="src.validate.sensitivity_specificity_curve"><code class="name flex">
+<span>def <span class="ident">sensitivity_specificity_curve</span></span>(<span>y_test, preds_proba, plot=False, thresholds=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>preds_proba should be 1d</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sensitivity_specificity_curve(y_test, preds_proba, plot=False, thresholds=None):
+    &#39;&#39;&#39;preds_proba should be 1d
+    &#39;&#39;&#39;
+    if thresholds is None:
+        thresholds = sorted(np.unique(preds_proba))
+    sens = []
+    spec = []
+    for threshold in tqdm(thresholds):
+        preds = preds_proba &gt; threshold
+        stats = sklearn.metrics.classification_report(y_test, preds,
+                                                      output_dict=True, zero_division=0)
+        sens.append(stats[&#39;1&#39;][&#39;recall&#39;])
+        spec.append(stats[&#39;0&#39;][&#39;recall&#39;])
+
+    if plot:
+        plt.plot(sens, spec, &#39;.-&#39;)
+        plt.xlabel(&#39;sensitivity&#39;)
+        plt.ylabel(&#39;specificity&#39;)
+        plt.grid()
+    return sens, spec, thresholds</code></pre>
+</details>
+</dd>
+<dt id="src.validate.specificity_score"><code class="name flex">
+<span>def <span class="ident">specificity_score</span></span>(<span>y_true, y_pred)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def specificity_score(y_true, y_pred):
+    tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()
+    return tn / (tn + fp)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src" href="index.html">src</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.validate.append_score_results" href="#src.validate.append_score_results">append_score_results</a></code></li>
+<li><code><a title="src.validate.get_scores" href="#src.validate.get_scores">get_scores</a></code></li>
+<li><code><a title="src.validate.select_best_fold" href="#src.validate.select_best_fold">select_best_fold</a></code></li>
+<li><code><a title="src.validate.sensitivity_score" href="#src.validate.sensitivity_score">sensitivity_score</a></code></li>
+<li><code><a title="src.validate.sensitivity_specificity_curve" href="#src.validate.sensitivity_specificity_curve">sensitivity_specificity_curve</a></code></li>
+<li><code><a title="src.validate.specificity_score" href="#src.validate.specificity_score">specificity_score</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
