@@ -1,5 +1,4 @@
 # directories
-
 import numpy as np
 import pandas as pd
 
@@ -138,7 +137,7 @@ fewest_feats = [
 
 def add_cv_split(df: pd.DataFrame, dset='pecarn'):
     # set up train / test
-    np.random.seed(42)
+    np.random.seed(1)
     if dset == 'pecarn':
         offset = 0
     elif dset == 'psrc':

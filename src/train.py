@@ -160,7 +160,9 @@ def predict_over_folds(cv_folds, X, y, X_test1, X_test2,
                 print('sample weights failed!', model_type)
                 traceback.print_exc()
                 balanced = False
-        if not balanced: # balancing failed or was not possible
+        
+        # balancing failed or was not possible - use oversampling
+        if not balanced:
             X_train_r_cv, Y_train_r_cv = balance(X_train_cv, Y_train_cv, balancing, balancing_ratio)
             m.fit(X_train_r_cv, Y_train_r_cv)
         
@@ -180,7 +182,8 @@ def train(df: pd.DataFrame, feat_names: list,
           outcome_def='iai_intervention',
           sample_weights=None, balancing='ros', balancing_ratio=1,
           out_name='results/classify/test.pkl', 
-          train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7], feature_selection=None, feature_selection_num=3):
+          train_idxs=[1, 2, 3, 4, 5], test_idxs1=[6], test_idxs2=[7],
+          feature_selection=None, feature_selection_num=3):
     '''Balance classes in y using strategy specified by balancing
         if balancing is sample_weights, then ignore balancing_ratio
     '''
