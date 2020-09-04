@@ -28,3 +28,4 @@ results
 clean.sh
 cancel_jobs.py
 reports/**.pdf
+reports/*/*.pdf
