@@ -81,8 +81,10 @@ def remove_from_list(l, removes):
     return [x for x in l
             if not x in removes]
 
-def select_final_feats(feat_names, collapse_abd_tender=True,
-                       collapse_abd_distention=True, collapse_age=True):
+def select_final_feats(feat_names,
+                       collapse_abd_tender=True,
+                       collapse_abd_distention=True,
+                       collapse_age=True):
     '''Return an interpretable set of the best features
     '''
     feat_names = [f for f in feat_names

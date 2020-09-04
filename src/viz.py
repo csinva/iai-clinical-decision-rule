@@ -6,8 +6,13 @@ from matplotlib import pyplot as plt
 from matplotlib_venn import venn2
 from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
-
+import os
+from os.path import join as oj
 import seaborn as sns
+
+DIR_FILE = os.path.dirname(os.path.realpath(__file__)) # directory of this file
+DIR_FIGS = oj(DIR_FILE, '../reports/figs')
+
 
 cb2 = '#66ccff'
 cb = '#1f77b4'
@@ -19,7 +24,10 @@ cm = sns.diverging_palette(10, 240, n=1000, as_cmap=True)
 cm_rev = sns.diverging_palette(240, 10, n=1000, as_cmap=True)
 cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 
-
+def savefig(s: str):
+    plt.savefig(oj(DIR_FIGS, s + '.pdf'))
+    plt.savefig(oj(DIR_FIGS, s + '.png'), dpi=300)
+    
 
 def venn_overlap(df, col1: str, col2: str, val1=1, val2=1):
     '''Plots venn diagram of overlap between 2 cols with values specified

@@ -27,3 +27,4 @@ build
 results
 clean.sh
 cancel_jobs.py
+reports/**.pdf
