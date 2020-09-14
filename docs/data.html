@@ -25,7 +25,6 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python"># directories
-
 import numpy as np
 import pandas as pd
 
@@ -108,8 +107,10 @@ def remove_from_list(l, removes):
     return [x for x in l
             if not x in removes]
 
-def select_final_feats(feat_names, collapse_abd_tender=True,
-                       collapse_abd_distention=True, collapse_age=True):
+def select_final_feats(feat_names,
+                       collapse_abd_tender=True,
+                       collapse_abd_distention=True,
+                       collapse_age=True):
     &#39;&#39;&#39;Return an interpretable set of the best features
     &#39;&#39;&#39;
     feat_names = [f for f in feat_names
@@ -164,7 +165,7 @@ fewest_feats = [
 
 def add_cv_split(df: pd.DataFrame, dset=&#39;pecarn&#39;):
     # set up train / test
-    np.random.seed(42)
+    np.random.seed(1)
     if dset == &#39;pecarn&#39;:
         offset = 0
     elif dset == &#39;psrc&#39;:
@@ -268,7 +269,7 @@ def get_sample_weights(df, df_pecarn, df_psrc, balancing_ratio):
 </summary>
 <pre><code class="python">def add_cv_split(df: pd.DataFrame, dset=&#39;pecarn&#39;):
     # set up train / test
-    np.random.seed(42)
+    np.random.seed(1)
     if dset == &#39;pecarn&#39;:
         offset = 0
     elif dset == &#39;psrc&#39;:
@@ -480,8 +481,10 @@ femur fracture</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def select_final_feats(feat_names, collapse_abd_tender=True,
-                       collapse_abd_distention=True, collapse_age=True):
+<pre><code class="python">def select_final_feats(feat_names,
+                       collapse_abd_tender=True,
+                       collapse_abd_distention=True,
+                       collapse_age=True):
     &#39;&#39;&#39;Return an interpretable set of the best features
     &#39;&#39;&#39;
     feat_names = [f for f in feat_names

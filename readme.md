@@ -1,4 +1,6 @@
-Demonstrating the use of PDR/PCS in emergency medicine on the PECARN dataset.
+# Demonstrating the use of PDR/PCS in emergency medicine on the PECARN dataset.
+
+Code for reproducing analysis evaluating the PECARN Clinical Decision rule for prediction Intra-abdominal injury requiring intervention (IAI-I).
 
 
 # PCS documentation
@@ -13,6 +15,8 @@ Want to be able to identify the risk of clinically important traumatic brain inj
 Protocol for screening subjects is given in the paper (i.e. children presenting within 24 h of non-trivial head trauma). Data is now open-source and available as a series of csv and accompanying pdf files providing details on how it was collected.
 
 3. Data cleaning and preprocessing (narrative, code, visualization). Describe steps taken to convert raw data into data used for analysis, and why these preprocessing steps are justified. Ask whether more than one preprocessing methods should be used and examine their impacts on the final data results.
+
+![](reports/matched_hists.png)
 
 The definition of the outcome is the most difficult part. Categorical features are on-hot encoded.
 
@@ -30,8 +34,8 @@ asd
 
 
 # Reference
+- IAI data is gratefully downloaded from the open-source [PECARN website](http://pecarn.org/studyDatasets/Default) (also available here in the [data](data) folder)
+    - unfortunately, PSRC data is not available open-source at this time
+- makes heavy use of the [imodels](https://github.com/csinva/interpretability-implementations-demos) package
 
-- docs generated with pdoc3
-- stability-selection is taken from [this repo](https://github.com/scikit-learn-contrib/stability-selection) with minor adjustments
-    - to use, cd to lib/stability-selection then run `python setup.py install develop`
 

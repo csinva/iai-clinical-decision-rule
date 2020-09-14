@@ -25,15 +25,19 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import numpy as np
-# plt.style.use(&#39;dark_background&#39;)
 import pandas as pd
 from colorama import Fore
 from matplotlib import pyplot as plt
 from matplotlib_venn import venn2
 from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
-
+import os
+from os.path import join as oj
 import seaborn as sns
+
+DIR_FILE = os.path.dirname(os.path.realpath(__file__)) # directory of this file
+DIR_FIGS = oj(DIR_FILE, &#39;../reports/figs&#39;)
+
 
 cb2 = &#39;#66ccff&#39;
 cb = &#39;#1f77b4&#39;
@@ -45,7 +49,10 @@ cm = sns.diverging_palette(10, 240, n=1000, as_cmap=True)
 cm_rev = sns.diverging_palette(240, 10, n=1000, as_cmap=True)
 cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 
-
+def savefig(s: str):
+    plt.savefig(oj(DIR_FIGS, s + &#39;.pdf&#39;))
+    plt.savefig(oj(DIR_FIGS, s + &#39;.png&#39;), dpi=300)
+    
 
 def venn_overlap(df, col1: str, col2: str, val1=1, val2=1):
     &#39;&#39;&#39;Plots venn diagram of overlap between 2 cols with values specified
@@ -492,6 +499,20 @@ Normalization can be applied by setting <code>normalize=True</code>.</p></sectio
     return ax</code></pre>
 </details>
 </dd>
+<dt id="src.viz.savefig"><code class="name flex">
+<span>def <span class="ident">savefig</span></span>(<span>s)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def savefig(s: str):
+    plt.savefig(oj(DIR_FIGS, s + &#39;.pdf&#39;))
+    plt.savefig(oj(DIR_FIGS, s + &#39;.png&#39;), dpi=300)</code></pre>
+</details>
+</dd>
 <dt id="src.viz.venn_overlap"><code class="name flex">
 <span>def <span class="ident">venn_overlap</span></span>(<span>df, col1, col2, val1=1, val2=1)</span>
 </code></dt>
@@ -676,6 +697,7 @@ Normalization can be applied by setting <code>normalize=True</code>.</p></sectio
 <li><code><a title="src.viz.highlight_max" href="#src.viz.highlight_max">highlight_max</a></code></li>
 <li><code><a title="src.viz.jointplot_grouped" href="#src.viz.jointplot_grouped">jointplot_grouped</a></code></li>
 <li><code><a title="src.viz.plot_confusion_matrix" href="#src.viz.plot_confusion_matrix">plot_confusion_matrix</a></code></li>
+<li><code><a title="src.viz.savefig" href="#src.viz.savefig">savefig</a></code></li>
 <li><code><a title="src.viz.venn_overlap" href="#src.viz.venn_overlap">venn_overlap</a></code></li>
 <li><code><a title="src.viz.visualize_individual_results" href="#src.viz.visualize_individual_results">visualize_individual_results</a></code></li>
 <li><code><a title="src.viz.viz_biggest_errs" href="#src.viz.viz_biggest_errs">viz_biggest_errs</a></code></li>

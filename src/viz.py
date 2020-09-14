@@ -1,5 +1,4 @@
 import numpy as np
-# plt.style.use('dark_background')
 import pandas as pd
 from colorama import Fore
 from matplotlib import pyplot as plt
