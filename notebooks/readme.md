@@ -1,4 +1,5 @@
-This is an overview of the markdown contents of all the notebooks / scripts in this directory.# 00_benchmark_clinician_suspicion.md
+This is an overview of the markdown contents of all the notebooks / scripts in this directory.
+# 00_benchmark_clinician_suspicion
 
 
 This notebook benchmarks how well clinical suspicion does for predicting IAI-I. It only uses data from PECARN.
@@ -7,7 +8,7 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 
 ## counts should match pecarn paper
 
-# 01_match_features_psrc_pecarn.md
+# 01_match_features_psrc_pecarn
 
 
 **load the data**
@@ -28,7 +29,7 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 
 ## how are vars related to outcome
 
-# 02_benchmark_pecarn_rule.md
+# 02_benchmark_pecarn_rule
 
 
 ## check bivariable associations
@@ -42,7 +43,7 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 ## look at errors for subgroups
 **here we consider the riskier subgroups (young age, female)**
 
-# 03_eda.md
+# 03_eda
 
 
 ## combined
@@ -65,7 +66,7 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 
 #### scatter plots
 
-# 04_fit_interpretable_models.md
+# 04_fit_interpretable_models
 
 
 ## fit simple models
@@ -88,12 +89,12 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 
 ## look at all the results
 
-# 05_benchmark_new_rule.md
+# 05_benchmark_new_rule
 
 
 **test individual rule**
 
-# 06_measure_predictive_limits.md
+# 06_measure_predictive_limits
 
 
 ## look at different buckets
