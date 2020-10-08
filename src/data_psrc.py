@@ -142,6 +142,8 @@ def rename_values(df):
 
     for k in moi:
         df.loc[df[k] == 1, 'MOI'] = moi[k]
+        
+    df['CTScan'] = df['Abdominal CT scan performed']
 
     return df
 

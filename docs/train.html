@@ -40,10 +40,10 @@ from sklearn.svm import SVC
 from sklearn.feature_selection import SelectFromModel
 from sklearn.inspection import permutation_importance
 import os.path
-from imodels import RuleListClassifier, RuleFit, SLIM, GreedyRuleList
 from imblearn.over_sampling import RandomOverSampler, SMOTE
 from sklearn.model_selection import KFold
 import pandas as pd
+import imodels
 # from stability_selection import StabilitySelection
 import validate
 import traceback
@@ -109,13 +109,13 @@ def get_model(model_type, hyperparam=0):
     elif model_type == &#39;gb&#39;:
         m = GradientBoostingClassifier()
     elif model_type == &#39;brl&#39;:
-        m = RuleListClassifier()
+        m = imodels.BayesianRuleListClassifier()
     elif model_type == &#39;slim&#39;:
-        m = SLIM()
+        m = imodels.SLIMRegressor()
     elif model_type == &#39;grl&#39;:
-        m = GreedyRuleList()
+        m = imodels.GreedyRuleListClassifier()
     elif model_type == &#39;rulefit&#39;:
-        m = RuleFit()
+        m = imodels.RuleFitRegressor()
     return m
 
     
@@ -387,13 +387,13 @@ def train(df: pd.DataFrame, feat_names: list,
     elif model_type == &#39;gb&#39;:
         m = GradientBoostingClassifier()
     elif model_type == &#39;brl&#39;:
-        m = RuleListClassifier()
+        m = imodels.BayesianRuleListClassifier()
     elif model_type == &#39;slim&#39;:
-        m = SLIM()
+        m = imodels.SLIMRegressor()
     elif model_type == &#39;grl&#39;:
-        m = GreedyRuleList()
+        m = imodels.GreedyRuleListClassifier()
     elif model_type == &#39;rulefit&#39;:
-        m = RuleFit()
+        m = imodels.RuleFitRegressor()
     return m</code></pre>
 </details>
 </dd>

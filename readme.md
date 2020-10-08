@@ -2,9 +2,10 @@
 
 Code for reproducing analysis evaluating the PECARN Clinical Decision rule for prediction Intra-abdominal injury requiring intervention (IAI-I).
 
+Documentation for useful functions is [here](https://github.com/csinva/iai-clinical-decision-rule) and for notebooks is [here](https://github.com/csinva/iai-clinical-decision-rule/tree/master/notebooks).
+
 
 # PCS documentation
-
 
 1. Domain problem formulation (narrative). Clearly state the real-world question and describe prior work related to this question. Indicate how this question can be answered in the context of a model or analysis.
 

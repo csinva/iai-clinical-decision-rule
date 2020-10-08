@@ -66,7 +66,10 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 
 #### scatter plots
 
-# 04_fit_interpretable_models
+# 04_sample_splitting
+
+
+# 05_fit_interpretable_models
 
 
 ## fit simple models
@@ -89,12 +92,12 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 
 ## look at all the results
 
-# 05_benchmark_new_rule
+# 06_benchmark_new_rule
 
 
 **test individual rule**
 
-# 06_measure_predictive_limits
+# 07_measure_predictive_limits
 
 
 ## look at different buckets

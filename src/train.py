@@ -14,10 +14,10 @@ from sklearn.svm import SVC
 from sklearn.feature_selection import SelectFromModel
 from sklearn.inspection import permutation_importance
 import os.path
-from imodels import RuleListClassifier, RuleFit, SLIM, GreedyRuleList
 from imblearn.over_sampling import RandomOverSampler, SMOTE
 from sklearn.model_selection import KFold
 import pandas as pd
+import imodels
 # from stability_selection import StabilitySelection
 import validate
 import traceback
@@ -83,13 +83,13 @@ def get_model(model_type, hyperparam=0):
     elif model_type == 'gb':
         m = GradientBoostingClassifier()
     elif model_type == 'brl':
-        m = RuleListClassifier()
+        m = imodels.BayesianRuleListClassifier()
     elif model_type == 'slim':
-        m = SLIM()
+        m = imodels.SLIMRegressor()
     elif model_type == 'grl':
-        m = GreedyRuleList()
+        m = imodels.GreedyRuleListClassifier()
     elif model_type == 'rulefit':
-        m = RuleFit()
+        m = imodels.RuleFitRegressor()
     return m
 
     

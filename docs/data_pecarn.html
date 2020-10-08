@@ -280,6 +280,7 @@ def rename_values(df):
         df[k] = df[k].astype(str)
 
     df[&#39;AbdomenPain&#39;] = df[&#39;AbdomenPain&#39;].replace(&#39;3.0&#39;, &#39;other&#39;)
+    df[&#39;CTScan&#39;] = (df[&#39;AbdCTScan&#39;] == 1.0).astype(int)
 
     # remap values which take on values 0....4
     ks_remap = [&#39;VomitWretch&#39;,
@@ -657,6 +658,7 @@ set types of</p></section>
         df[k] = df[k].astype(str)
 
     df[&#39;AbdomenPain&#39;] = df[&#39;AbdomenPain&#39;].replace(&#39;3.0&#39;, &#39;other&#39;)
+    df[&#39;CTScan&#39;] = (df[&#39;AbdCTScan&#39;] == 1.0).astype(int)
 
     # remap values which take on values 0....4
     ks_remap = [&#39;VomitWretch&#39;,

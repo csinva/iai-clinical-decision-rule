@@ -168,6 +168,8 @@ def rename_values(df):
 
     for k in moi:
         df.loc[df[k] == 1, &#39;MOI&#39;] = moi[k]
+        
+    df[&#39;CTScan&#39;] = df[&#39;Abdominal CT scan performed&#39;]
 
     return df
 
@@ -377,6 +379,8 @@ set types of</p></section>
 
     for k in moi:
         df.loc[df[k] == 1, &#39;MOI&#39;] = moi[k]
+        
+    df[&#39;CTScan&#39;] = df[&#39;Abdominal CT scan performed&#39;]
 
     return df</code></pre>
 </details>
