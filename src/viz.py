@@ -23,6 +23,23 @@ cm = sns.diverging_palette(10, 240, n=1000, as_cmap=True)
 cm_rev = sns.diverging_palette(240, 10, n=1000, as_cmap=True)
 cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 
+def rename(s):
+    RENAMING = {
+        'gcsscore': 'GCS Score',
+        
+        'irf': 'Iterative random forest',
+        'grl': 'CART rule list',
+        'decision_tree': 'CART decision tree',
+        'rulefit': 'Rule fit',
+        'bayesian_rule_list': 'Bayesian rule list'
+    }
+    if s.lower() in RENAMING:
+        return RENAMING[s.lower()]
+    else:
+        return s.capitalize()
+    return s
+
+
 def savefig(s: str):
     plt.savefig(oj(DIR_FIGS, s + '.pdf'))
     plt.savefig(oj(DIR_FIGS, s + '.png'), dpi=300)
