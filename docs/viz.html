@@ -49,6 +49,23 @@ cm = sns.diverging_palette(10, 240, n=1000, as_cmap=True)
 cm_rev = sns.diverging_palette(240, 10, n=1000, as_cmap=True)
 cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 
+def rename(s):
+    RENAMING = {
+        &#39;gcsscore&#39;: &#39;GCS Score&#39;,
+        
+        &#39;irf&#39;: &#39;Iterative random forest&#39;,
+        &#39;grl&#39;: &#39;CART rule list&#39;,
+        &#39;decision_tree&#39;: &#39;CART decision tree&#39;,
+        &#39;rulefit&#39;: &#39;Rule fit&#39;,
+        &#39;bayesian_rule_list&#39;: &#39;Bayesian rule list&#39;
+    }
+    if s.lower() in RENAMING:
+        return RENAMING[s.lower()]
+    else:
+        return s.capitalize()
+    return s
+
+
 def savefig(s: str):
     plt.savefig(oj(DIR_FIGS, s + &#39;.pdf&#39;))
     plt.savefig(oj(DIR_FIGS, s + &#39;.png&#39;), dpi=300)
@@ -499,6 +516,32 @@ Normalization can be applied by setting <code>normalize=True</code>.</p></sectio
     return ax</code></pre>
 </details>
 </dd>
+<dt id="src.viz.rename"><code class="name flex">
+<span>def <span class="ident">rename</span></span>(<span>s)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rename(s):
+    RENAMING = {
+        &#39;gcsscore&#39;: &#39;GCS Score&#39;,
+        
+        &#39;irf&#39;: &#39;Iterative random forest&#39;,
+        &#39;grl&#39;: &#39;CART rule list&#39;,
+        &#39;decision_tree&#39;: &#39;CART decision tree&#39;,
+        &#39;rulefit&#39;: &#39;Rule fit&#39;,
+        &#39;bayesian_rule_list&#39;: &#39;Bayesian rule list&#39;
+    }
+    if s.lower() in RENAMING:
+        return RENAMING[s.lower()]
+    else:
+        return s.capitalize()
+    return s</code></pre>
+</details>
+</dd>
 <dt id="src.viz.savefig"><code class="name flex">
 <span>def <span class="ident">savefig</span></span>(<span>s)</span>
 </code></dt>
@@ -697,6 +740,7 @@ Normalization can be applied by setting <code>normalize=True</code>.</p></sectio
 <li><code><a title="src.viz.highlight_max" href="#src.viz.highlight_max">highlight_max</a></code></li>
 <li><code><a title="src.viz.jointplot_grouped" href="#src.viz.jointplot_grouped">jointplot_grouped</a></code></li>
 <li><code><a title="src.viz.plot_confusion_matrix" href="#src.viz.plot_confusion_matrix">plot_confusion_matrix</a></code></li>
+<li><code><a title="src.viz.rename" href="#src.viz.rename">rename</a></code></li>
 <li><code><a title="src.viz.savefig" href="#src.viz.savefig">savefig</a></code></li>
 <li><code><a title="src.viz.venn_overlap" href="#src.viz.venn_overlap">venn_overlap</a></code></li>
 <li><code><a title="src.viz.visualize_individual_results" href="#src.viz.visualize_individual_results">visualize_individual_results</a></code></li>

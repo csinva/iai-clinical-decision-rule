@@ -72,6 +72,8 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 # 05_fit_interpretable_models
 
 
+Fit interpretable models to the training set and test on validation sets. Uses imodels package as of 10/25/2020.
+
 ## fit simple models
 
 **decision tree**
@@ -92,10 +94,16 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 
 ## look at all the results
 
-# 06_benchmark_new_rule
+# 06_benchmark_compare_new_rules
 
 
 **test individual rule**
+
+## test overlap of different rules
+
+**rules make different predictions**
+
+**difference in predictions makes little difference for IAI-I**
 
 # 07_measure_predictive_limits
 

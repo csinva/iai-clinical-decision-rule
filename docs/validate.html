@@ -26,7 +26,7 @@
 </summary>
 <pre><code class="python">from os.path import join as oj
 import sys
-
+import warnings
 sys.path.insert(1, oj(sys.path[0], &#39;..&#39;))  # insert parent path
 import numpy as np
 import matplotlib.pyplot as plt
@@ -64,6 +64,43 @@ def sensitivity_specificity_curve(y_test, preds_proba, plot=False, thresholds=No
         plt.ylabel(&#39;specificity&#39;)
         plt.grid()
     return sens, spec, thresholds
+
+def all_stats_curve(y_test, preds_proba, plot=False, thresholds=None):
+    &#39;&#39;&#39;preds_proba should be 1d
+    &#39;&#39;&#39;
+    if thresholds is None:
+        thresholds = sorted(np.unique(preds_proba))
+    all_stats = {
+        s: [] for s in [&#39;sens&#39;, &#39;spec&#39;, &#39;ppv&#39;, &#39;npv&#39;, &#39;lr+&#39;, &#39;lr-&#39;]
+    }
+    for threshold in tqdm(thresholds):
+        preds = preds_proba &gt; threshold
+#         stats = sklearn.metrics.classification_report(y_test, preds,
+#                                                       output_dict=True,
+#                                                       zero_division=0)
+        
+#         all_stats[&#39;sensitivity&#39;].append(stats[&#39;1&#39;][&#39;recall&#39;])
+#         all_stats[&#39;specificity&#39;].append(stats[&#39;0&#39;][&#39;recall&#39;])
+        tn, fp, fn, tp = metrics.confusion_matrix(y_test, preds).ravel()
+        with warnings.catch_warnings():
+            warnings.simplefilter(&#34;ignore&#34;)
+            sens = tp / (tp + fn)
+            spec = tn / (tn + fp)
+            all_stats[&#39;sens&#39;].append(sens)
+            all_stats[&#39;spec&#39;].append(spec)
+            all_stats[&#39;ppv&#39;].append(tp / (tp + fp))
+            all_stats[&#39;npv&#39;].append(tn / (tn + fn))
+            all_stats[&#39;lr+&#39;].append(sens / (1 - spec))
+            all_stats[&#39;lr-&#39;].append((1 - sens) / spec)
+        
+
+    if plot:
+        plt.plot(all_stats[&#39;sens&#39;], all_stats[&#39;spec&#39;], &#39;.-&#39;)
+        plt.xlabel(&#39;sensitivity&#39;)
+        plt.ylabel(&#39;specificity&#39;)
+        plt.grid()
+    return all_stats, thresholds
+
 
 
 scorers = {
@@ -174,6 +211,52 @@ def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="src.validate.all_stats_curve"><code class="name flex">
+<span>def <span class="ident">all_stats_curve</span></span>(<span>y_test, preds_proba, plot=False, thresholds=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>preds_proba should be 1d</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def all_stats_curve(y_test, preds_proba, plot=False, thresholds=None):
+    &#39;&#39;&#39;preds_proba should be 1d
+    &#39;&#39;&#39;
+    if thresholds is None:
+        thresholds = sorted(np.unique(preds_proba))
+    all_stats = {
+        s: [] for s in [&#39;sens&#39;, &#39;spec&#39;, &#39;ppv&#39;, &#39;npv&#39;, &#39;lr+&#39;, &#39;lr-&#39;]
+    }
+    for threshold in tqdm(thresholds):
+        preds = preds_proba &gt; threshold
+#         stats = sklearn.metrics.classification_report(y_test, preds,
+#                                                       output_dict=True,
+#                                                       zero_division=0)
+        
+#         all_stats[&#39;sensitivity&#39;].append(stats[&#39;1&#39;][&#39;recall&#39;])
+#         all_stats[&#39;specificity&#39;].append(stats[&#39;0&#39;][&#39;recall&#39;])
+        tn, fp, fn, tp = metrics.confusion_matrix(y_test, preds).ravel()
+        with warnings.catch_warnings():
+            warnings.simplefilter(&#34;ignore&#34;)
+            sens = tp / (tp + fn)
+            spec = tn / (tn + fp)
+            all_stats[&#39;sens&#39;].append(sens)
+            all_stats[&#39;spec&#39;].append(spec)
+            all_stats[&#39;ppv&#39;].append(tp / (tp + fp))
+            all_stats[&#39;npv&#39;].append(tn / (tn + fn))
+            all_stats[&#39;lr+&#39;].append(sens / (1 - spec))
+            all_stats[&#39;lr-&#39;].append((1 - sens) / spec)
+        
+
+    if plot:
+        plt.plot(all_stats[&#39;sens&#39;], all_stats[&#39;spec&#39;], &#39;.-&#39;)
+        plt.xlabel(&#39;sensitivity&#39;)
+        plt.ylabel(&#39;specificity&#39;)
+        plt.grid()
+    return all_stats, thresholds</code></pre>
+</details>
+</dd>
 <dt id="src.validate.append_score_results"><code class="name flex">
 <span>def <span class="ident">append_score_results</span></span>(<span>scores, pred, y, suffix1='', suffix2='', thresh=None)</span>
 </code></dt>
@@ -375,6 +458,7 @@ def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="src.validate.all_stats_curve" href="#src.validate.all_stats_curve">all_stats_curve</a></code></li>
 <li><code><a title="src.validate.append_score_results" href="#src.validate.append_score_results">append_score_results</a></code></li>
 <li><code><a title="src.validate.get_scores" href="#src.validate.get_scores">get_scores</a></code></li>
 <li><code><a title="src.validate.select_best_fold" href="#src.validate.select_best_fold">select_best_fold</a></code></li>

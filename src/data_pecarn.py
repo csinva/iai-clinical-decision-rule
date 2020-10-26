@@ -51,6 +51,7 @@ def get_data(use_processed=False, frac_missing_allowed=0.05,
         # save
         os.makedirs(os.path.dirname(processed_file), exist_ok=True)
         df.to_pickle(processed_file)
+        df.to_csv(processed_file[:-4] + '.csv')
 
         unit_test(df)
         return df
