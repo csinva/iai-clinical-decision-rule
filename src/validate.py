@@ -1,6 +1,6 @@
 from os.path import join as oj
 import sys
-
+import warnings
 sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,6 +38,43 @@ def sensitivity_specificity_curve(y_test, preds_proba, plot=False, thresholds=No
         plt.ylabel('specificity')
         plt.grid()
     return sens, spec, thresholds
+
+def all_stats_curve(y_test, preds_proba, plot=False, thresholds=None):
+    '''preds_proba should be 1d
+    '''
+    if thresholds is None:
+        thresholds = sorted(np.unique(preds_proba))
+    all_stats = {
+        s: [] for s in ['sens', 'spec', 'ppv', 'npv', 'lr+', 'lr-']
+    }
+    for threshold in tqdm(thresholds):
+        preds = preds_proba > threshold
+#         stats = sklearn.metrics.classification_report(y_test, preds,
+#                                                       output_dict=True,
+#                                                       zero_division=0)
+        
+#         all_stats['sensitivity'].append(stats['1']['recall'])
+#         all_stats['specificity'].append(stats['0']['recall'])
+        tn, fp, fn, tp = metrics.confusion_matrix(y_test, preds).ravel()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            sens = tp / (tp + fn)
+            spec = tn / (tn + fp)
+            all_stats['sens'].append(sens)
+            all_stats['spec'].append(spec)
+            all_stats['ppv'].append(tp / (tp + fp))
+            all_stats['npv'].append(tn / (tn + fn))
+            all_stats['lr+'].append(sens / (1 - spec))
+            all_stats['lr-'].append((1 - sens) / spec)
+        
+
+    if plot:
+        plt.plot(all_stats['sens'], all_stats['spec'], '.-')
+        plt.xlabel('sensitivity')
+        plt.ylabel('specificity')
+        plt.grid()
+    return all_stats, thresholds
+
 
 
 scorers = {
