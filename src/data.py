@@ -24,12 +24,32 @@ def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):
                                      dummy=dummy,
                                      impute_feats=impute)
     all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
-    df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
-    all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
-
-    # resulting features
-    common_feats = list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
-    common_feats = common_feats + meta
+    try:
+        df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
+        all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
+        common_feats = meta + list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
+    except:
+        print('PSRC data not loaded (not public)')
+        df_psrc = df_pecarn[df_pecarn.cv_fold > 100] # select 0 rows
+        filtered_feats_psrc = None
+        common_feats =  ['AbdDistention_or_AbdomenPain_yes',
+                         'AbdTenderDegree_None',
+                         'AbdTrauma_or_SeatBeltSign_yes',
+                         'Age<2_yes',
+                         'CostalTender_yes',
+                         'DecrBreathSound_yes',
+                         'GCSScore_Full_yes',
+                         'Hypotension_yes',
+                         'MOI_Bike collision/fall',
+                         'MOI_Fall from an elevation',
+                         'MOI_Motor vehicle collision',
+                         'MOI_Motorcycle/ATV/Scooter collision',
+                         'MOI_Object struck abdomen',
+                         'MOI_Pedestrian/bicyclist struck by moving vehicle',
+                         'ThoracicTrauma_yes',
+                         'VomitWretch_yes'] + meta
+        
+    
 
     feats_binary = [feat for feat in common_feats
                     if not feat in feats_numerical + feats_categorical + meta]
