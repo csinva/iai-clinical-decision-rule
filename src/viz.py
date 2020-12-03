@@ -26,12 +26,28 @@ cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 def rename(s):
     RENAMING = {
         'gcsscore': 'GCS Score',
-        
+        'initheartrate': 'Heart rate',
+        'initsysbprange': 'Systolic BP',
+        'abdtenderdegree': 'Abd. tenderness\ndegree',
         'irf': 'Iterative random forest',
         'grl': 'CART rule list',
+        'moi': 'MOI',
         'decision_tree': 'CART decision tree',
         'rulefit': 'Rule fit',
-        'bayesian_rule_list': 'Bayesian rule list'
+        'bayesian_rule_list': 'Bayesian rule list',
+        'pedestrian/bicyclist struck by moving vehicle': 'Pedestrian/bicyclist struck\nby moving vehicle',
+        'native hawaiian or other pacific islander': 'Native hawaiian\nor other pacific islander',
+        'decrbreathsound': 'Decr. breath sounds',
+        'abddistention': 'Abd. distention',
+        'vomitwretch': 'Vomit/wretch',
+        'seatbeltsign': 'Seatbelt sign',
+        'costaltender': 'Costal tenderness',
+        'rtcostaltender': 'Right costal tenderness',
+        'abdtrauma': 'Abd. trauma',
+        'thoracictrauma': 'Thoracic trauma',
+        'ltcostaltender': 'Left costal tenderness',
+        'distractingpain': 'Distracting pain',
+        'abdomenpain': 'Abd. pain',
     }
     if s.lower() in RENAMING:
         return RENAMING[s.lower()]
