@@ -50,12 +50,32 @@ def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):
                                      dummy=dummy,
                                      impute_feats=impute)
     all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
-    df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
-    all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
-
-    # resulting features
-    common_feats = list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
-    common_feats = common_feats + meta
+    try:
+        df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
+        all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
+        common_feats = meta + list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
+    except:
+        print(&#39;PSRC data not loaded (not public)&#39;)
+        df_psrc = df_pecarn[df_pecarn.cv_fold &gt; 100] # select 0 rows
+        filtered_feats_psrc = None
+        common_feats =  [&#39;AbdDistention_or_AbdomenPain_yes&#39;,
+                         &#39;AbdTenderDegree_None&#39;,
+                         &#39;AbdTrauma_or_SeatBeltSign_yes&#39;,
+                         &#39;Age&lt;2_yes&#39;,
+                         &#39;CostalTender_yes&#39;,
+                         &#39;DecrBreathSound_yes&#39;,
+                         &#39;GCSScore_Full_yes&#39;,
+                         &#39;Hypotension_yes&#39;,
+                         &#39;MOI_Bike collision/fall&#39;,
+                         &#39;MOI_Fall from an elevation&#39;,
+                         &#39;MOI_Motor vehicle collision&#39;,
+                         &#39;MOI_Motorcycle/ATV/Scooter collision&#39;,
+                         &#39;MOI_Object struck abdomen&#39;,
+                         &#39;MOI_Pedestrian/bicyclist struck by moving vehicle&#39;,
+                         &#39;ThoracicTrauma_yes&#39;,
+                         &#39;VomitWretch_yes&#39;] + meta
+        
+    
 
     feats_binary = [feat for feat in common_feats
                     if not feat in feats_numerical + feats_categorical + meta]
@@ -444,12 +464,32 @@ femur fracture</p>
                                      dummy=dummy,
                                      impute_feats=impute)
     all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
-    df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
-    all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
-
-    # resulting features
-    common_feats = list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
-    common_feats = common_feats + meta
+    try:
+        df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
+        all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
+        common_feats = meta + list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
+    except:
+        print(&#39;PSRC data not loaded (not public)&#39;)
+        df_psrc = df_pecarn[df_pecarn.cv_fold &gt; 100] # select 0 rows
+        filtered_feats_psrc = None
+        common_feats =  [&#39;AbdDistention_or_AbdomenPain_yes&#39;,
+                         &#39;AbdTenderDegree_None&#39;,
+                         &#39;AbdTrauma_or_SeatBeltSign_yes&#39;,
+                         &#39;Age&lt;2_yes&#39;,
+                         &#39;CostalTender_yes&#39;,
+                         &#39;DecrBreathSound_yes&#39;,
+                         &#39;GCSScore_Full_yes&#39;,
+                         &#39;Hypotension_yes&#39;,
+                         &#39;MOI_Bike collision/fall&#39;,
+                         &#39;MOI_Fall from an elevation&#39;,
+                         &#39;MOI_Motor vehicle collision&#39;,
+                         &#39;MOI_Motorcycle/ATV/Scooter collision&#39;,
+                         &#39;MOI_Object struck abdomen&#39;,
+                         &#39;MOI_Pedestrian/bicyclist struck by moving vehicle&#39;,
+                         &#39;ThoracicTrauma_yes&#39;,
+                         &#39;VomitWretch_yes&#39;] + meta
+        
+    
 
     feats_binary = [feat for feat in common_feats
                     if not feat in feats_numerical + feats_categorical + meta]

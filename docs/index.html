@@ -19,44 +19,38 @@ Demonstrating the use of PDR/PCS in …" />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src</code></h1>
+
 </header>
 <section id="section-intro">
 <p>Python package for documenting all the functions used in the
-derivation of the iai clinical decision rule.
-Demonstrating the use of PDR/PCS in emergency medicine on the PECARN dataset.</p>
+derivation of the iai clinical decision rule.</p>
+<h1 id="demonstrating-the-use-of-pdrpcs-in-emergency-medicine-on-the-pecarn-dataset">Demonstrating the use of PDR/PCS in emergency medicine on the PECARN dataset.</h1>
+<p>Code for reproducing analysis evaluating the PECARN Clinical Decision rule for prediction Intra-abdominal injury requiring intervention (IAI-I).</p>
+<p>Documentation for useful functions is <a href="csinva.io/iai-clinical-decision-rule">here</a> and for a thorough look into the notebooks is <a href="https://github.com/csinva/iai-clinical-decision-rule/tree/master/notebooks">here</a>.</p>
 <h1 id="pcs-documentation">PCS documentation</h1>
-<ol>
-<li>Domain problem formulation (narrative). Clearly state the real-world question and describe prior work related to this question. Indicate how this question can be answered in the context of a model or analysis.</li>
-</ol>
-<p>Want to be able to identify the risk of clinically important traumatic brain injury (ciTBI) among children. This information can be used to triage CT imaging.</p>
-<ol>
-<li>Data collection and storage (narrative). Describe how the data were generated, including experimental design principles, and reasons why data is relevant to answer the domain question. Describe where data is stored and how it can be accessed by others.</li>
-</ol>
-<p>Protocol for screening subjects is given in the paper (i.e. children presenting within 24 h of non-trivial head trauma). Data is now open-source and available as a series of csv and accompanying pdf files providing details on how it was collected.</p>
-<ol>
-<li>Data cleaning and preprocessing (narrative, code, visualization). Describe steps taken to convert raw data into data used for analysis, and why these preprocessing steps are justified. Ask whether more than one preprocessing methods should be used and examine their impacts on the final data results.</li>
-</ol>
-<p>The definition of the outcome is the most difficult part. Categorical features are on-hot encoded.</p>
-<ol>
-<li>Exploratory data analysis (narrative, code, visualization). Describe any preliminary analyses that influenced modeling decisions or conclusions along with code and visualizations to support these decisions.</li>
-</ol>
+<h2 id="1-domain-problem-formulation">1. Domain problem formulation</h2>
+<p>Our goal is to be able to identify the risk of clinically important traumatic brain injury (ciTBI) among children. This information can be used to triage CT imaging.</p>
+<p>The outcome is definite to be Intra-abdominal injury requiring intervention (IAI-I).</p>
+<h2 id="2-data-collection-and-storage">2. Data collection and storage</h2>
+<p>Protocol for screening subjects is given in the <a href="https://www.annemergmed.com/article/S0196-0644(12">PECARN paper</a>01743-X/fulltext) (i.e. children presenting within 24 h of non-trivial head trauma) and the <a href="https://www.sciencedirect.com/science/article/abs/pii/S1072751517300376">PSRC paper</a>. Data is now open-source and available as a series of csv and accompanying pdf files providing details on how it was collected.</p>
+<h2 id="3-data-cleaning-and-preprocessing">3. Data cleaning and preprocessing</h2>
+<p>After matching features between the PECARN and PSRC data, we get histograms as shown below:</p>
+<p><img src="reports/figs/matched_hists.png" width="50%"><img src="reports/figs/matched_hists_continuous.png" width="30%"></p>
+<p>The definition of the outcome is the most difficult part. Categorical features are one-hot encoded.</p>
+<h2 id="4-exploratory-data-analysis">4. Exploratory data analysis</h2>
 <p>Split up preverbal (&lt;2 years of age) and verbal (&gt;=2 years of age) patients.</p>
-<ol>
-<li>Modeling and Post-hoc analysis (narrative, code, visualization). Carry out PCS inference in the context of the domain question. Specify appropriate model and data perturbations. If necessary, specify null hypotheses and associated perturbations.</li>
-</ol>
-<p>sfdg</p>
-<ol>
-<li>Interpretation of results (narrative and visualization). Translate the data results to draw conclusions and/or make recommendations in the context of domain problem.</li>
-</ol>
-<p>asd</p>
+<h2 id="5-modeling-and-post-hoc-analysis">5. Modeling and Post-hoc analysis</h2>
+<p>Many different models are fit and achieve different sensitivity/specificity tradeoffs.</p>
+<p><img alt="" src="reports/figs/metrics_3_splits.png"></p>
+<h2 id="6-interpretation-of-results">6. Interpretation of results</h2>
+<p>We are able to rederive reasonable rule-based models for IAI prediction.</p>
 <h1 id="reference">Reference</h1>
 <ul>
-<li>docs generated with pdoc3</li>
-<li>stability-selection is taken from <a href="https://github.com/scikit-learn-contrib/stability-selection">this repo</a> with minor adjustments<ul>
-<li>to use, cd to lib/stability-selection then run <code>python setup.py install develop</code></li>
+<li>IAI data is gratefully downloaded from the open-source <a href="http://pecarn.org/studyDatasets/Default">PECARN website</a> (also available here in the <a href="data">data</a> folder)<ul>
+<li>unfortunately, PSRC data is not available open-source at this time</li>
 </ul>
 </li>
+<li>makes heavy use of the <a href="https://github.com/csinva/interpretability-implementations-demos">imodels</a> package</li>
 </ul>
 <details class="source">
 <summary>
@@ -65,7 +59,7 @@ Demonstrating the use of PDR/PCS in emergency medicine on the PECARN dataset.</p
 <pre><code class="python">&#34;&#34;&#34;
 Python package for documenting all the functions used in the
 derivation of the iai clinical decision rule.
-.. include:: ./documentation.md
+.. include:: ../readme.md
 &#34;&#34;&#34;</code></pre>
 </details>
 </section>
@@ -113,7 +107,16 @@ derivation of the iai clinical decision rule.
 <h1>Index</h1>
 <div class="toc">
 <ul>
-<li><a href="#pcs-documentation">PCS documentation</a></li>
+<li><a href="#demonstrating-the-use-of-pdrpcs-in-emergency-medicine-on-the-pecarn-dataset">Demonstrating the use of PDR/PCS in emergency medicine on the PECARN dataset.</a></li>
+<li><a href="#pcs-documentation">PCS documentation</a><ul>
+<li><a href="#1-domain-problem-formulation">1. Domain problem formulation</a></li>
+<li><a href="#2-data-collection-and-storage">2. Data collection and storage</a></li>
+<li><a href="#3-data-cleaning-and-preprocessing">3. Data cleaning and preprocessing</a></li>
+<li><a href="#4-exploratory-data-analysis">4. Exploratory data analysis</a></li>
+<li><a href="#5-modeling-and-post-hoc-analysis">5. Modeling and Post-hoc analysis</a></li>
+<li><a href="#6-interpretation-of-results">6. Interpretation of results</a></li>
+</ul>
+</li>
 <li><a href="#reference">Reference</a></li>
 </ul>
 </div>

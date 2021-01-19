@@ -52,12 +52,28 @@ cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 def rename(s):
     RENAMING = {
         &#39;gcsscore&#39;: &#39;GCS Score&#39;,
-        
+        &#39;initheartrate&#39;: &#39;Heart rate&#39;,
+        &#39;initsysbprange&#39;: &#39;Systolic BP&#39;,
+        &#39;abdtenderdegree&#39;: &#39;Abd. tenderness\ndegree&#39;,
         &#39;irf&#39;: &#39;Iterative random forest&#39;,
         &#39;grl&#39;: &#39;CART rule list&#39;,
+        &#39;moi&#39;: &#39;MOI&#39;,
         &#39;decision_tree&#39;: &#39;CART decision tree&#39;,
         &#39;rulefit&#39;: &#39;Rule fit&#39;,
-        &#39;bayesian_rule_list&#39;: &#39;Bayesian rule list&#39;
+        &#39;bayesian_rule_list&#39;: &#39;Bayesian rule list&#39;,
+        &#39;pedestrian/bicyclist struck by moving vehicle&#39;: &#39;Pedestrian/bicyclist struck\nby moving vehicle&#39;,
+        &#39;native hawaiian or other pacific islander&#39;: &#39;Native hawaiian\nor other pacific islander&#39;,
+        &#39;decrbreathsound&#39;: &#39;Decr. breath sounds&#39;,
+        &#39;abddistention&#39;: &#39;Abd. distention&#39;,
+        &#39;vomitwretch&#39;: &#39;Vomit/wretch&#39;,
+        &#39;seatbeltsign&#39;: &#39;Seatbelt sign&#39;,
+        &#39;costaltender&#39;: &#39;Costal tenderness&#39;,
+        &#39;rtcostaltender&#39;: &#39;Right costal tenderness&#39;,
+        &#39;abdtrauma&#39;: &#39;Abd. trauma&#39;,
+        &#39;thoracictrauma&#39;: &#39;Thoracic trauma&#39;,
+        &#39;ltcostaltender&#39;: &#39;Left costal tenderness&#39;,
+        &#39;distractingpain&#39;: &#39;Distracting pain&#39;,
+        &#39;abdomenpain&#39;: &#39;Abd. pain&#39;,
     }
     if s.lower() in RENAMING:
         return RENAMING[s.lower()]
@@ -528,12 +544,28 @@ Normalization can be applied by setting <code>normalize=True</code>.</p></sectio
 <pre><code class="python">def rename(s):
     RENAMING = {
         &#39;gcsscore&#39;: &#39;GCS Score&#39;,
-        
+        &#39;initheartrate&#39;: &#39;Heart rate&#39;,
+        &#39;initsysbprange&#39;: &#39;Systolic BP&#39;,
+        &#39;abdtenderdegree&#39;: &#39;Abd. tenderness\ndegree&#39;,
         &#39;irf&#39;: &#39;Iterative random forest&#39;,
         &#39;grl&#39;: &#39;CART rule list&#39;,
+        &#39;moi&#39;: &#39;MOI&#39;,
         &#39;decision_tree&#39;: &#39;CART decision tree&#39;,
         &#39;rulefit&#39;: &#39;Rule fit&#39;,
-        &#39;bayesian_rule_list&#39;: &#39;Bayesian rule list&#39;
+        &#39;bayesian_rule_list&#39;: &#39;Bayesian rule list&#39;,
+        &#39;pedestrian/bicyclist struck by moving vehicle&#39;: &#39;Pedestrian/bicyclist struck\nby moving vehicle&#39;,
+        &#39;native hawaiian or other pacific islander&#39;: &#39;Native hawaiian\nor other pacific islander&#39;,
+        &#39;decrbreathsound&#39;: &#39;Decr. breath sounds&#39;,
+        &#39;abddistention&#39;: &#39;Abd. distention&#39;,
+        &#39;vomitwretch&#39;: &#39;Vomit/wretch&#39;,
+        &#39;seatbeltsign&#39;: &#39;Seatbelt sign&#39;,
+        &#39;costaltender&#39;: &#39;Costal tenderness&#39;,
+        &#39;rtcostaltender&#39;: &#39;Right costal tenderness&#39;,
+        &#39;abdtrauma&#39;: &#39;Abd. trauma&#39;,
+        &#39;thoracictrauma&#39;: &#39;Thoracic trauma&#39;,
+        &#39;ltcostaltender&#39;: &#39;Left costal tenderness&#39;,
+        &#39;distractingpain&#39;: &#39;Distracting pain&#39;,
+        &#39;abdomenpain&#39;: &#39;Abd. pain&#39;,
     }
     if s.lower() in RENAMING:
         return RENAMING[s.lower()]

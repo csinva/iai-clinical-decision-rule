@@ -2,8 +2,43 @@
 
 Code for reproducing analysis evaluating the PECARN Clinical Decision rule for prediction Intra-abdominal injury requiring intervention (IAI-I).
 
-Documentation for useful functions is [here](csinva.io/iai-clinical-decision-rule) and for notebooks is [here](https://github.com/csinva/iai-clinical-decision-rule/tree/master/notebooks).
+Documentation for useful functions is [here](csinva.io/iai-clinical-decision-rule) and for a thorough look into the notebooks is [here](https://github.com/csinva/iai-clinical-decision-rule/tree/master/notebooks).
 
+# PCS documentation
+
+## 1. Domain problem formulation
+
+Our goal is to be able to identify the risk of clinically important traumatic brain injury (ciTBI) among children. This information can be used to triage CT imaging.
+
+The outcome is definite to be Intra-abdominal injury requiring intervention (IAI-I).
+
+## 2. Data collection and storage
+
+Protocol for screening subjects is given in the [PECARN paper](https://www.annemergmed.com/article/S0196-0644(12)01743-X/fulltext) (i.e. children presenting within 24 h of non-trivial head trauma) and the [PSRC paper](https://www.sciencedirect.com/science/article/abs/pii/S1072751517300376). Data is now open-source and available as a series of csv and accompanying pdf files providing details on how it was collected.
+
+## 3. Data cleaning and preprocessing
+
+After matching features between the PECARN and PSRC data, we get histograms as shown below:
+
+
+
+<img src="reports/figs/matched_hists.png" width="50%"><img src="reports/figs/matched_hists_continuous.png" width="30%">
+
+The definition of the outcome is the most difficult part. Categorical features are one-hot encoded.
+
+## 4. Exploratory data analysis
+
+Split up preverbal (<2 years of age) and verbal (>=2 years of age) patients.
+
+## 5. Modeling and Post-hoc analysis
+
+Many different models are fit and achieve different sensitivity/specificity tradeoffs.
+
+![](reports/figs/metrics_3_splits.png)
+
+## 6. Interpretation of results
+
+We are able to rederive reasonable rule-based models for IAI prediction.
 
 
 # Reference

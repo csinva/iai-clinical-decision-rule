@@ -8,8 +8,8 @@ ss = 'This is an overview of the markdown contents of all the notebooks / script
 
 
 # add pcs.md
-pcs = open('pcs.md', 'r').read()
-ss += pcs + '\n\n'
+# pcs = open('pcs.md', 'r').read()
+# ss += pcs + '\n\n'
 
 for fname in sorted(os.listdir(NOTEBOOKS_DIR)):
     if fname.endswith('.md') and not fname == OUTPUT_FILE:
