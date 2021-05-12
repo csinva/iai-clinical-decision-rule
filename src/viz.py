@@ -51,6 +51,8 @@ def rename(s):
     }
     if s.lower() in RENAMING:
         return RENAMING[s.lower()]
+    elif s == 'PECARN':
+        return s
     else:
         return s.capitalize()
     return s

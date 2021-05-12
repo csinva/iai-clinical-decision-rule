@@ -45,7 +45,7 @@ def all_stats_curve(y_test, preds_proba, plot=False, thresholds=None):
     if thresholds is None:
         thresholds = sorted(np.unique(preds_proba))
     all_stats = {
-        s: [] for s in ['sens', 'spec', 'ppv', 'npv', 'lr+', 'lr-']
+        s: [] for s in ['sens', 'spec', 'ppv', 'npv', 'lr+', 'lr-', 'f1']
     }
     for threshold in tqdm(thresholds):
         preds = preds_proba > threshold
@@ -66,6 +66,7 @@ def all_stats_curve(y_test, preds_proba, plot=False, thresholds=None):
             all_stats['npv'].append(tn / (tn + fn))
             all_stats['lr+'].append(sens / (1 - spec))
             all_stats['lr-'].append((1 - sens) / spec)
+            all_stats['f1'].append(tp / (tp + 0.5 * (fp + fn)))
         
 
     if plot:

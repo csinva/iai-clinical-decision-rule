@@ -77,6 +77,8 @@ def rename(s):
     }
     if s.lower() in RENAMING:
         return RENAMING[s.lower()]
+    elif s == &#39;PECARN&#39;:
+        return s
     else:
         return s.capitalize()
     return s
@@ -569,6 +571,8 @@ Normalization can be applied by setting <code>normalize=True</code>.</p></sectio
     }
     if s.lower() in RENAMING:
         return RENAMING[s.lower()]
+    elif s == &#39;PECARN&#39;:
+        return s
     else:
         return s.capitalize()
     return s</code></pre>

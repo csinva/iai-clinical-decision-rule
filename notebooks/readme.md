@@ -44,6 +44,8 @@ This notebook benchmarks how well clinical suspicion does for predicting IAI-I. 
 ## look at errors for subgroups
 **here we consider the riskier subgroups (young age, female)**
 
+## look at errors on splits
+
 # 03_eda
 
 
@@ -95,9 +97,14 @@ Fit interpretable models to the training set and test on validation sets. Uses i
 
 ## look at all the results
 
+# 06_permutation_importances
+
+
+Fit interpretable models to the training set and test on validation sets. Uses imodels package as of 10/25/2020 (v0.2.5).
+
 ## look at importances for all the models
 
-# 06_benchmark_compare_new_rules
+# 07_benchmark_compare_new_rules
 
 
 **test individual rule**
@@ -108,7 +115,7 @@ Fit interpretable models to the training set and test on validation sets. Uses i
 
 **difference in predictions makes little difference for IAI-I**
 
-# 07_measure_predictive_limits
+# 08_measure_predictive_limits
 
 
 ## look at different buckets
@@ -116,4 +123,7 @@ Fit interpretable models to the training set and test on validation sets. Uses i
 ## fit simple models
 
 **decision tree**
+
+# pecarn_predict
+
 

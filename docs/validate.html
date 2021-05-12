@@ -71,7 +71,7 @@ def all_stats_curve(y_test, preds_proba, plot=False, thresholds=None):
     if thresholds is None:
         thresholds = sorted(np.unique(preds_proba))
     all_stats = {
-        s: [] for s in [&#39;sens&#39;, &#39;spec&#39;, &#39;ppv&#39;, &#39;npv&#39;, &#39;lr+&#39;, &#39;lr-&#39;]
+        s: [] for s in [&#39;sens&#39;, &#39;spec&#39;, &#39;ppv&#39;, &#39;npv&#39;, &#39;lr+&#39;, &#39;lr-&#39;, &#39;f1&#39;]
     }
     for threshold in tqdm(thresholds):
         preds = preds_proba &gt; threshold
@@ -92,6 +92,7 @@ def all_stats_curve(y_test, preds_proba, plot=False, thresholds=None):
             all_stats[&#39;npv&#39;].append(tn / (tn + fn))
             all_stats[&#39;lr+&#39;].append(sens / (1 - spec))
             all_stats[&#39;lr-&#39;].append((1 - sens) / spec)
+            all_stats[&#39;f1&#39;].append(tp / (tp + 0.5 * (fp + fn)))
         
 
     if plot:
@@ -226,7 +227,7 @@ def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
     if thresholds is None:
         thresholds = sorted(np.unique(preds_proba))
     all_stats = {
-        s: [] for s in [&#39;sens&#39;, &#39;spec&#39;, &#39;ppv&#39;, &#39;npv&#39;, &#39;lr+&#39;, &#39;lr-&#39;]
+        s: [] for s in [&#39;sens&#39;, &#39;spec&#39;, &#39;ppv&#39;, &#39;npv&#39;, &#39;lr+&#39;, &#39;lr-&#39;, &#39;f1&#39;]
     }
     for threshold in tqdm(thresholds):
         preds = preds_proba &gt; threshold
@@ -247,6 +248,7 @@ def get_scores(predictions_list, predictions_test1_list, predictions_test2_list,
             all_stats[&#39;npv&#39;].append(tn / (tn + fn))
             all_stats[&#39;lr+&#39;].append(sens / (1 - spec))
             all_stats[&#39;lr-&#39;].append((1 - sens) / spec)
+            all_stats[&#39;f1&#39;].append(tp / (tp + 0.5 * (fp + fn)))
         
 
     if plot:
