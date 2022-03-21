@@ -26,7 +26,7 @@ def get_data(use_processed=False, frac_missing_allowed=0.05,
     if use_processed and os.path.exists(processed_file):
         return pd.read_pickle(processed_file)
     else:
-        df_features = get_features()  # read all features into df
+        df_features = get_features(use_processed=use_processed)  # read all features into df
         df_outcomes = get_outcomes()  # 2 outcomes: iai, and iai_intervention
         df = pd.merge(df_features, df_outcomes, on='id', how='left')
         df = rename_values(df)  # rename the features by their meaning
@@ -57,7 +57,7 @@ def get_data(use_processed=False, frac_missing_allowed=0.05,
         return df
 
 
-def get_features(processed_file=oj(PROCESSED_DIR, 'df_pecarn_features.pkl')):
+def get_features(processed_file=oj(PROCESSED_DIR, 'df_pecarn_features.pkl'), use_processed=True):
     '''Read all features into df
     
     Returns
@@ -65,7 +65,7 @@ def get_features(processed_file=oj(PROCESSED_DIR, 'df_pecarn_features.pkl')):
     features: pd.DataFrame
     '''
 
-    if os.path.exists(processed_file):
+    if os.path.exists(processed_file) and use_processed:
         return pd.read_pickle(processed_file)
 
     # all the fnames to be loaded and searched over
