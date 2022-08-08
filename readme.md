@@ -1,7 +1,9 @@
 <h1 align="center"> Stable clinical rule learning.</h1>
 <p align="center"> Demonstrating the use of PDR/PCS in emergency medicine on the PECARN dataset. 
 </p>
-
+<p align="center"> Accompanies the paper <i>"Predictability and stability testing to assess clinical decision instrument performance for children after blunt torso trauma
+"</i> (<a href="https://journals.plos.org/digitalhealth/article?id=10.1371/journal.pdig.0000076">PLOS digital health, 2022</a>)
+</p>
 <p align="center">
 <img src="https://img.shields.io/badge/license-mit-blue.svg">
   <img src="https://img.shields.io/badge/python-3.6--3.8-blue">
@@ -56,3 +58,19 @@ We are able to rederive reasonable rule-based models for IAI prediction.
 - makes heavy use of the [imodels](https://github.com/csinva/interpretability-implementations-demos) package
 
 
+```R
+@article{kornblith22iaiclinical
+    doi = {10.1371/journal.pdig.0000076},
+    author = {Kornblith, Aaron E. AND Singh, Chandan AND Devlin, Gabriel AND Addo, Newton AND Streck, Christian J. AND Holmes, James F. AND Kuppermann, Nathan AND Grupp-Phelan, Jacqueline AND Fineman, Jeffrey AND Butte, Atul J. AND Yu, Bin},
+    journal = {PLOS Digital Health},
+    publisher = {Public Library of Science},
+    title = {Predictability and stability testing to assess clinical decision instrument performance for children after blunt torso trauma},
+    year = {2022},
+    month = {08},
+    volume = {1},
+    url = {https://doi.org/10.1371/journal.pdig.0000076},
+    pages = {1-16},
+    number = {8},
+
+}
+```
