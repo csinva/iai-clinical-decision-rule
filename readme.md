@@ -11,8 +11,7 @@
   <img src="https://img.shields.io/github/checks-status/Yu-group/pcs-pipeline/master">
 </p> 
 
-Code for reproducing analysis evaluating the PECARN Clinical Decision rule for prediction Intra-abdominal injury requiring intervention (IAI-I). Corresponds to the paper "Predictability and Stability Testing to Assess Clinical Decision Instrument Performance for Children After Blunt Torso Trauma" ([medRxiv](https://www.medrxiv.org/content/10.1101/2022.03.08.22270944v1.full.pdf))
-
+Code for reproducing analysis evaluating the PECARN Clinical Decision rule for prediction Intra-abdominal injury requiring intervention (IAI-I). 
 Documentation for useful functions is [here](csinva.io/iai-clinical-decision-rule) and for a thorough look into the notebooks is [here](https://github.com/csinva/iai-clinical-decision-rule/tree/master/notebooks).
 
 # PCS documentation
