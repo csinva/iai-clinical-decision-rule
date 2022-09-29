@@ -3,3 +3,9 @@ pandas
 tqdm
 imodels==0.2.4
 matplotlib_venn
+
+
+# for plotting
+# colorama
+# dtreeviz
+# seaborn
