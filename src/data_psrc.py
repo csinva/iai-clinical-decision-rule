@@ -1,17 +1,18 @@
+import data
+import pandas as pd
+import numpy as np
 import os
 import sys
 from os.path import join as oj
 from config import PROCESSED_DIR, PSRC_DIR
 sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
-import numpy as np
-import pandas as pd
-import data
 
 
-
-def get_data(use_processed=False, processed_file=oj(PROCESSED_DIR, 'df_psrc.pkl'), dummy=False, impute_feats=True):
+def get_data(use_processed=False,
+             use_processed_feats=False,
+             processed_file=oj(PROCESSED_DIR, 'df_psrc.pkl'), dummy=False, impute_feats=True):
     '''Run all the preprocessing
-    
+
     Params
     ------
     use_processed: bool, optional
@@ -27,7 +28,8 @@ def get_data(use_processed=False, processed_file=oj(PROCESSED_DIR, 'df_psrc.pkl'
 
         # fix col names
         df['id'] = -1 * np.arange(1, df.shape[0] + 1)
-        df = df.rename(columns=lambda x: x.replace('choice=0ne', 'choice=None').strip())
+        df = df.rename(columns=lambda x: x.replace(
+            'choice=0ne', 'choice=None').strip())
         df = df.replace('0ne', 'None')
 
         # rename values
@@ -41,11 +43,13 @@ def get_data(use_processed=False, processed_file=oj(PROCESSED_DIR, 'df_psrc.pkl'
                    if k in ['Time patient trauma alert concluded/ left trauma bay (military time)',
                             'Time CT performed',
                             ]]
-        df = df.drop(columns=ks_drop + ['Record ID', 'Arrival time in ED', 'Age in months', 'Age in years'])
+        df = df.drop(
+            columns=ks_drop + ['Record ID', 'Arrival time in ED', 'Age in months', 'Age in years'])
 
         # outcomes
         iai_keys = [k for k in df.keys() if 'Interventions for IAI' in k]
-        iai_with_intervention_keys = [k for k in iai_keys if not 'choice=None' in k]
+        iai_with_intervention_keys = [
+            k for k in iai_keys if not 'choice=None' in k]
         outcomes = ['Admission',
                     'ICU admission',
                     'Length of inpatient stay (days)',
@@ -87,7 +91,8 @@ def rename_values(df):
 
     # fill with median
 
-    df['Age'] = df['Age in years'].fillna(0) + df['Age in months'].fillna(0) / 12
+    df['Age'] = df['Age in years'].fillna(
+        0) + df['Age in months'].fillna(0) / 12
     df['InitSysBPRange'] = df['Initial ED systolic BP']
     df['InitHeartRate'] = df['Initial ED HR']
     df['FemurFracture'] = df['Femur fracture'].sum(axis=1)
@@ -101,12 +106,17 @@ def rename_values(df):
     df['Race_orig'] = df['Race'].fillna('unknown')
     df['Hispanic'] = df['Hispanic ethnicity'].fillna('unknown').map(binary)
     df['SeatBeltSign'] = df['SeatBeltSign'].map(binary)
-    df['AbdDistention'] = df['Abdominal distension'].fillna('unknown').map(binary)
+    df['AbdDistention'] = df['Abdominal distension'].fillna(
+        'unknown').map(binary)
     df['VomitWretch'] = df['Emesis post injury'].fillna('unknown').map(binary)
-    df['AbdTrauma'] = (1 - df['Evidence of abdominal wall trauma (choice=None)']).map(binary)
-    df['AbdomenPain'] = (df['Complainabd. pain'] != '0').astype(int).map(binary)
-    df['ThoracicTrauma'] = (1 - df['Evidence of thoracic trauma  (choice=None)']).map(binary)
-    df['DecrBreathSound'] = df['Evidence of thoracic trauma  (choice=Decreased breath sounds)'].map(binary)
+    df['AbdTrauma'] = (
+        1 - df['Evidence of abdominal wall trauma (choice=None)']).map(binary)
+    df['AbdomenPain'] = (df['Complainabd. pain'] !=
+                         '0').astype(int).map(binary)
+    df['ThoracicTrauma'] = (
+        1 - df['Evidence of thoracic trauma  (choice=None)']).map(binary)
+    df['DecrBreathSound'] = df['Evidence of thoracic trauma  (choice=Decreased breath sounds)'].map(
+        binary)
 
     df['DistractingPain'] = np.array([False] * df.shape[0])
     for k in ['Chest X-ray (choice=Rib fracture)',
@@ -124,7 +134,8 @@ def rename_values(df):
         'Limited exam secondary to intubation/sedation': 'Severe',  # probably severe
         'unknown': 'None'
     }
-    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].fillna('None').map(abdTenderDegree)
+    df['AbdTenderDegree'] = df['Abdominal tenderness to palpation'].fillna(
+        'None').map(abdTenderDegree)
 
     moi = {
         'Mechanism of injury (choice=Assault/struck)': 'Object struck abdomen',
@@ -142,7 +153,7 @@ def rename_values(df):
 
     for k in moi:
         df.loc[df[k] == 1, 'MOI'] = moi[k]
-        
+
     df['CTScan'] = df['Abdominal CT scan performed']
 
     return df
@@ -152,9 +163,12 @@ def impute(df: pd.DataFrame):
     """Returns df with imputed features
     """
     # filling some continuous vars with median
-    df['GCSScore'] = (df['GCSScore'].fillna(df['GCSScore'].median())).astype(int)
-    df['InitSysBPRange'] = df['InitSysBPRange'].fillna(df['InitSysBPRange'].median()).astype(int)
-    df['InitHeartRate'] = df['InitHeartRate'].fillna(df['InitHeartRate'].median())
+    df['GCSScore'] = (df['GCSScore'].fillna(
+        df['GCSScore'].median())).astype(int)
+    df['InitSysBPRange'] = df['InitSysBPRange'].fillna(
+        df['InitSysBPRange'].median()).astype(int)
+    df['InitHeartRate'] = df['InitHeartRate'].fillna(
+        df['InitHeartRate'].median())
 
     # other vars get specific imputations
     # df['AbdTenderDegree'] = df['AbdTenderDegree'].fillna('None')
