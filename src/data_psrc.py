@@ -174,3 +174,12 @@ def impute(df: pd.DataFrame):
     # df['AbdTenderDegree'] = df['AbdTenderDegree'].fillna('None')
     df['AbdomenPain'] = df['AbdomenPain'].fillna('other')
     return df
+
+def get_FAST(d):
+    fast_recieved = d['FAST (choice=not performed)'] == 0
+    # fast_interpretation_known = (d['UltrasoundRes'] != 3) # some patients have "no interpretetation"
+    fast_study_cohort = fast_recieved # & fast_interpretation_known
+    abnormal = ~(d['FAST (choice=Negative)'] == 1)
+    fast_abnormal = fast_study_cohort & abnormal
+    # ((d['UltrasoundType'] == 1) & (d['UltrasoundRes'] == 3) & (d['iai'] == 1)).sum() # look at patients with no interpretation
+    return fast_study_cohort, fast_abnormal

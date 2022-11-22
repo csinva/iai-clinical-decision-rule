@@ -7,7 +7,13 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn import metrics
 import sklearn.metrics
+from sklearn.metrics import confusion_matrix
 
+def calc_stats(y_true, y_pred):
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    sens = tp / (tp + fn)
+    spec = tn / (tn + fp)
+    return tn, fp, fn, tp, sens, spec
 
 def specificity_score(y_true, y_pred):
     tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred).ravel()

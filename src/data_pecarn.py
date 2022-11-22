@@ -301,3 +301,12 @@ def impute(df: pd.DataFrame):
 def unit_test(df):
     assert df.shape[0] == 12044, 'should have 12044 patients'
     assert np.sum(df['iai_intervention']) == 203, 'should have 203 patients IWI'
+
+def get_FAST(d):
+    # ((d['UltrasoundType'] == 1) & (d['UltrasoundRes'] == 3) & (d['iai'] == 1)).sum() # look at patients with no interpretation
+    fast_recieved = d['UltrasoundType'] == 1
+    fast_interpretation_known = (d['UltrasoundRes'] != 3) # some patients have "no interpretetation"
+    fast_study_cohort = fast_recieved & fast_interpretation_known
+    abnormal = d['UltrasoundRes'] == 2
+    fast_abnormal = fast_study_cohort & abnormal
+    return fast_study_cohort, fast_abnormal
