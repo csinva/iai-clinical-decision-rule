@@ -18,14 +18,14 @@ outcome_def = 'iai_intervention'  # output
 
 
 
-def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1):
-    df_pecarn = data_pecarn.get_data(use_processed=False,
+def load_it_all(dummy=True, impute=True, frac_missing_allowed=0.1, use_processed=True):
+    df_pecarn = data_pecarn.get_data(use_processed=use_processed,
                                      frac_missing_allowed=frac_missing_allowed,
                                      dummy=dummy,
                                      impute_feats=impute)
     all_feats_pecarn, filtered_feats_pecarn = get_feat_names(df_pecarn)
     try:
-        df_psrc = data_psrc.get_data(use_processed=False, dummy=dummy, impute_feats=impute)
+        df_psrc = data_psrc.get_data(use_processed=use_processed, dummy=dummy, impute_feats=impute)
         all_feats_psrc, filtered_feats_psrc = get_feat_names(df_psrc)
         common_feats = meta + list(filtered_feats_pecarn.intersection(filtered_feats_psrc))
     except:
